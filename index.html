@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         .logo {
-            max-width: 300px; /* Zadanie 6: Powiększenie logo x2 */
+            max-width: 300px;
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -296,7 +296,7 @@
                     <div class="form-group no-sub-info">
                         <label for="kwota" class="form-label">Kwota kredytu</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="500000" required>
+                            <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="500000">
                             <span class="input-group-text">zł</span>
                         </div>
                         <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="500000">
@@ -305,7 +305,7 @@
                     <div class="form-group">
                         <label for="okres" class="form-label">Ilość rat</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="360" required>
+                            <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="360">
                             <span class="input-group-text">mc-y</span>
                         </div>
                         <div class="sub-info" id="lata">Ilość lat: 30</div>
@@ -314,7 +314,7 @@
                     <div class="form-group no-sub-info">
                         <label for="oprocentowanie" class="form-label">Oprocentowanie</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="7" required>
+                            <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="7">
                             <span class="input-group-text">%</span>
                         </div>
                         <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="7">
@@ -376,7 +376,7 @@
                 </div>
 
                 <div class="form-row">
-                    <button type="button" class="btn btn-primary" onclick="obliczKredyt()">Oblicz</button>
+                    <button type="button" class="btn btn-primary" id="obliczBtn">Oblicz</button>
                 </div>
             </form>
         </div>
@@ -396,27 +396,27 @@
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
                         <div class="color-box" style="background-color: #28a745;">
-                            <span class="tooltip">-</span>
+                            <span class="tooltip" id="tooltipKapital">-</span>
                         </div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
                         <div class="color-box" style="background-color: #007bff;">
-                            <span class="tooltip">-</span>
+                            <span class="tooltip" id="tooltipOdsetki">-</span>
                         </div>Odsetki
                     </div>
                     <div class="legend-item" data-index="2">
                         <div class="color-box" style="background-color: #dc3545;">
-                            <span class="tooltip">-</span>
+                            <span class="tooltip" id="tooltipNadplata">-</span>
                         </div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="3">
                         <div class="color-box" style="background-color: #17a2b8;">
-                            <span class="tooltip">-</span>
+                            <span class="tooltip" id="tooltipProwizja">-</span>
                         </div>Prowizja za udzielenie
                     </div>
                     <div class="legend-item" data-index="4">
                         <div class="color-box" style="background-color: #6f42c1;">
-                            <span class="tooltip">-</span>
+                            <span class="tooltip" id="tooltipProwizjaNadplata">-</span>
                         </div>Prowizja od nadpłat
                     </div>
                 </div>
@@ -448,6 +448,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        console.log("Skrypt JavaScript załadowany"); // Debug
+
         let chart;
 
         // Synchronizacja zakresów z inputami
@@ -536,6 +538,8 @@
 
         function obliczKredyt() {
             console.log("Funkcja obliczKredyt została wywołana"); // Debug
+
+            // Pobieranie wartości z formularza
             let kwota = parseFloat(document.getElementById("kwota").value) || 0;
             let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12 || 0;
             let miesiace = parseInt(document.getElementById("okres").value) || 0;
@@ -544,6 +548,12 @@
             let rodzajRat = document.getElementById("rodzajRat").value || "rowne";
             let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked')?.value || "skrocenie";
             let prowizjaPLN = updateProwizja() || 0;
+
+            // Walidacja
+            if (kwota <= 0 || miesiace <= 0 || oprocentowanie <= 0) {
+                alert("Proszę wypełnić wszystkie wymagane pola poprawnymi wartościami.");
+                return;
+            }
 
             let rata, calkowityKoszt = 0, odsetki = 0, harmonogram = [];
             let pozostalyKapital = kwota;
@@ -619,14 +629,14 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            // Aktualizacja wartości w tooltipach
-            document.getElementById("kapitalTooltip").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.getElementById("odsetkiTooltip").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.getElementById("nadplataWynikTooltip").textContent = `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.getElementById("prowizjaWynikTooltip").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.getElementById("prowizjaOdNadplatTooltip").textContent = `Prowizja od nadpłat: 0.00 zł`;
+            // Aktualizacja tooltipów
+            document.getElementById("tooltipKapital").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("tooltipOdsetki").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("tooltipNadplata").textContent = `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("tooltipProwizja").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("tooltipProwizjaNadplata").textContent = `Prowizja od nadpłat: 0.00 zł`;
 
-            document.getElementById("okresPoNadplatie").textContent = harmonogram.length || miesiace; // Poprawiona literówka
+            document.getElementById("okresPoNadplacie").textContent = harmonogram.length || miesiace;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
             // Aktualizacja data-hover
@@ -636,6 +646,7 @@
             let kosztHighlight = document.querySelector('.highlight.red');
             kosztHighlight.setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
+            // Aktualizacja wykresu
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
@@ -679,6 +690,7 @@
                 });
             });
 
+            // Aktualizacja harmonogramu
             let tabela = document.getElementById("harmonogramTabela");
             tabela.innerHTML = "";
             harmonogram.forEach(wiersz => {
@@ -697,6 +709,12 @@
             document.getElementById("formSection").style.display = "none";
             document.getElementById("resultSection").style.display = "block";
         }
+
+        // Dodanie zdarzenia do przycisku
+        document.getElementById("obliczBtn").addEventListener("click", function() {
+            console.log("Przycisk Oblicz został kliknięty"); // Debug
+            obliczKredyt();
+        });
     </script>
 </body>
 </html>
