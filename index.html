@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         .logo {
-            max-width: 150px;
+            max-width: 300px; /* Zadanie 6: Powiększenie logo x2 */
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -141,16 +141,16 @@
         }
         .chart-container {
             display: flex;
-            align-items: flex-start;
-            justify-content: flex-start; /* Zmiana dla bliższego układu */
-            gap: 0; /* Zadanie 2: Usunięcie odstępu */
+            align-items: center; /* Zadanie 3: Wyśrodkowanie w pionie */
+            justify-content: flex-start;
+            gap: 0;
             margin-bottom: 20px;
             position: relative;
             overflow: visible;
         }
         .chart {
             flex: 1;
-            max-width: 160px; /* Zadanie 2: Zmniejszenie rozmiaru wykresu */
+            max-width: 160px;
             position: relative;
             z-index: 20;
             margin-right: 0;
@@ -159,6 +159,8 @@
             flex: 1;
             padding-left: 0;
             max-width: 50%;
+            margin-left: 1.5cm; /* Zadanie 1: Odstęp 1,5 cm */
+            margin-top: 20px; /* Zadanie 3: Obniżenie pasków */
         }
         .chart-legend .legend-item {
             display: flex;
@@ -197,12 +199,12 @@
             z-index: 30;
             transition: display 0.2s ease;
         }
+        .chart-legend .legend-item:hover .color-box .tooltip {
+            display: block; /* Zadanie 2: Wyświetlanie tooltipa przy hover */
+        }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
             height: 24px;
-        }
-        .chart-legend .legend-item:hover .color-box .tooltip {
-            display: block; /* Zadanie 1: Wyświetlanie tooltipa przy hover */
         }
         .chart-legend .legend-item:hover {
             color: #fff;
@@ -218,17 +220,15 @@
             padding: 4px 8px;
             border-radius: 5px;
             position: relative;
-        }
-        .highlight.yellow, .highlight.red {
             cursor: pointer;
         }
         .highlight.yellow:hover span, .highlight.red:hover span {
-            display: none;
+            display: none; /* Zadanie 4 i 5: Ukrywanie starego tekstu */
         }
         .highlight.yellow:hover::after, .highlight.red:hover::after {
             content: attr(data-hover);
             font-weight: bold;
-            font-size: 1.2em; /* Zadanie 3: Większa czcionka */
+            font-size: 1.2em;
             color: inherit;
             position: absolute;
             left: 0;
@@ -236,7 +236,8 @@
             width: 100%;
             height: 100%;
             display: block;
-            line-height: 1.2em;
+            text-align: center; /* Zadanie 4 i 5: Wyśrodkowanie w poziomie */
+            line-height: 1.5em; /* Zadanie 4 i 5: Wyśrodkowanie w pionie */
         }
         .highlight.yellow {
             background-color: #ffeb3b;
@@ -395,27 +396,27 @@
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
                         <div class="color-box" style="background-color: #28a745;">
-                            <span class="tooltip" id="kapitalTooltip"></span>
+                            <span class="tooltip">-</span>
                         </div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
                         <div class="color-box" style="background-color: #007bff;">
-                            <span class="tooltip" id="odsetkiTooltip"></span>
+                            <span class="tooltip">-</span>
                         </div>Odsetki
                     </div>
                     <div class="legend-item" data-index="2">
                         <div class="color-box" style="background-color: #dc3545;">
-                            <span class="tooltip" id="nadplataWynikTooltip"></span>
+                            <span class="tooltip">-</span>
                         </div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="3">
                         <div class="color-box" style="background-color: #17a2b8;">
-                            <span class="tooltip" id="prowizjaWynikTooltip"></span>
+                            <span class="tooltip">-</span>
                         </div>Prowizja za udzielenie
                     </div>
                     <div class="legend-item" data-index="4">
                         <div class="color-box" style="background-color: #6f42c1;">
-                            <span class="tooltip" id="prowizjaOdNadplatTooltip"></span>
+                            <span class="tooltip">-</span>
                         </div>Prowizja od nadpłat
                     </div>
                 </div>
@@ -621,11 +622,11 @@
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
-            // Zadanie 3: Aktualizacja data-hover dla "Okres kredytowania"
+            // Aktualizacja data-hover dla "Okres kredytowania"
             let okresHighlight = document.querySelector('.highlight.yellow');
-            okresHighlight.setAttribute('data-hover', `${miesiace} miesięcy`); // Dynamiczna wartość
+            okresHighlight.setAttribute('data-hover', `${miesiace} miesięcy`);
 
-            // Zadanie 3: Aktualizacja data-hover dla "Całkowita kwota spłaty"
+            // Aktualizacja data-hover dla "Całkowita kwota spłaty"
             let kosztHighlight = document.querySelector('.highlight.red');
             kosztHighlight.setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
