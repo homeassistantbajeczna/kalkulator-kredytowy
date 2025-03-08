@@ -10,14 +10,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #f5f6f5;
+            background-color: #F5F5DC; /* Jasny beżowy */
             font-family: 'Arial', sans-serif;
             padding: 10px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: #fff;
+            background: #D2B48C; /* Ciemny beżowy */
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
@@ -34,7 +34,7 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 1.2em;
-            color: #000000;
+            color: #000000; /* Czarny */
         }
         .form-row {
             display: flex;
@@ -52,19 +52,20 @@
             font-size: 0.8em;
             text-transform: uppercase;
             margin-bottom: 2px;
-            color: #000000;
+            color: #000000; /* Czarny */
         }
         .form-control, .form-select, .form-range {
             height: 25px;
             font-size: 0.8em;
             padding: 2px;
+            text-align: center; /* Wyśrodkowanie wartości w polach */
         }
         .form-select {
             max-width: 60px;
         }
         .form-range {
             margin-top: 2px;
-            accent-color: #FFC107; /* Żółty kolor suwaka */
+            accent-color: #FFD700; /* Złoty */
         }
         .input-group-text {
             font-size: 0.8em;
@@ -72,13 +73,15 @@
         }
         .sub-info {
             font-size: 0.7em;
-            color: #555;
+            color: #000000; /* Czarny */
             margin-top: 2px;
-            text-align: center;
+            text-align: left; /* Przesunięcie do lewej */
         }
         .result-section {
             display: none;
             padding: 10px;
+            max-width: 800px; /* Zmniejszenie ekranu podsumowania */
+            margin: 0 auto; /* Wyśrodkowanie */
         }
         .result-header {
             display: flex;
@@ -88,11 +91,11 @@
         }
         .result-header h4 {
             font-size: 1.2em;
-            color: #000000;
+            color: #000000; /* Czarny */
         }
         .result-header .highlight {
-            font-size: 1em;
-            padding: 5px 10px;
+            font-size: 0.9em; /* Zmniejszenie pasków */
+            padding: 4px 8px;
             border-radius: 5px;
         }
         .highlight.yellow {
@@ -117,20 +120,22 @@
             align-items: center;
             margin-bottom: 8px;
             font-size: 0.9em;
+            color: #000000; /* Czarny */
         }
         .chart-legend .color-box {
             width: 100%;
-            height: 20px;
+            height: 15px; /* Zmniejszenie pasków */
             margin-bottom: 5px;
             border-radius: 5px;
             text-align: center;
             color: #fff;
             font-weight: bold;
-            line-height: 20px;
+            line-height: 15px;
+            font-size: 0.8em;
         }
         .chart {
             flex: 1;
-            max-width: 300px;
+            max-width: 250px; /* Zmniejszenie wykresu */
         }
         .harmonogram {
             margin-top: 20px;
@@ -147,8 +152,8 @@
             margin-bottom: 10px;
         }
         .btn-primary, .btn-secondary {
-            background-color: #FFC107; /* Żółty kolor z logo */
-            border-color: #FFC107;
+            background-color: #FFD700; /* Złoty */
+            border-color: #FFD700;
             color: #000000; /* Czarny tekst */
             font-size: 0.9em;
             padding: 5px 20px;
@@ -157,8 +162,8 @@
             display: block;
         }
         .btn-primary:hover, .btn-secondary:hover {
-            background-color: #e0a800;
-            border-color: #e0a800;
+            background-color: #e0c107;
+            border-color: #e0c107;
             color: #000000;
         }
     </style>
