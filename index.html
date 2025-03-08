@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         .logo {
-            max-width: 300px;
+            max-width: 200px;
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -36,7 +36,8 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 1.2em;
-            color: #333333;
+            color: #333333; /* Zadanie 1: Powrót do czarnego */
+            font-weight: 700;
         }
         .form-row {
             display: flex;
@@ -58,11 +59,11 @@
             height: 0;
         }
         .form-label {
-            font-weight: 500;
+            font-weight: 700;
             font-size: 0.8em;
             text-transform: uppercase;
             margin-bottom: 2px;
-            color: #333333;
+            color: #333333; /* Zadanie 1: Powrót do czarnego */
         }
         .form-control, .form-select, .form-range {
             height: 25px;
@@ -137,7 +138,8 @@
         }
         .result-header h4 {
             font-size: 1.2em;
-            color: #333333;
+            color: #333333; /* Zadanie 1: Powrót do czarnego */
+            font-weight: 700;
         }
         .chart-container {
             display: flex;
@@ -164,26 +166,31 @@
         }
         .chart-legend .legend-item {
             display: flex;
-            align-items: flex-start;
+            align-items: center; /* Zadanie 4: Wyrównanie wysokości */
             margin-bottom: 8px;
             font-size: 0.9em;
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
+            padding-left: 5px; /* Zadanie 3: Odsunięcie tekstu o 0,5 cm */
         }
         .chart-legend .color-box {
             width: 30%;
-            height: 20px;
-            margin-bottom: 3px;
+            height: 24px; /* Zadanie 4: Stała wysokość */
+            margin-bottom: 0;
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
-            line-height: 20px;
+            line-height: 24px; /* Zadanie 4: Dopasowanie do wysokości */
             font-size: 0.6em;
             transition: width 0.3s ease, height 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
             position: relative;
+            color: #fff;
+        }
+        .chart-legend .color-box .value {
+            display: block;
         }
         .chart-legend .color-box .tooltip {
             display: none;
@@ -197,10 +204,12 @@
             line-height: 24px;
             text-align: center;
             z-index: 30;
-            transition: display 0.2s ease;
+        }
+        .chart-legend .legend-item:hover .color-box .value {
+            display: none;
         }
         .chart-legend .legend-item:hover .color-box .tooltip {
-            display: block;
+            display: block; /* Zadanie 2: Upewnienie się, że tooltip się pojawia */
         }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
@@ -222,8 +231,8 @@
             position: relative;
             cursor: pointer;
         }
-        .highlight.yellow:hover span, .highlight.red:hover span {
-            display: none;
+        .highlight.yellow:hover, .highlight.red:hover {
+            color: transparent;
         }
         .highlight.yellow:hover::after, .highlight.red:hover::after {
             content: attr(data-hover);
@@ -238,6 +247,13 @@
             display: block;
             text-align: center;
             line-height: 1.5em;
+            color: #333333;
+        }
+        .highlight.yellow:hover::after {
+            color: #333333;
+        }
+        .highlight.red:hover::after {
+            color: #dc3545;
         }
         .highlight.yellow {
             background-color: #ffeb3b;
@@ -396,26 +412,31 @@
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
                         <div class="color-box" style="background-color: #28a745;">
+                            <span class="value" id="valueKapital">-</span>
                             <span class="tooltip" id="tooltipKapital">-</span>
                         </div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
                         <div class="color-box" style="background-color: #007bff;">
+                            <span class="value" id="valueOdsetki">-</span>
                             <span class="tooltip" id="tooltipOdsetki">-</span>
                         </div>Odsetki
                     </div>
                     <div class="legend-item" data-index="2">
                         <div class="color-box" style="background-color: #dc3545;">
+                            <span class="value" id="valueNadplata">-</span>
                             <span class="tooltip" id="tooltipNadplata">-</span>
                         </div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="3">
                         <div class="color-box" style="background-color: #17a2b8;">
+                            <span class="value" id="valueProwizja">-</span>
                             <span class="tooltip" id="tooltipProwizja">-</span>
                         </div>Prowizja za udzielenie
                     </div>
                     <div class="legend-item" data-index="4">
                         <div class="color-box" style="background-color: #6f42c1;">
+                            <span class="value" id="valueProwizjaNadplata">-</span>
                             <span class="tooltip" id="tooltipProwizjaNadplata">-</span>
                         </div>Prowizja od nadpłat
                     </div>
@@ -448,7 +469,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        console.log("Skrypt JavaScript załadowany"); // Debug
+        console.log("Skrypt JavaScript załadowany");
 
         let chart;
 
@@ -537,7 +558,7 @@
         }
 
         function obliczKredyt() {
-            console.log("Funkcja obliczKredyt została wywołana"); // Debug
+            console.log("Funkcja obliczKredyt została wywołana");
 
             // Pobieranie wartości z formularza
             let kwota = parseFloat(document.getElementById("kwota").value) || 0;
@@ -629,11 +650,20 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            // Aktualizacja tooltipów
+            // Aktualizacja wartości na paskach i tooltipów
+            document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipKapital").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+
+            document.getElementById("valueOdsetki").textContent = `${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipOdsetki").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+
+            document.getElementById("valueNadplata").textContent = `${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipNadplata").textContent = `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+
+            document.getElementById("valueProwizja").textContent = `${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipProwizja").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+
+            document.getElementById("valueProwizjaNadplata").textContent = `0.00 zł`;
             document.getElementById("tooltipProwizjaNadplata").textContent = `Prowizja od nadpłat: 0.00 zł`;
 
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length || miesiace;
@@ -712,7 +742,7 @@
 
         // Dodanie zdarzenia do przycisku
         document.getElementById("obliczBtn").addEventListener("click", function() {
-            console.log("Przycisk Oblicz został kliknięty"); // Debug
+            console.log("Przycisk Oblicz został kliknięty");
             obliczKredyt();
         });
     </script>
