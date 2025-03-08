@@ -6,6 +6,8 @@
     <title>Kalkulator Kredytowy</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background-color: #f5f6f5;
@@ -19,25 +21,29 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-wrap: wrap;
         }
-        .form-section {
-            flex: 1;
-            min-width: 300px;
-            padding-right: 15px;
+        .logo {
+            max-width: 120px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
-        .result-section {
-            flex: 2;
-            min-width: 400px;
-            padding-left: 15px;
+        .form-section, .result-section {
+            padding: 10px;
+        }
+        .form-section h4 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
         }
         .form-label {
             font-weight: bold;
             font-size: 0.9em;
+            text-transform: uppercase;
         }
         .form-control, .form-range {
-            height: 30px;
+            height: 35px;
             font-size: 0.9em;
         }
         .form-range {
@@ -47,25 +53,40 @@
             font-size: 0.8em;
             color: #555;
         }
-        .result {
-            background-color: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
+        .result-section {
+            display: none;
+        }
+        .chart-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .chart-legend {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .chart-legend div {
+            margin-bottom: 10px;
             font-size: 0.9em;
+        }
+        .chart-legend .color-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .chart {
+            flex: 1;
+            max-width: 300px;
         }
         .harmonogram {
             margin-top: 10px;
-            max-height: 300px;
-            overflow-y: auto;
             font-size: 0.8em;
         }
-        .table {
+        .harmonogram table {
             margin-bottom: 0;
-        }
-        .logo {
-            max-width: 120px;
-            margin-bottom: 10px;
-            cursor: pointer;
         }
         .footer {
             text-align: center;
@@ -73,74 +94,90 @@
             color: #666;
             margin-top: 10px;
         }
+        .btn-toggle {
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #007bff;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Sekcja formularza -->
-        <div class="form-section">
+        <div class="form-section" id="formSection">
             <a href="https://twoja-strona.pl" target="_blank">
-                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo">
+                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
             </a>
-            <h4 class="mb-3">Kalkulator Kredytowy</h4>
+            <h4>Kalkulator Kredytowy</h4>
             <form id="kredytForm">
                 <!-- Kwota kredytu -->
-                <div class="mb-2">
-                    <label for="kwota" class="form-label">Kwota kredytu (PLN):</label>
-                    <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="100000" required>
-                    <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="100000">
+                <div class="form-group">
+                    <label for="kwota" class="form-label">Kwota kredytu</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="3000000" required>
+                        <span class="input-group-text">zł</span>
+                    </div>
+                    <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="3000000">
                 </div>
 
                 <!-- Ilość rat -->
-                <div class="mb-2">
-                    <label for="okres" class="form-label">Ilość rat (miesiące):</label>
-                    <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="120" required>
-                    <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="120">
-                    <div class="sub-info" id="lata">Przeliczona ilość lat: 10</div>
+                <div class="form-group">
+                    <label for="okres" class="form-label">Ilość rat</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="420" required>
+                        <span class="input-group-text">mc-y</span>
+                    </div>
+                    <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="420">
+                    <div class="sub-info" id="lata">Ilość lat: 35</div>
                 </div>
 
                 <!-- Oprocentowanie -->
-                <div class="mb-2">
-                    <label for="oprocentowanie" class="form-label">Oprocentowanie (%):</label>
-                    <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="5" required>
-                    <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="5">
+                <div class="form-group">
+                    <label for="oprocentowanie" class="form-label">Oprocentowanie</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="25" required>
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="25">
                 </div>
 
                 <!-- Rodzaj rat -->
-                <div class="mb-2">
-                    <label class="form-label">Rodzaj rat:</label>
-                    <div>
-                        <input type="radio" id="rowne" name="rodzajRat" value="rowne" checked>
-                        <label for="rowne">Równe</label>
-                        <input type="radio" id="malejace" name="rodzajRat" value="malejace" class="ms-2">
-                        <label for="malejace">Malejące</label>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Rodzaj rat</label>
+                    <select class="form-control" id="rodzajRat">
+                        <option value="rowne">Rata równa</option>
+                        <option value="malejace">Rata malejąca</option>
+                    </select>
                 </div>
 
                 <!-- Prowizja -->
-                <div class="mb-2">
-                    <label for="prowizja" class="form-label">Prowizja:</label>
+                <div class="form-group">
+                    <label for="prowizja" class="form-label">Prowizja za udzielenie</label>
                     <div class="input-group">
                         <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
                         <select class="form-select" id="prowizjaTyp">
                             <option value="procent">%</option>
-                            <option value="pln">PLN</option>
+                            <option value="pln">zł</option>
                         </select>
                     </div>
                     <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
-                    <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 2000 PLN</div>
+                    <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 60000.00 zł</div>
                 </div>
 
                 <!-- Nadpłata -->
-                <div class="mb-2">
-                    <label for="nadplata" class="form-label">Nadpłata miesięczna (PLN):</label>
-                    <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                <div class="form-group">
+                    <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                        <span class="input-group-text">zł</span>
+                    </div>
                     <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
                 </div>
 
                 <!-- Efekt nadpłaty -->
-                <div class="mb-2">
-                    <label class="form-label">Efekt nadpłaty:</label>
+                <div class="form-group">
+                    <label class="form-label">Efekt nadpłaty</label>
                     <div>
                         <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
                         <label for="skrocenie">Skrócenie kredytu</label>
@@ -157,31 +194,48 @@
         </div>
 
         <!-- Sekcja wyników -->
-        <div class="result-section">
-            <div class="result">
-                <h5>Wyniki:</h5>
-                <p><strong>Miesięczna rata:</strong> <span id="rata">-</span> PLN</p>
-                <p><strong>Nadpłata miesięczna:</strong> <span id="nadplataWynik">-</span> PLN</p>
-                <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt">-</span> PLN</p>
-                <p><strong>Odsetki:</strong> <span id="odsetki">-</span> PLN</p>
-                <p><strong>Prowizja:</strong> <span id="prowizjaWynik">-</span> PLN</p>
-                <p><strong>Okres spłaty po nadpłacie:</strong> <span id="okresPoNadplacie">-</span> miesięcy</p>
+        <div class="result-section" id="resultSection">
+            <a href="https://twoja-strona.pl" target="_blank">
+                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
+            </a>
+            <h4 class="text-center mb-3">Kredyt wyjściowy</h4>
+            <button class="btn btn-secondary w-100 mb-3" onclick="showForm()">Powrót do edycji</button>
+            <div class="chart-container">
+                <div class="chart-legend">
+                    <div><span class="color-box" style="background-color: #28a745;"></span>Kapitał: <span id="kapital">-</span> zł</div>
+                    <div><span class="color-box" style="background-color: #dc3545;"></span>Nadpłaty: <span id="nadplataWynik">-</span> zł</div>
+                    <div><span class="color-box" style="background-color: #6f42c1;"></span>Prowizja od nadpłat: <span id="prowizjaOdNadplat">-</span> zł</div>
+                    <div><span class="color-box" style="background-color: #007bff;"></span>Odsetki: <span id="odsetki">-</span> zł</div>
+                    <div><span class="color-box" style="background-color: #17a2b8;"></span>Prowizja za udzielenie: <span id="prowizjaWynik">-</span> zł</div>
+                </div>
+                <div class="chart">
+                    <canvas id="creditChart"></canvas>
+                </div>
+            </div>
+            <div class="text-center mb-3">
+                <p><strong>Okres kredytowania:</strong> <span id="okresPoNadplacie">-</span> mc-y</p>
+                <p><strong>Całkowita kwota spłaty:</strong> <span id="koszt">-</span> zł</p>
             </div>
             <div class="harmonogram">
-                <h5>Harmonogram spłat:</h5>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Miesiąc</th>
-                            <th>Rata</th>
-                            <th>Nadpłata</th>
-                            <th>Kapitał</th>
-                            <th>Odsetki</th>
-                            <th>Pozostały kapitał</th>
-                        </tr>
-                    </thead>
-                    <tbody id="harmonogramTabela"></tbody>
-                </table>
+                <h5 class="btn-toggle" onclick="toggleHarmonogram()">Harmonogram spłat ▼</h5>
+                <div id="harmonogramContent">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Miesiąc</th>
+                                <th>Rata</th>
+                                <th>Nadpłata</th>
+                                <th>Kapitał</th>
+                                <th>Odsetki</th>
+                                <th>Pozostały kapitał</th>
+                            </tr>
+                        </thead>
+                        <tbody id="harmonogramTabela"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="footer">
+                <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Moja strona</a></p>
             </div>
         </div>
     </div>
@@ -189,6 +243,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let chart;
+
         // Synchronizacja suwaków z polami tekstowymi
         document.getElementById("kwotaRange").addEventListener("input", function() {
             document.getElementById("kwota").value = this.value;
@@ -233,8 +289,8 @@
         // Funkcja przeliczająca lata
         function updateLata() {
             let miesiace = parseInt(document.getElementById("okres").value);
-            let lata = (miesiace / 12).toFixed(1);
-            document.getElementById("lata").textContent = `Przeliczona ilość lat: ${lata}`;
+            let lata = (miesiace / 12).toFixed(0);
+            document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
         }
 
         // Funkcja obliczająca prowizję w PLN
@@ -243,7 +299,7 @@
             let prowizja = parseFloat(document.getElementById("prowizja").value);
             let typ = document.getElementById("prowizjaTyp").value;
             let prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
-            document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toFixed(2)} PLN`;
+            document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toFixed(2)} zł`;
             return prowizjaPLN;
         }
 
@@ -251,24 +307,43 @@
         updateLata();
         updateProwizja();
 
+        // Funkcja zwijania/rozwijania harmonogramu
+        function toggleHarmonogram() {
+            let content = document.getElementById("harmonogramContent");
+            let toggleBtn = document.querySelector(".btn-toggle");
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                toggleBtn.textContent = "Harmonogram spłat ▼";
+            } else {
+                content.style.display = "none";
+                toggleBtn.textContent = "Harmonogram spłat ►";
+            }
+        }
+
+        // Funkcja pokazująca formularz
+        function showForm() {
+            document.getElementById("formSection").style.display = "block";
+            document.getElementById("resultSection").style.display = "none";
+        }
+
         // Obliczanie kredytu
         function obliczKredyt() {
             let kwota = parseFloat(document.getElementById("kwota").value);
             let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12; // miesięczne
             let miesiace = parseInt(document.getElementById("okres").value);
             let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
-            let rodzajRat = document.querySelector('input[name="rodzajRat"]:checked').value;
+            let rodzajRat = document.getElementById("rodzajRat").value;
             let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
             let prowizjaPLN = updateProwizja();
 
             let rata, calkowityKoszt = 0, odsetki = 0, harmonogram = [];
             let pozostalyKapital = kwota;
+            let calkowitaNadplata = 0;
 
             if (rodzajRat === "rowne") {
                 // Raty równe
                 rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
-                    // Obniżenie raty
                     rata = ((kwota - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
                 }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
@@ -276,10 +351,11 @@
                     let kapital = rata - odsetkiMiesiac;
                     if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
+                        calkowitaNadplata += nadplata;
                     }
                     pozostalyKapital -= kapital;
                     if (pozostalyKapital < 0) pozostalyKapital = 0;
-                    calkowityKoszt += rata + (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0);
+                    calkowityKoszt += rata;
                     odsetki += odsetkiMiesiac;
                     harmonogram.push({
                         miesiac: i,
@@ -303,10 +379,11 @@
                     rata = kapital + odsetkiMiesiac;
                     if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
+                        calkowitaNadplata += nadplata;
                     }
                     pozostalyKapital -= kapital;
                     if (pozostalyKapital < 0) pozostalyKapital = 0;
-                    calkowityKoszt += rata + (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0);
+                    calkowityKoszt += rata;
                     odsetki += odsetkiMiesiac;
                     harmonogram.push({
                         miesiac: i,
@@ -324,12 +401,13 @@
             calkowityKoszt += prowizjaPLN;
 
             // Wyświetl wyniki
-            document.getElementById("rata").textContent = harmonogram[0].rata;
-            document.getElementById("nadplataWynik").textContent = nadplata.toFixed(2);
-            document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
+            document.getElementById("kapital").textContent = kwota.toFixed(2);
+            document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toFixed(2);
+            document.getElementById("prowizjaOdNadplat").textContent = "0.00"; // Brak prowizji od nadpłat
             document.getElementById("odsetki").textContent = odsetki.toFixed(2);
             document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toFixed(2);
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
+            document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
 
             // Wypełnij harmonogram
             let tabela = document.getElementById("harmonogramTabela");
@@ -346,6 +424,30 @@
                     </tr>
                 `;
             });
+
+            // Tworzenie wykresu
+            if (chart) chart.destroy();
+            chart = new Chart(document.getElementById("creditChart"), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kapitał', 'Nadpłaty', 'Prowizja od nadpłat', 'Odsetki', 'Prowizja za udzielenie'],
+                    datasets: [{
+                        data: [kwota, calkowitaNadplata, 0, odsetki, prowizjaPLN],
+                        backgroundColor: ['#28a745', '#dc3545', '#6f42c1', '#007bff', '#17a2b8'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Zwinięcie formularza i pokazanie wyników
+            document.getElementById("formSection").style.display = "none";
+            document.getElementById("resultSection").style.display = "block";
         }
     </script>
 </body>
