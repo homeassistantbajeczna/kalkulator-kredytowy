@@ -141,7 +141,7 @@
         }
         .chart-container {
             display: flex;
-            align-items: center; /* Zadanie 3: Wyśrodkowanie w pionie */
+            align-items: center;
             justify-content: flex-start;
             gap: 0;
             margin-bottom: 20px;
@@ -159,8 +159,8 @@
             flex: 1;
             padding-left: 0;
             max-width: 50%;
-            margin-left: 1.5cm; /* Zadanie 1: Odstęp 1,5 cm */
-            margin-top: 20px; /* Zadanie 3: Obniżenie pasków */
+            margin-left: 1.5cm;
+            margin-top: 20px;
         }
         .chart-legend .legend-item {
             display: flex;
@@ -200,7 +200,7 @@
             transition: display 0.2s ease;
         }
         .chart-legend .legend-item:hover .color-box .tooltip {
-            display: block; /* Zadanie 2: Wyświetlanie tooltipa przy hover */
+            display: block;
         }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
@@ -223,7 +223,7 @@
             cursor: pointer;
         }
         .highlight.yellow:hover span, .highlight.red:hover span {
-            display: none; /* Zadanie 4 i 5: Ukrywanie starego tekstu */
+            display: none;
         }
         .highlight.yellow:hover::after, .highlight.red:hover::after {
             content: attr(data-hover);
@@ -236,8 +236,8 @@
             width: 100%;
             height: 100%;
             display: block;
-            text-align: center; /* Zadanie 4 i 5: Wyśrodkowanie w poziomie */
-            line-height: 1.5em; /* Zadanie 4 i 5: Wyśrodkowanie w pionie */
+            text-align: center;
+            line-height: 1.5em;
         }
         .highlight.yellow {
             background-color: #ffeb3b;
@@ -450,6 +450,7 @@
     <script>
         let chart;
 
+        // Synchronizacja zakresów z inputami
         document.getElementById("kwotaRange").addEventListener("input", function() {
             document.getElementById("kwota").value = this.value;
         });
@@ -497,15 +498,16 @@
             document.getElementById("nadplataJednorazowaRange").value = this.value;
         });
 
+        // Funkcje pomocnicze
         function updateLata() {
-            let miesiace = parseInt(document.getElementById("okres").value);
+            let miesiace = parseInt(document.getElementById("okres").value) || 0;
             let lata = (miesiace / 12).toFixed(0);
             document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
         }
 
         function updateProwizja() {
-            let kwota = parseFloat(document.getElementById("kwota").value);
-            let prowizja = parseFloat(document.getElementById("prowizja").value);
+            let kwota = parseFloat(document.getElementById("kwota").value) || 0;
+            let prowizja = parseFloat(document.getElementById("prowizja").value) || 0;
             let typ = document.getElementById("prowizjaTyp").value;
             let prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
             document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
@@ -533,14 +535,15 @@
         }
 
         function obliczKredyt() {
-            let kwota = parseFloat(document.getElementById("kwota").value);
-            let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12;
-            let miesiace = parseInt(document.getElementById("okres").value);
+            console.log("Funkcja obliczKredyt została wywołana"); // Debug
+            let kwota = parseFloat(document.getElementById("kwota").value) || 0;
+            let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12 || 0;
+            let miesiace = parseInt(document.getElementById("okres").value) || 0;
             let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
             let nadplataJednorazowa = parseFloat(document.getElementById("nadplataJednorazowa").value) || 0;
-            let rodzajRat = document.getElementById("rodzajRat").value;
-            let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
-            let prowizjaPLN = updateProwizja();
+            let rodzajRat = document.getElementById("rodzajRat").value || "rowne";
+            let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked')?.value || "skrocenie";
+            let prowizjaPLN = updateProwizja() || 0;
 
             let rata, calkowityKoszt = 0, odsetki = 0, harmonogram = [];
             let pozostalyKapital = kwota;
@@ -551,10 +554,12 @@
                 calkowitaNadplata += nadplataJednorazowa;
             }
 
-            if (rodzajRat === "rowne") {
+            if (rodzajRat === "rowne" && oprocentowanie > 0) {
                 rata = (pozostalyKapital * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                if (isNaN(rata) || !isFinite(rata)) rata = 0;
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
                     rata = ((pozostalyKapital - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                    if (isNaN(rata) || !isFinite(rata)) rata = 0;
                 }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
@@ -579,7 +584,7 @@
                     });
                     if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
-            } else {
+            } else if (rodzajRat === "malejace" && oprocentowanie > 0) {
                 let kapitalStaly = pozostalyKapital / miesiace;
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
                     kapitalStaly = (pozostalyKapital - nadplata * miesiace) / miesiace;
@@ -608,6 +613,8 @@
                     });
                     if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
+            } else {
+                rata = 0;
             }
 
             calkowityKoszt += prowizjaPLN;
@@ -619,14 +626,13 @@
             document.getElementById("prowizjaWynikTooltip").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("prowizjaOdNadplatTooltip").textContent = `Prowizja od nadpłat: 0.00 zł`;
 
-            document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
+            document.getElementById("okresPoNadplatie").textContent = harmonogram.length || miesiace; // Poprawiona literówka
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
-            // Aktualizacja data-hover dla "Okres kredytowania"
+            // Aktualizacja data-hover
             let okresHighlight = document.querySelector('.highlight.yellow');
             okresHighlight.setAttribute('data-hover', `${miesiace} miesięcy`);
 
-            // Aktualizacja data-hover dla "Całkowita kwota spłaty"
             let kosztHighlight = document.querySelector('.highlight.red');
             kosztHighlight.setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
