@@ -104,7 +104,7 @@
             padding: 2px 5px;
         }
         .sub-info {
-            font-size: 0.6em; /* Powiększenie tekstu "Ilość lat" i "Wartość prowizji" */
+            font-size: 0.5em; /* Zmniejszenie tekstu "Ilość lat" i "Wartość prowizji" */
             color: #333333;
             margin-top: 2px;
             text-align: left;
@@ -114,9 +114,8 @@
             align-items: center;
             gap: 3px;
         }
-        /* Styl dla radio buttons - kolor taki sam jak przycisk "Oblicz" */
         input[type="radio"] {
-            accent-color: #C2B280; /* Kolor kropek wyboru */
+            accent-color: #C2B280;
         }
         .radio-label {
             font-size: 0.55em;
@@ -290,7 +289,6 @@
             border-color: #b0a070;
             color: #000000;
         }
-        /* Domyślnie zwinięty harmonogram */
         #harmonogramContent {
             display: none;
         }
@@ -464,74 +462,97 @@
     <script>
         let chart;
 
+        // Funkcje aktualizujące wartości w polach tekstowych przy zmianie suwaków
         document.getElementById("kwotaRange").addEventListener("input", function() {
-            document.getElementById("kwota").value = this.value;
+            const kwotaInput = document.getElementById("kwota");
+            kwotaInput.value = this.value;
+            updateProwizja(); // Aktualizacja prowizji przy zmianie kwoty
         });
+
         document.getElementById("kwota").addEventListener("input", function() {
-            document.getElementById("kwotaRange").value = this.value;
+            const kwotaRange = document.getElementById("kwotaRange");
+            kwotaRange.value = this.value;
+            updateProwizja(); // Aktualizacja prowizji przy zmianie kwoty
         });
 
         document.getElementById("okresRange").addEventListener("input", function() {
-            document.getElementById("okres").value = this.value;
-            updateLata();
+            const okresInput = document.getElementById("okres");
+            okresInput.value = this.value;
+            updateLata(); // Aktualizacja ilości lat
         });
+
         document.getElementById("okres").addEventListener("input", function() {
-            document.getElementById("okresRange").value = this.value;
-            updateLata();
+            const okresRange = document.getElementById("okresRange");
+            okresRange.value = this.value;
+            updateLata(); // Aktualizacja ilości lat
         });
 
         document.getElementById("oprocentowanieRange").addEventListener("input", function() {
-            document.getElementById("oprocentowanie").value = this.value;
+            const oprocentowanieInput = document.getElementById("oprocentowanie");
+            oprocentowanieInput.value = this.value;
         });
+
         document.getElementById("oprocentowanie").addEventListener("input", function() {
-            document.getElementById("oprocentowanieRange").value = this.value;
+            const oprocentowanieRange = document.getElementById("oprocentowanieRange");
+            oprocentowanieRange.value = this.value;
         });
 
         document.getElementById("prowizjaRange").addEventListener("input", function() {
-            document.getElementById("prowizja").value = this.value;
-            updateProwizja();
+            const prowizjaInput = document.getElementById("prowizja");
+            prowizjaInput.value = this.value;
+            updateProwizja(); // Aktualizacja wartości prowizji
         });
+
         document.getElementById("prowizja").addEventListener("input", function() {
-            document.getElementById("prowizjaRange").value = this.value;
-            updateProwizja();
+            const prowizjaRange = document.getElementById("prowizjaRange");
+            prowizjaRange.value = this.value;
+            updateProwizja(); // Aktualizacja wartości prowizji
         });
+
         document.getElementById("prowizjaTyp").addEventListener("change", updateProwizja);
 
         document.getElementById("nadplataRange").addEventListener("input", function() {
-            document.getElementById("nadplata").value = this.value;
+            const nadplataInput = document.getElementById("nadplata");
+            nadplataInput.value = this.value;
         });
+
         document.getElementById("nadplata").addEventListener("input", function() {
-            document.getElementById("nadplataRange").value = this.value;
+            const nadplataRange = document.getElementById("nadplataRange");
+            nadplataRange.value = this.value;
         });
 
         document.getElementById("nadplataJednorazowaRange").addEventListener("input", function() {
-            document.getElementById("nadplataJednorazowa").value = this.value;
+            const nadplataJednorazowaInput = document.getElementById("nadplataJednorazowa");
+            nadplataJednorazowaInput.value = this.value;
         });
+
         document.getElementById("nadplataJednorazowa").addEventListener("input", function() {
-            document.getElementById("nadplataJednorazowaRange").value = this.value;
+            const nadplataJednorazowaRange = document.getElementById("nadplataJednorazowaRange");
+            nadplataJednorazowaRange.value = this.value;
         });
 
         function updateLata() {
-            let miesiace = parseInt(document.getElementById("okres").value) || 0;
-            let lata = (miesiace / 12).toFixed(0);
+            const miesiace = parseInt(document.getElementById("okres").value) || 0;
+            const lata = (miesiace / 12).toFixed(0);
             document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
         }
 
         function updateProwizja() {
-            let kwota = parseFloat(document.getElementById("kwota").value) || 0;
-            let prowizja = parseFloat(document.getElementById("prowizja").value) || 0;
-            let typ = document.getElementById("prowizjaTyp").value;
-            let prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
+            const kwota = parseFloat(document.getElementById("kwota").value) || 0;
+            const prowizja = parseFloat(document.getElementById("prowizja").value) || 0;
+            const typ = document.getElementById("prowizjaTyp").value;
+            const prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
             document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             return prowizjaPLN;
         }
 
+        // Początkowa aktualizacja wartości
         updateLata();
         updateProwizja();
 
         function toggleHarmonogram() {
-            let content = document.getElementById("harmonogramContent");
-            let toggleBtn = document.querySelector(".btn-toggle");
+            const content = document.getElementById("harmonogramContent");
+            const toggleBtn = document.querySelector(".btn-toggle");
             if (content.style.display === "none") {
                 content.style.display = "block";
                 toggleBtn.textContent = "Harmonogram spłat ▼";
@@ -667,7 +688,7 @@
                     }]
                 },
                 options: {
-                    responsive: true;
+                    responsive: true,
                     plugins: { legend: { display: false } }
                 }
             });
