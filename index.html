@@ -10,121 +10,165 @@
         body {
             background-color: #f5f6f5;
             font-family: 'Arial', sans-serif;
-            padding: 20px;
+            padding: 10px;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: #fff;
-            padding: 30px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 15px;
+        }
+        .result-section {
+            flex: 2;
+            min-width: 400px;
+            padding-left: 15px;
         }
         .form-label {
             font-weight: bold;
+            font-size: 0.9em;
+        }
+        .form-control, .form-range {
+            height: 30px;
+            font-size: 0.9em;
+        }
+        .form-range {
+            margin-top: 5px;
+        }
+        .sub-info {
+            font-size: 0.8em;
+            color: #555;
         }
         .result {
-            margin-top: 20px;
-            padding: 15px;
             background-color: #e9ecef;
+            padding: 10px;
             border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .harmonogram {
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.8em;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .logo {
+            max-width: 120px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
         .footer {
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #666;
-        }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-        .form-range {
             margin-top: 10px;
-        }
-        .sub-info {
-            font-size: 0.9em;
-            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo z linkiem -->
-        <a href="https://twoja-strona.pl" target="_blank">
-            <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo">
-        </a>
-
-        <h2 class="text-center mb-4">Kalkulator Kredytowy</h2>
-        <form id="kredytForm">
-            <!-- Kwota kredytu -->
-            <div class="mb-3">
-                <label for="kwota" class="form-label">Kwota kredytu (PLN):</label>
-                <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="100000" required>
-                <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="100000">
-            </div>
-
-            <!-- Ilość rat -->
-            <div class="mb-3">
-                <label for="okres" class="form-label">Ilość rat (miesiące):</label>
-                <input type="number" class="form-control" id="okres" min="12" max="240" step="1" value="120" required>
-                <input type="range" class="form-range" id="okresRange" min="12" max="240" step="1" value="120">
-                <div class="sub-info" id="lata">Przeliczona ilość lat: 10</div>
-            </div>
-
-            <!-- Oprocentowanie -->
-            <div class="mb-3">
-                <label for="oprocentowanie" class="form-label">Oprocentowanie roczne (%):</label>
-                <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="5" required>
-                <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="5">
-            </div>
-
-            <!-- Rodzaj rat -->
-            <div class="mb-3">
-                <label class="form-label">Rodzaj rat:</label>
-                <div>
-                    <input type="radio" id="rowne" name="rodzajRat" value="rowne" checked>
-                    <label for="rowne">Równe</label>
-                    <input type="radio" id="malejace" name="rodzajRat" value="malejace" class="ms-3">
-                    <label for="malejace">Malejące</label>
+        <!-- Sekcja formularza -->
+        <div class="form-section">
+            <a href="https://twoja-strona.pl" target="_blank">
+                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo">
+            </a>
+            <h4 class="mb-3">Kalkulator Kredytowy</h4>
+            <form id="kredytForm">
+                <!-- Kwota kredytu -->
+                <div class="mb-2">
+                    <label for="kwota" class="form-label">Kwota kredytu (PLN):</label>
+                    <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="100000" required>
+                    <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="100000">
                 </div>
-            </div>
 
-            <!-- Prowizja -->
-            <div class="mb-3">
-                <label for="prowizja" class="form-label">Prowizja za udzielenie kredytu:</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
-                    <select class="form-select" id="prowizjaTyp">
-                        <option value="procent">%</option>
-                        <option value="pln">PLN</option>
-                    </select>
+                <!-- Ilość rat -->
+                <div class="mb-2">
+                    <label for="okres" class="form-label">Ilość rat (miesiące):</label>
+                    <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="120" required>
+                    <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="120">
+                    <div class="sub-info" id="lata">Przeliczona ilość lat: 10</div>
                 </div>
-                <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
-                <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 2000 PLN</div>
+
+                <!-- Oprocentowanie -->
+                <div class="mb-2">
+                    <label for="oprocentowanie" class="form-label">Oprocentowanie (%):</label>
+                    <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="5" required>
+                    <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="5">
+                </div>
+
+                <!-- Rodzaj rat -->
+                <div class="mb-2">
+                    <label class="form-label">Rodzaj rat:</label>
+                    <div>
+                        <input type="radio" id="rowne" name="rodzajRat" value="rowne" checked>
+                        <label for="rowne">Równe</label>
+                        <input type="radio" id="malejace" name="rodzajRat" value="malejace" class="ms-2">
+                        <label for="malejace">Malejące</label>
+                    </div>
+                </div>
+
+                <!-- Prowizja -->
+                <div class="mb-2">
+                    <label for="prowizja" class="form-label">Prowizja:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
+                        <select class="form-select" id="prowizjaTyp">
+                            <option value="procent">%</option>
+                            <option value="pln">PLN</option>
+                        </select>
+                    </div>
+                    <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
+                    <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 2000 PLN</div>
+                </div>
+
+                <!-- Nadpłata -->
+                <div class="mb-2">
+                    <label for="nadplata" class="form-label">Nadpłata miesięczna (PLN):</label>
+                    <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                    <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
+                </div>
+
+                <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz</button>
+            </form>
+            <div class="footer">
+                <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Moja strona</a></p>
             </div>
-
-            <!-- Nadpłata (opcjonalna) -->
-            <div class="mb-3">
-                <label for="nadplata" class="form-label">Nadpłata miesięczna (PLN, opcjonalna):</label>
-                <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
-                <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
-            </div>
-
-            <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz ratę</button>
-        </form>
-
-        <div id="wynik" class="result" style="display: none;">
-            <h5>Wyniki:</h5>
-            <p><strong>Miesięczna rata:</strong> <span id="rata"></span> PLN</p>
-            <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt"></span> PLN</p>
-            <p><strong>Odsetki:</strong> <span id="odsetki"></span> PLN</p>
-            <p><strong>Prowizja:</strong> <span id="prowizjaWynik"></span> PLN</p>
         </div>
 
-        <div class="footer">
-            <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Odwiedź moją stronę</a></p>
+        <!-- Sekcja wyników -->
+        <div class="result-section">
+            <div class="result">
+                <h5>Wyniki:</h5>
+                <p><strong>Miesięczna rata:</strong> <span id="rata">-</span> PLN</p>
+                <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt">-</span> PLN</p>
+                <p><strong>Odsetki:</strong> <span id="odsetki">-</span> PLN</p>
+                <p><strong>Prowizja:</strong> <span id="prowizjaWynik">-</span> PLN</p>
+            </div>
+            <div class="harmonogram">
+                <h5>Harmonogram spłat:</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Miesiąc</th>
+                            <th>Rata</th>
+                            <th>Kapitał</th>
+                            <th>Odsetki</th>
+                            <th>Pozostały kapitał</th>
+                        </tr>
+                    </thead>
+                    <tbody id="harmonogramTabela"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -202,54 +246,78 @@
             let rodzajRat = document.querySelector('input[name="rodzajRat"]:checked').value;
             let prowizjaPLN = updateProwizja();
 
-            let rata, calkowityKoszt, odsetki;
+            let rata, calkowityKoszt = 0, odsetki = 0, harmonogram = [];
+            let pozostalyKapital = kwota;
 
             if (rodzajRat === "rowne") {
-                // Raty równe (annuitetowe)
+                // Raty równe
                 rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
-                calkowityKoszt = rata * miesiace;
-                odsetki = calkowityKoszt - kwota;
+                for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
+                    let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
+                    let kapital = rata - odsetkiMiesiac;
+                    if (nadplata > 0) {
+                        kapital += nadplata;
+                        rata = pozostalyKapital > 0 ? (pozostalyKapital * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -(miesiace - i))) : 0;
+                    }
+                    pozostalyKapital -= kapital;
+                    if (pozostalyKapital < 0) pozostalyKapital = 0;
+                    calkowityKoszt += rata + (nadplata > 0 ? nadplata : 0);
+                    odsetki += odsetkiMiesiac;
+                    harmonogram.push({
+                        miesiac: i,
+                        rata: (rata + (nadplata > 0 ? nadplata : 0)).toFixed(2),
+                        kapital: kapital.toFixed(2),
+                        odsetki: odsetkiMiesiac.toFixed(2),
+                        pozostaly: pozostalyKapital.toFixed(2)
+                    });
+                }
             } else {
                 // Raty malejące
-                let kapital = kwota / miesiace;
-                calkowityKoszt = 0;
-                let pozostalyKapital = kwota;
-                for (let i = 0; i < miesiace; i++) {
+                let kapitalStaly = kwota / miesiace;
+                for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
-                    rata = kapital + odsetkiMiesiac; // Pierwsza rata jako przykład
-                    calkowityKoszt += rata;
+                    let kapital = kapitalStaly;
+                    rata = kapital + odsetkiMiesiac;
+                    if (nadplata > 0) {
+                        kapital += nadplata;
+                    }
                     pozostalyKapital -= kapital;
+                    if (pozostalyKapital < 0) pozostalyKapital = 0;
+                    calkowityKoszt += rata + (nadplata > 0 ? nadplata : 0);
+                    odsetki += odsetkiMiesiac;
+                    harmonogram.push({
+                        miesiac: i,
+                        rata: (rata + (nadplata > 0 ? nadplata : 0)).toFixed(2),
+                        kapital: kapital.toFixed(2),
+                        odsetki: odsetkiMiesiac.toFixed(2),
+                        pozostaly: pozostalyKapital.toFixed(2)
+                    });
                 }
-                odsetki = calkowityKoszt - kwota;
-                rata = (kwota / miesiace) + (kwota * oprocentowanie); // Przybliżona pierwsza rata
             }
 
-            // Uwzględnienie nadpłaty
-            if (nadplata > 0) {
-                let pozostalyKapital = kwota;
-                let noweMiesiace = 0;
-                calkowityKoszt = 0;
-                while (pozostalyKapital > 0 && noweMiesiace < miesiace) {
-                    let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
-                    let rataMiesiac = rodzajRat === "rowne" ? rata : (kwota / miesiace) + odsetkiMiesiac;
-                    rataMiesiac += nadplata;
-                    pozostalyKapital -= (rataMiesiac - odsetkiMiesiac);
-                    calkowityKoszt += rataMiesiac;
-                    noweMiesiace++;
-                }
-                odsetki = calkowityKoszt - kwota;
-                rata = rata; // Pierwsza rata pozostaje taka sama, ale okres się skraca
-            }
-
-            // Dodanie prowizji do kosztu
+            // Dodanie prowizji
             calkowityKoszt += prowizjaPLN;
 
             // Wyświetl wyniki
-            document.getElementById("rata").textContent = rata.toFixed(2);
+            document.getElementById("rata").textContent = harmonogram[0].rata;
             document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
             document.getElementById("odsetki").textContent = odsetki.toFixed(2);
             document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toFixed(2);
-            document.getElementById("wynik").style.display = "block";
+
+            // Wypełnij harmonogram
+            let tabela = document.getElementById("harmonogramTabela");
+            tabela.innerHTML = "";
+            harmonogram.forEach(wiersz => {
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${wiersz.miesiac}</td>
+                        <td>${wiersz.rata}</td>
+                        <td>${wiersz.kapital}</td>
+                        <td>${wiersz.odsetki}</td>
+                        <td>${wiersz.pozostaly}</td>
+                    </tr>
+                `;
+            });
         }
     </script>
 </body>
