@@ -123,7 +123,7 @@
             margin-left: 0;
         }
         .spacer {
-            height: 12px; /* Zadanie 1: Dalsze podniesienie pola */
+            height: 12px;
         }
         .result-section {
             display: none;
@@ -142,26 +142,27 @@
         .chart-container {
             display: flex;
             align-items: flex-start;
-            justify-content: space-between;
+            justify-content: flex-start; /* Zmiana dla bliższego układu */
+            gap: 0; /* Zadanie 2: Usunięcie odstępu */
             margin-bottom: 20px;
             position: relative;
             overflow: visible;
         }
         .chart {
             flex: 1;
-            max-width: 180px; /* Zadanie 2: Dostosowanie rozmiaru wykresu */
+            max-width: 160px; /* Zadanie 2: Zmniejszenie rozmiaru wykresu */
             position: relative;
             z-index: 20;
-            margin-right: 0; /* Zadanie 2: Usunięcie odstępu */
+            margin-right: 0;
         }
         .chart-legend {
             flex: 1;
-            padding-left: 0; /* Zadanie 2: Usunięcie odstępu od wykresu */
+            padding-left: 0;
             max-width: 50%;
         }
         .chart-legend .legend-item {
             display: flex;
-            align-items: flex-start; /* Zadanie 5: Nazwy wyżej */
+            align-items: flex-start;
             margin-bottom: 8px;
             font-size: 0.9em;
             color: #333333;
@@ -171,7 +172,7 @@
         .chart-legend .color-box {
             width: 30%;
             height: 20px;
-            margin-bottom: 3px; /* Zadanie 5: Lepsze oddzielenie od nazwy */
+            margin-bottom: 3px;
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
@@ -183,7 +184,7 @@
             position: relative;
         }
         .chart-legend .color-box .tooltip {
-            display: none; /* Zadanie 3: Początkowo ukryte */
+            display: none;
             position: absolute;
             top: 0;
             left: 0;
@@ -196,12 +197,12 @@
             z-index: 30;
             transition: display 0.2s ease;
         }
-        .chart-legend .color-box:hover .tooltip {
-            display: block; /* Zadanie 3: Wyświetlanie przy hover */
-        }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
             height: 24px;
+        }
+        .chart-legend .legend-item:hover .color-box .tooltip {
+            display: block; /* Zadanie 1: Wyświetlanie tooltipa przy hover */
         }
         .chart-legend .legend-item:hover {
             color: #fff;
@@ -217,6 +218,25 @@
             padding: 4px 8px;
             border-radius: 5px;
             position: relative;
+        }
+        .highlight.yellow, .highlight.red {
+            cursor: pointer;
+        }
+        .highlight.yellow:hover span, .highlight.red:hover span {
+            display: none;
+        }
+        .highlight.yellow:hover::after, .highlight.red:hover::after {
+            content: attr(data-hover);
+            font-weight: bold;
+            font-size: 1.2em; /* Zadanie 3: Większa czcionka */
+            color: inherit;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            line-height: 1.2em;
         }
         .highlight.yellow {
             background-color: #ffeb3b;
@@ -401,8 +421,8 @@
                 </div>
             </div>
             <div class="summary-footer">
-                <span class="highlight yellow">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
-                <span class="highlight red">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
+                <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
+                <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
             </div>
             <div class="harmonogram">
                 <h5 class="btn-toggle" onclick="toggleHarmonogram()">Harmonogram spłat ▼</h5>
@@ -525,7 +545,6 @@
             let pozostalyKapital = kwota;
             let calkowitaNadplata = 0;
 
-            // Uwzględnienie nadpłaty jednorazowej w pierwszym miesiącu
             if (nadplataJednorazowa > 0) {
                 pozostalyKapital -= nadplataJednorazowa;
                 calkowitaNadplata += nadplataJednorazowa;
@@ -602,24 +621,22 @@
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
-            // Zadanie 4: Zmiana tekstu przy najechaniu na okres
-            let okresElement = document.getElementById("okresPoNadplacie");
-            let originalOkres = okresElement.textContent;
-            okresElement.addEventListener('mouseover', function() {
-                this.textContent = "360 miesięcy";
-            });
-            okresElement.addEventListener('mouseout', function() {
-                this.textContent = originalOkres;
-            });
+            // Zadanie 3: Aktualizacja data-hover dla "Okres kredytowania"
+            let okresHighlight = document.querySelector('.highlight.yellow');
+            okresHighlight.setAttribute('data-hover', `${miesiace} miesięcy`); // Dynamiczna wartość
+
+            // Zadanie 3: Aktualizacja data-hover dla "Całkowita kwota spłaty"
+            let kosztHighlight = document.querySelector('.highlight.red');
+            kosztHighlight.setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
                 data: {
-                    labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja za udzielenie', 'Prowizja od nadpłat'], // Zadanie 6: Nowa kolejność
+                    labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja za udzielenie', 'Prowizja od nadpłat'],
                     datasets: [{
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
-                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'], // Zadanie 6: Nowa kolejność kolorów
+                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'],
                         borderWidth: 1,
                         hoverOffset: 3
                     }]
