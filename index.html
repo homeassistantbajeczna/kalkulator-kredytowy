@@ -8,57 +8,61 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+            background-color: #f5f6f5;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
         }
         .container {
-            max-width: 800px;
-            margin-top: 50px;
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 20px;
+        .form-label {
+            font-weight: bold;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
         }
         .footer {
-            margin-top: 30px;
             text-align: center;
-            font-size: 0.9em;
-        }
-        table {
             margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo -->
-        <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo">
-
         <h2 class="text-center mb-4">Kalkulator Kredytowy</h2>
-        <form id="kredytForm" class="p-4 bg-white shadow rounded">
+        <form id="kredytForm">
             <div class="mb-3">
                 <label for="kwota" class="form-label">Kwota kredytu (PLN):</label>
-                <input type="number" class="form-control" id="kwota" step="0.01" required>
+                <input type="number" class="form-control" id="kwota" min="1000" step="1000" required>
             </div>
             <div class="mb-3">
-                <label for="oprocentowanie" class="form-label">Oprocentowanie (%):</label>
-                <input type="number" class="form-control" id="oprocentowanie" step="0.01" required>
+                <label for="oprocentowanie" class="form-label">Oprocentowanie roczne (%):</label>
+                <input type="number" class="form-control" id="oprocentowanie" min="0" step="0.1" required>
             </div>
             <div class="mb-3">
-                <label for="okres" class="form-label">Okres spłaty (miesiące):</label>
-                <input type="number" class="form-control" id="okres" required>
+                <label for="okres" class="form-label">Okres spłaty (lata):</label>
+                <input type="number" class="form-control" id="okres" min="1" max="30" required>
             </div>
-            <div class="mb-3">
-                <label for="nadplata" class="form-label">Nadpłata (PLN, opcjonalna):</label>
-                <input type="number" class="form-control" id="nadplata" step="0.01" value="0">
-            </div>
-            <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz</button>
+            <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz ratę</button>
         </form>
 
-        <!-- Wyniki -->
-        <div id="wynik" class="mt-4"></div>
+        <div id="wynik" class="result" style="display: none;">
+            <h5>Wyniki:</h5>
+            <p><strong>Miesięczna rata:</strong> <span id="rata"></span> PLN</p>
+            <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt"></span> PLN</p>
+            <p><strong>Odsetki:</strong> <span id="odsetki"></span> PLN</p>
+        </div>
 
-        <!-- Stopka z linkiem -->
         <div class="footer">
             <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Odwiedź moją stronę</a></p>
         </div>
@@ -68,75 +72,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function obliczKredyt() {
+            // Pobierz dane z formularza
             let kwota = parseFloat(document.getElementById("kwota").value);
             let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12; // miesięczne
-            let okres = parseInt(document.getElementById("okres").value);
-            let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
+            let lata = parseInt(document.getElementById("okres").value);
+            let miesiace = lata * 12;
 
-            // Obliczenie podstawowej raty
-            let rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -okres));
-            let pozostalyKapital = kwota;
-            let calkowiteOdsetki = 0;
-            let harmonogram = [];
+            // Oblicz ratę (wzór na ratę annuitetową)
+            let rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+            let calkowityKoszt = rata * miesiace;
+            let odsetki = calkowityKoszt - kwota;
 
-            // Generowanie harmonogramu
-            for (let i = 1; i <= okres; i++) {
-                let odsetki = pozostalyKapital * oprocentowanie;
-                let kapital = rata - odsetki;
-                pozostalyKapital -= kapital;
-
-                if (i === 1 && nadplata > 0) {
-                    pozostalyKapital -= nadplata;
-                    rata = (pozostalyKapital * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -(okres - 1)));
-                }
-
-                if (pozostalyKapital < 0) pozostalyKapital = 0;
-                calkowiteOdsetki += odsetki;
-
-                harmonogram.push({
-                    miesiac: i,
-                    rata: rata.toFixed(2),
-                    kapital: kapital.toFixed(2),
-                    odsetki: odsetki.toFixed(2),
-                    pozostaly: pozostalyKapital.toFixed(2)
-                });
-
-                if (pozostalyKapital <= 0) break;
-            }
-
-            // Wyświetlanie wyników
-            let wynikHTML = `
-                <h4>Wyniki:</h4>
-                <p><strong>Miesięczna rata:</strong> ${rata.toFixed(2)} PLN</p>
-                <p><strong>Całkowite odsetki:</strong> ${calkowiteOdsetki.toFixed(2)} PLN</p>
-                <h5>Harmonogram spłat:</h5>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Miesiąc</th>
-                            <th>Rata</th>
-                            <th>Kapitał</th>
-                            <th>Odsetki</th>
-                            <th>Pozostały kapitał</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            harmonogram.forEach(wiersz => {
-                wynikHTML += `
-                    <tr>
-                        <td>${wiersz.miesiac}</td>
-                        <td>${wiersz.rata}</td>
-                        <td>${wiersz.kapital}</td>
-                        <td>${wiersz.odsetki}</td>
-                        <td>${wiersz.pozostaly}</td>
-                    </tr>
-                `;
-            });
-
-            wynikHTML += `</tbody></table>`;
-            document.getElementById("wynik").innerHTML = wynikHTML;
+            // Wyświetl wyniki
+            document.getElementById("rata").textContent = rata.toFixed(2);
+            document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
+            document.getElementById("odsetki").textContent = odsetki.toFixed(2);
+            document.getElementById("wynik").style.display = "block";
         }
     </script>
 </body>
