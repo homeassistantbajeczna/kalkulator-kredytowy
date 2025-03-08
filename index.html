@@ -150,10 +150,10 @@
         }
         .chart {
             flex: 0 0 auto;
-            width: 160px; /* Zmniejszony rozmiar wykresu */
-            height: 160px;
+            width: 140px; /* Jeszcze mniejszy wykres */
+            height: 140px;
             position: relative;
-            z-index: 25; /* Zwiększony z-index */
+            z-index: 25;
         }
         .chart-legend {
             flex: 0 0 auto;
@@ -167,20 +167,20 @@
             display: flex;
             align-items: center;
             margin-bottom: 8px;
-            font-size: 0.8em; /* Zmniejszona czcionka */
+            font-size: 0.8em;
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
             padding-left: 10px;
         }
         .chart-legend .color-box {
-            width: 110px; /* Nieznacznie mniejszy pasek */
-            height: 20px; /* Zmniejszona wysokość paska */
+            width: 110px;
+            height: 20px;
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
             line-height: 20px;
-            font-size: 0.55em; /* Mniejsza czcionka w pasku */
+            font-size: 0.55em;
             white-space: nowrap;
             overflow: hidden;
             position: relative;
@@ -210,10 +210,14 @@
         .chart-legend .legend-item:hover .color-box {
             width: 110px;
         }
+        .chart-legend .legend-item:hover .legend-text {
+            opacity: 0; /* Przywrócony efekt znikania tekstu */
+            transition: opacity 0.3s ease;
+        }
         .chart-legend .legend-text {
             opacity: 1;
             transition: opacity 0.3s ease;
-            font-size: 0.8em; /* Zmniejszona czcionka tekstu obok paska */
+            font-size: 0.8em;
         }
         .summary-footer {
             display: flex;
@@ -559,8 +563,7 @@
         }
 
         function showForm() {
-            document.getElementById("formSection").style.display = "block";
-            document.getElementById("resultSection").style.display = "none";
+            document.getElementPromoSection").style.display = "none";
         }
 
         function obliczKredyt() {
@@ -684,7 +687,7 @@
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
                         backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'],
                         borderWidth: 1,
-                        hoverOffset: 10,
+                        hoverOffset: 8, // Zmniejszony efekt powiększania
                         hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1']
                     }]
                 },
@@ -704,6 +707,19 @@
                         event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
                     }
                 }
+            });
+
+            // Dodanie interakcji przy najechaniu na elementy legendy
+            document.querySelectorAll('.legend-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    chart.setActiveElements([{ datasetIndex: 0, index: index }]);
+                    chart.update();
+                });
+                item.addEventListener('mouseleave', function() {
+                    chart.setActiveElements([]);
+                    chart.update();
+                });
             });
 
             let tabela = document.getElementById("harmonogramTabela");
