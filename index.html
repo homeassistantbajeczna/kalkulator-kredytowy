@@ -100,3 +100,44 @@
                     odsetki: odsetki.toFixed(2),
                     pozostaly: pozostalyKapital.toFixed(2)
                 });
+
+                if (pozostalyKapital <= 0) break;
+            }
+
+            // Wyświetlanie wyników
+            let wynikHTML = `
+                <h4>Wyniki:</h4>
+                <p><strong>Miesięczna rata:</strong> ${rata.toFixed(2)} PLN</p>
+                <p><strong>Całkowite odsetki:</strong> ${calkowiteOdsetki.toFixed(2)} PLN</p>
+                <h5>Harmonogram spłat:</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Miesiąc</th>
+                            <th>Rata</th>
+                            <th>Kapitał</th>
+                            <th>Odsetki</th>
+                            <th>Pozostały kapitał</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            harmonogram.forEach(wiersz => {
+                wynikHTML += `
+                    <tr>
+                        <td>${wiersz.miesiac}</td>
+                        <td>${wiersz.rata}</td>
+                        <td>${wiersz.kapital}</td>
+                        <td>${wiersz.odsetki}</td>
+                        <td>${wiersz.pozostaly}</td>
+                    </tr>
+                `;
+            });
+
+            wynikHTML += `</tbody></table>`;
+            document.getElementById("wynik").innerHTML = wynikHTML;
+        }
+    </script>
+</body>
+</html>
