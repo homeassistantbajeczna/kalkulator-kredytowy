@@ -44,7 +44,7 @@
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: flex-start; /* Zadanie 3: Wyrównanie suwaków */
+            align-items: center; /* Zadanie 3: Wyrównanie suwaków */
         }
         .form-group {
             flex: 1;
@@ -166,22 +166,22 @@
         }
         .chart-legend .legend-item {
             display: flex;
-            align-items: center; /* Zadanie 3: Wyrównanie wysokości */
+            align-items: center;
             margin-bottom: 8px;
             font-size: 0.9em;
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
-            padding-left: 5px !important; /* Zadanie 1: Odsunięcie tekstu o 0,5 cm */
+            padding-left: 0.5cm; /* Zadanie 1: Odsunięcie tekstu o 0,5 cm */
         }
         .chart-legend .color-box {
             width: 30%;
-            height: 24px; /* Stała wysokość */
+            height: 24px;
             margin-bottom: 0;
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
-            line-height: 24px; /* Dopasowanie do wysokości */
+            line-height: 24px;
             font-size: 0.6em;
             transition: width 0.3s ease, height 0.3s ease;
             white-space: nowrap;
@@ -209,7 +209,7 @@
             display: none;
         }
         .chart-legend .legend-item:hover .color-box .tooltip {
-            display: block !important; /* Zadanie 2: Upewnienie się, że tooltip się pojawia */
+            display: block; /* Zadanie 2: Tooltip widoczny przy najechaniu */
         }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
@@ -316,7 +316,7 @@
                             <span class="input-group-text">zł</span>
                         </div>
                         <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="500000">
-                        <div class="sub-info"></div> <!-- Zadanie 3: Dodanie pustego sub-info dla wyrównania -->
+                        <div class="sub-info"></div> <!-- Zadanie 3: Wyrównanie -->
                     </div>
                     <div class="form-group">
                         <label for="okres" class="form-label">Ilość rat</label>
@@ -334,7 +334,7 @@
                             <span class="input-group-text">%</span>
                         </div>
                         <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="7">
-                        <div class="sub-info"></div> <!-- Zadanie 3: Dodanie pustego sub-info dla wyrównania -->
+                        <div class="sub-info"></div> <!-- Zadanie 3: Wyrównanie -->
                     </div>
                 </div>
 
@@ -652,7 +652,7 @@
 
             // Aktualizacja wartości na paskach i tooltipów
             document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.getElementById("tooltipKapital").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("tooltipKapital").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`; // Zadanie 2: Przykład wartości
 
             document.getElementById("valueOdsetki").textContent = `${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipOdsetki").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
