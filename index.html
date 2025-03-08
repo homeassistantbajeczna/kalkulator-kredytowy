@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Kredytowy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> <!-- Zaktualizowana wersja Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -143,22 +143,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 30px; /* Zwiększony odstęp dla lepszego wyrównania */
             margin-bottom: 20px;
             position: relative;
             overflow: visible;
         }
         .chart {
             flex: 0 0 auto;
-            width: 160px; /* Ustalona szerokość wykresu */
-            height: 160px; /* Ustalona wysokość wykresu */
+            width: 200px; /* Nieznacznie większy wykres dla lepszej widoczności */
+            height: 200px;
             position: relative;
-            z-index: 20;
+            z-index: 20; /* Zwiększenie z-index, aby wykres był na wierzchu */
         }
         .chart-legend {
             flex: 0 0 auto;
-            max-width: 250px; /* Ograniczenie szerokości legendy */
+            max-width: 250px;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .chart-legend .legend-item {
             display: flex;
@@ -168,10 +171,10 @@
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
-            padding-left: 10px;
+            padding-left: 15px; /* Nieznacznie większy odstęp tekstu od paska */
         }
         .chart-legend .color-box {
-            width: 100px; /* Stała szerokość paska */
+            width: 120px; /* Stała szerokość paska, dostosowana do treści */
             height: 24px;
             border-radius: 5px;
             text-align: center;
@@ -182,6 +185,7 @@
             overflow: hidden;
             position: relative;
             color: #fff;
+            margin-right: 10px; /* Odstęp między paskiem a tekstem */
         }
         .chart-legend .color-box .value {
             display: block;
@@ -204,11 +208,7 @@
             display: none;
         }
         .chart-legend .legend-item:hover .color-box {
-            width: 100px; /* Usunięcie powiększania paska przy hover */
-        }
-        .chart-legend .legend-item:hover .legend-text {
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            width: 120px; /* Brak zmiany rozmiaru przy hover */
         }
         .chart-legend .legend-text {
             opacity: 1;
@@ -670,12 +670,10 @@
             document.querySelector('.highlight.yellow').setAttribute('data-hover', `${miesiace} miesięcy`);
             document.querySelector('.highlight.red').setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
-            // Usuwanie starego wykresu, jeśli istnieje
             if (chart) {
                 chart.destroy();
             }
 
-            // Tworzenie nowego wykresu
             const ctx = document.getElementById("creditChart").getContext("2d");
             chart = new Chart(ctx, {
                 type: 'doughnut',
@@ -685,15 +683,24 @@
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
                         backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'],
                         borderWidth: 1,
-                        hoverOffset: 10 // Zwiększenie efektu powiększania
+                        hoverOffset: 15, // Zwiększone dla lepszej widoczności efektu hover
+                        hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'] // Zachowanie koloru przy hover
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // Wyłączenie proporcji, aby wykres dopasował się do kontenera
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: true }
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 }
+                        }
+                    },
+                    onHover: (event, chartElement) => {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
                     }
                 }
             });
