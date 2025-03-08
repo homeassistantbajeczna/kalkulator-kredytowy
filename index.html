@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Kredytowy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> <!-- Zaktualizowana wersja Chart.js -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -141,26 +141,24 @@
         }
         .chart-container {
             display: flex;
-            justify-content: center; /* Wyśrodkowanie całego kontenera */
+            justify-content: center;
             align-items: center;
-            gap: 20px; /* Zwiększony odstęp między wykresem a legendą */
+            gap: 20px;
             margin-bottom: 20px;
             position: relative;
             overflow: visible;
         }
         .chart {
-            flex: 0 0 auto; /* Ustalona szerokość, ale elastyczność w wyśrodkowaniu */
-            max-width: 160px;
+            flex: 0 0 auto;
+            width: 160px; /* Ustalona szerokość wykresu */
+            height: 160px; /* Ustalona wysokość wykresu */
             position: relative;
             z-index: 20;
-            margin-right: 0;
         }
         .chart-legend {
-            flex: 0 0 auto; /* Ustalona szerokość, ale elastyczność w wyśrodkowaniu */
-            padding-left: 0;
-            max-width: 50%;
-            margin-left: 0; /* Usunięcie poprzedniego marginesu */
-            margin-top: 0;
+            flex: 0 0 auto;
+            max-width: 250px; /* Ograniczenie szerokości legendy */
+            margin: 0;
         }
         .chart-legend .legend-item {
             display: flex;
@@ -170,17 +168,16 @@
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
-            padding-left: 10px; /* Przesunięcie tekstu o 1 cm (10px) od pasków */
+            padding-left: 10px;
         }
         .chart-legend .color-box {
-            width: 30%;
+            width: 100px; /* Stała szerokość paska */
             height: 24px;
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
             line-height: 24px;
             font-size: 0.6em;
-            transition: width 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
             position: relative;
@@ -207,7 +204,7 @@
             display: none;
         }
         .chart-legend .legend-item:hover .color-box {
-            width: 40%;
+            width: 100px; /* Usunięcie powiększania paska przy hover */
         }
         .chart-legend .legend-item:hover .legend-text {
             opacity: 0;
@@ -673,8 +670,14 @@
             document.querySelector('.highlight.yellow').setAttribute('data-hover', `${miesiace} miesięcy`);
             document.querySelector('.highlight.red').setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
-            if (chart) chart.destroy();
-            chart = new Chart(document.getElementById("creditChart"), {
+            // Usuwanie starego wykresu, jeśli istnieje
+            if (chart) {
+                chart.destroy();
+            }
+
+            // Tworzenie nowego wykresu
+            const ctx = document.getElementById("creditChart").getContext("2d");
+            chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja za udzielenie', 'Prowizja od nadpłat'],
@@ -682,14 +685,15 @@
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
                         backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'],
                         borderWidth: 1,
-                        hoverOffset: 3 // Przywrócenie powiększania przy najechaniu
+                        hoverOffset: 10 // Zwiększenie efektu powiększania
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false, // Wyłączenie proporcji, aby wykres dopasował się do kontenera
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: true } // Upewnienie się, że tooltipy działają
+                        tooltip: { enabled: true }
                     }
                 }
             });
