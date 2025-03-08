@@ -12,14 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f6f5; /* Początkowe tło */
+            background-color: #f5f6f5;
             font-family: 'Montserrat', sans-serif;
             padding: 10px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: #FFFFFF; /* Białe tło */
+            background: #FFFFFF;
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
@@ -36,14 +36,14 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 1.2em;
-            color: #333333; /* Ciemnoszary */
+            color: #333333;
         }
         .form-row {
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: center; /* Zmiana na center dla lepszego wyrównania */
+            align-items: center; /* Zadanie 1: Zmiana na center dla wyrównania */
         }
         .form-group {
             flex: 1;
@@ -55,34 +55,32 @@
             font-size: 0.8em;
             text-transform: uppercase;
             margin-bottom: 2px;
-            color: #333333; /* Ciemnoszary */
+            color: #333333;
         }
         .form-control, .form-select, .form-range {
             height: 25px;
             font-size: 0.8em;
             padding: 2px;
-            text-align: center; /* Wyśrodkowanie wartości w polach */
+            text-align: center;
         }
         .form-select {
             max-width: 60px;
-            /* Usunięcie strzałki dla selecta prowizji */
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQ0lEQVR42mNgwAfKy8Q/Y//+Ii//3jVAYQzsIFyQ0dOaWq992zxcnN5+9NmyZACV40DmGhPZtzwUAxhUaoLntdha0DqQbtz4E9DzN6XgI0P2VYFlQrUwoQDIgbChLE/0awXiwV5rhugPX6A8BSsYFDqU+rEFdkGZA7+G9HMqaAU6l+0w+NdJD7ADhzhR/4KDZnWOw0QKrVqYc1G+1Dczfx8DR0uv+QJqDRvQxdizFAQAwsy39EZhAAAwAAJ4+Q1XFlAAAAABJRU5ErkJggg==') no-repeat right 5px center; /* Spacja zamiast strzałki */
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQ0lEQVR42mNgwAfKy8Q/Y//+Ii//3jVAYQzsIFyQ0dOaWq992zxcnN5+9NmyZACV40DmGhPZtzwUAxhUaoLntdha0DqQbtz4E9DzN6XgI0P2VYFlQrUwoQDIgbChLE/0awXiwV5rhugPX6A8BSsYFDqU+rEFdkGZA7+G9HMqaAU6l+0w+NdJD7ADhzhR/4KDZnWOw0QKrVqYc1G+1Dczfx8DR0uv+QJqDRvQxdizFAQAwsy39EZhAAAwAAJ4+Q1XFlAAAAABJRU5ErkJggg==') no-repeat right 5px center;
         }
         .form-select#rodzajRat {
-            max-width: 120px; /* Zmniejszenie szerokości dla rodzaju rat */
+            max-width: 120px;
         }
         .form-range {
             margin-top: 2px;
             height: 10px;
-            background: #d3d3d3; /* Ciemniejsze tło paska suwaka */
+            background: #d3d3d3; /* Zadanie 4: Ciemniejsze tło paska suwaka */
             border-radius: 5px;
         }
-        /* Styl dla uchwytu suwaka (thumb) */
         .form-range::-webkit-slider-thumb {
-            background: #C2B280; /* Kolor uchwytu taki sam jak przycisk */
+            background: #C2B280; /* Zadanie 4: Kolor uchwytu jak przycisk */
             border: none;
             border-radius: 50%;
             width: 16px;
@@ -91,7 +89,7 @@
             -webkit-appearance: none;
         }
         .form-range::-moz-range-thumb {
-            background: #C2B280; /* Kolor uchwytu taki sam jak przycisk */
+            background: #C2B280; /* Zadanie 4: Kolor uchwytu jak przycisk */
             border: none;
             border-radius: 50%;
             width: 16px;
@@ -103,28 +101,28 @@
             padding: 2px 5px;
         }
         .sub-info {
-            font-size: 0.6em; /* Zmniejszenie "Ilość lat" i "Wartość prowizji" */
-            color: #333333; /* Ciemnoszary */
+            font-size: 0.6em;
+            color: #333333;
             margin-top: 2px;
-            text-align: left; /* Przesunięcie do lewej */
+            text-align: left;
         }
         .form-group.no-sub-info .input-group {
-            margin-bottom: 16px; /* Dodatkowy odstęp dla pól bez sub-info */
+            margin-bottom: 16px;
         }
         .radio-option {
             display: flex;
-            align-items: center; /* Wyśrodkowanie etykiety względem radio button */
+            align-items: center; /* Zadanie 3: Wyśrodkowanie etykiet */
             gap: 3px;
         }
         .radio-label {
-            font-size: 0.55em; /* Mniejszy tekst opcji */
-            margin-left: 0; /* Usunięcie dodatkowego marginesu */
+            font-size: 0.55em;
+            margin-left: 0;
         }
         .result-section {
             display: none;
             padding: 10px;
-            max-width: 800px; /* Zmniejszenie ekranu podsumowania */
-            margin: 0 auto; /* Wyśrodkowanie */
+            max-width: 800px;
+            margin: 0 auto;
         }
         .result-header {
             text-align: center;
@@ -132,7 +130,7 @@
         }
         .result-header h4 {
             font-size: 1.2em;
-            color: #333333; /* Ciemnoszary */
+            color: #333333;
         }
         .chart-container {
             display: flex;
@@ -143,7 +141,7 @@
         }
         .chart {
             flex: 1;
-            max-width: 200px; /* Zmniejszenie wykresu kołowego */
+            max-width: 200px; /* Zadanie 6: Zmniejszenie wykresu */
         }
         .chart-legend {
             flex: 1;
@@ -154,27 +152,27 @@
             align-items: center;
             margin-bottom: 8px;
             font-size: 0.9em;
-            color: #333333; /* Ciemnoszary */
-            cursor: pointer; /* Wskazuje, że można najechać */
-            transition: transform 0.3s ease; /* Animacja powiększenia */
+            color: #333333;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
         .chart-legend .color-box {
-            width: 120%; /* Rozszerzenie pasków */
-            height: 3.75px; /* Skrócenie o połowę (z 7.5px do 3.75px) */
+            width: 120%; /* Zadanie 5: Rozszerzenie pasków */
+            height: 3.75px; /* Zadanie 5: Skrócenie o połowę */
             margin-bottom: 5px;
             border-radius: 5px;
             text-align: center;
             color: #fff;
             font-weight: 500;
-            line-height: 3.75px; /* Dopasowanie linii do wysokości paska */
-            font-size: 0.5em; /* Jeszcze mniejszy tekst na paskach */
-            transition: width 0.3s ease, height 0.3s ease; /* Animacja powiększenia */
-            white-space: nowrap; /* Zapobiega zawijaniu tekstu */
-            overflow: hidden; /* Ukrywa nadmiar tekstu */
+            line-height: 3.75px;
+            font-size: 0.5em;
+            transition: width 0.3s ease, height 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
         }
         .chart-legend .legend-item:hover .color-box {
-            width: 130%; /* Powiększenie paska */
-            height: 4.5px; /* Powiększenie paska */
+            width: 130%;
+            height: 4.5px;
         }
         .summary-footer {
             display: flex;
@@ -209,9 +207,9 @@
             margin-bottom: 10px;
         }
         .btn-primary, .btn-secondary {
-            background-color: #C2B280; /* Jasny beżowy */
+            background-color: #C2B280;
             border-color: #C2B280;
-            color: #000000; /* Czarny tekst */
+            color: #000000;
             font-size: 0.9em;
             padding: 5px 20px;
             width: auto;
@@ -219,7 +217,7 @@
             display: block;
         }
         .btn-primary:hover, .btn-secondary:hover {
-            background-color: #b0a070; /* Lekko ciemniejszy odcień przy hover */
+            background-color: #b0a070;
             border-color: #b0a070;
             color: #000000;
         }
@@ -227,16 +225,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sekcja formularza -->
         <div class="form-section" id="formSection">
-            <!-- Rząd 1: Logo i nazwa -->
             <a href="https://twoja-strona.pl" target="_blank">
-                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
+                <h3 class="text-center">Logo</h3>
             </a>
             <h4>Kalkulator Kredytowy</h4>
 
             <form id="kredytForm">
-                <!-- Rząd 2: Kwota kredytu, ilość rat, oprocentowanie -->
                 <div class="form-row">
                     <div class="form-group no-sub-info">
                         <label for="kwota" class="form-label">Kwota kredytu</label>
@@ -265,7 +260,6 @@
                     </div>
                 </div>
 
-                <!-- Rząd 3: Rodzaj rat i prowizja -->
                 <div class="form-row">
                     <div class="form-group no-sub-info">
                         <label class="form-label">Rodzaj rat</label>
@@ -275,7 +269,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="prowizja" class="form-label">Prowizja</label>
+                        <label for="prowizja" class="form-label">Prowizja</label> <!-- Zadanie 2: Zmiana nazwy -->
                         <div class="input-group">
                             <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
                             <select class="form-select" id="prowizjaTyp">
@@ -288,7 +282,6 @@
                     </div>
                 </div>
 
-                <!-- Rząd 4: Nadpłata miesięczna -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
@@ -310,17 +303,15 @@
                     </div>
                 </div>
 
-                <!-- Rząd 5: Przycisk -->
                 <div class="form-row">
                     <button type="button" class="btn btn-primary" onclick="obliczKredyt()">Oblicz</button>
                 </div>
             </form>
         </div>
 
-        <!-- Sekcja wyników -->
         <div class="result-section" id="resultSection">
             <a href="https://twoja-strona.pl" target="_blank">
-                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
+                <h3 class="text-center">Logo</h3>
             </a>
             <div class="result-header">
                 <h4>Kredyt Posiadany</h4>
@@ -373,12 +364,10 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let chart;
 
-        // Synchronizacja suwaków z polami tekstowymi
         document.getElementById("kwotaRange").addEventListener("input", function() {
             document.getElementById("kwota").value = this.value;
         });
@@ -419,14 +408,12 @@
             document.getElementById("nadplataRange").value = this.value;
         });
 
-        // Funkcja przeliczająca lata
         function updateLata() {
             let miesiace = parseInt(document.getElementById("okres").value);
             let lata = (miesiace / 12).toFixed(0);
             document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
         }
 
-        // Funkcja obliczająca prowizję w PLN
         function updateProwizja() {
             let kwota = parseFloat(document.getElementById("kwota").value);
             let prowizja = parseFloat(document.getElementById("prowizja").value);
@@ -436,11 +423,9 @@
             return prowizjaPLN;
         }
 
-        // Inicjalizacja
         updateLata();
         updateProwizja();
 
-        // Funkcja zwijania/rozwijania harmonogramu
         function toggleHarmonogram() {
             let content = document.getElementById("harmonogramContent");
             let toggleBtn = document.querySelector(".btn-toggle");
@@ -453,16 +438,14 @@
             }
         }
 
-        // Funkcja pokazująca formularz
         function showForm() {
             document.getElementById("formSection").style.display = "block";
             document.getElementById("resultSection").style.display = "none";
         }
 
-        // Obliczanie kredytu
         function obliczKredyt() {
             let kwota = parseFloat(document.getElementById("kwota").value);
-            let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12; // miesięczne
+            let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12;
             let miesiace = parseInt(document.getElementById("okres").value);
             let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
             let rodzajRat = document.getElementById("rodzajRat").value;
@@ -474,7 +457,6 @@
             let calkowitaNadplata = 0;
 
             if (rodzajRat === "rowne") {
-                // Raty równe
                 rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
                     rata = ((kwota - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
@@ -501,7 +483,6 @@
                     if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
             } else {
-                // Raty malejące
                 let kapitalStaly = kwota / miesiace;
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
                     kapitalStaly = (kwota - nadplata * miesiace) / miesiace;
@@ -530,10 +511,8 @@
                 }
             }
 
-            // Dodanie prowizji
             calkowityKoszt += prowizjaPLN;
 
-            // Wyświetl wyniki
             document.getElementById("kapital").textContent = kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("prowizjaOdNadplat").textContent = "0.00";
@@ -542,7 +521,6 @@
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
-            // Tworzenie wykresu
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
@@ -552,7 +530,7 @@
                         data: [kwota, calkowitaNadplata, 0, odsetki, prowizjaPLN],
                         backgroundColor: ['#28a745', '#dc3545', '#6f42c1', '#007bff', '#17a2b8'],
                         borderWidth: 1,
-                        hoverOffset: 20 // Powiększenie wycinka przy najechaniu
+                        hoverOffset: 20
                     }]
                 },
                 options: {
@@ -570,7 +548,6 @@
                 }
             });
 
-            // Synchronizacja najechania na pasek z wykresem
             document.querySelectorAll('.legend-item').forEach(item => {
                 item.addEventListener('mouseenter', () => {
                     const index = item.getAttribute('data-index');
@@ -587,7 +564,6 @@
                 });
             });
 
-            // Wypełnij harmonogram
             let tabela = document.getElementById("harmonogramTabela");
             tabela.innerHTML = "";
             harmonogram.forEach(wiersz => {
@@ -603,7 +579,6 @@
                 `;
             });
 
-            // Zwinięcie formularza i pokazanie wyników
             document.getElementById("formSection").style.display = "none";
             document.getElementById("resultSection").style.display = "block";
         }
