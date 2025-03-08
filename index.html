@@ -27,34 +27,71 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
-        .form-section, .result-section {
+        .form-section {
             padding: 10px;
         }
         .form-section h4 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
+            font-size: 1.2em;
+        }
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 10px;
         }
         .form-group {
-            margin-bottom: 15px;
+            flex: 1;
+            min-width: 0;
         }
         .form-label {
             font-weight: bold;
-            font-size: 0.9em;
+            font-size: 0.8em;
             text-transform: uppercase;
+            margin-bottom: 2px;
         }
-        .form-control, .form-range {
-            height: 35px;
-            font-size: 0.9em;
+        .form-control, .form-select, .form-range {
+            height: 30px;
+            font-size: 0.8em;
+            padding: 4px;
         }
         .form-range {
-            margin-top: 5px;
+            margin-top: 2px;
+        }
+        .input-group-text {
+            font-size: 0.8em;
+            padding: 4px 8px;
         }
         .sub-info {
-            font-size: 0.8em;
+            font-size: 0.7em;
             color: #555;
+            margin-top: 2px;
         }
         .result-section {
             display: none;
+            padding: 10px;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .result-header h4 {
+            font-size: 1.2em;
+        }
+        .result-header .highlight {
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .highlight.yellow {
+            background-color: #ffeb3b;
+        }
+        .highlight.red {
+            background-color: #f8d7da;
+            color: #dc3545;
         }
         .chart-container {
             display: flex;
@@ -66,39 +103,45 @@
             flex: 1;
             padding-right: 20px;
         }
-        .chart-legend div {
-            margin-bottom: 10px;
+        .chart-legend .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
             font-size: 0.9em;
         }
         .chart-legend .color-box {
-            display: inline-block;
-            width: 20px;
+            width: 100%;
             height: 20px;
-            vertical-align: middle;
-            margin-right: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            line-height: 20px;
         }
         .chart {
             flex: 1;
             max-width: 300px;
         }
         .harmonogram {
-            margin-top: 10px;
+            margin-top: 20px;
             font-size: 0.8em;
         }
         .harmonogram table {
             margin-bottom: 0;
-        }
-        .footer {
-            text-align: center;
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 10px;
         }
         .btn-toggle {
             cursor: pointer;
             font-size: 0.9em;
             color: #007bff;
             text-decoration: underline;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -111,78 +154,84 @@
             </a>
             <h4>Kalkulator Kredytowy</h4>
             <form id="kredytForm">
-                <!-- Kwota kredytu -->
-                <div class="form-group">
-                    <label for="kwota" class="form-label">Kwota kredytu</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="3000000" required>
-                        <span class="input-group-text">zł</span>
+                <div class="form-row">
+                    <!-- Kwota kredytu -->
+                    <div class="form-group">
+                        <label for="kwota" class="form-label">Kwota kredytu</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="3000000" required>
+                            <span class="input-group-text">zł</span>
+                        </div>
+                        <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="3000000">
                     </div>
-                    <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="3000000">
-                </div>
 
-                <!-- Ilość rat -->
-                <div class="form-group">
-                    <label for="okres" class="form-label">Ilość rat</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="420" required>
-                        <span class="input-group-text">mc-y</span>
+                    <!-- Ilość rat -->
+                    <div class="form-group">
+                        <label for="okres" class="form-label">Ilość rat</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="420" required>
+                            <span class="input-group-text">mc-y</span>
+                        </div>
+                        <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="420">
+                        <div class="sub-info" id="lata">Ilość lat: 35</div>
                     </div>
-                    <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="420">
-                    <div class="sub-info" id="lata">Ilość lat: 35</div>
-                </div>
 
-                <!-- Oprocentowanie -->
-                <div class="form-group">
-                    <label for="oprocentowanie" class="form-label">Oprocentowanie</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="25" required>
-                        <span class="input-group-text">%</span>
+                    <!-- Oprocentowanie -->
+                    <div class="form-group">
+                        <label for="oprocentowanie" class="form-label">Oprocentowanie</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="25" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="25">
                     </div>
-                    <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="25">
                 </div>
 
-                <!-- Rodzaj rat -->
-                <div class="form-group">
-                    <label class="form-label">Rodzaj rat</label>
-                    <select class="form-control" id="rodzajRat">
-                        <option value="rowne">Rata równa</option>
-                        <option value="malejace">Rata malejąca</option>
-                    </select>
-                </div>
-
-                <!-- Prowizja -->
-                <div class="form-group">
-                    <label for="prowizja" class="form-label">Prowizja za udzielenie</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
-                        <select class="form-select" id="prowizjaTyp">
-                            <option value="procent">%</option>
-                            <option value="pln">zł</option>
+                <div class="form-row">
+                    <!-- Rodzaj rat -->
+                    <div class="form-group">
+                        <label class="form-label">Rodzaj rat</label>
+                        <select class="form-control" id="rodzajRat">
+                            <option value="rowne">Rata równa</option>
+                            <option value="malejace">Rata malejąca</option>
                         </select>
                     </div>
-                    <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
-                    <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 60000.00 zł</div>
-                </div>
 
-                <!-- Nadpłata -->
-                <div class="form-group">
-                    <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
-                        <span class="input-group-text">zł</span>
+                    <!-- Prowizja -->
+                    <div class="form-group">
+                        <label for="prowizja" class="form-label">Prowizja za udzielenie</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
+                            <select class="form-select" id="prowizjaTyp">
+                                <option value="procent">%</option>
+                                <option value="pln">zł</option>
+                            </select>
+                        </div>
+                        <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
+                        <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 60000.00 zł</div>
                     </div>
-                    <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
                 </div>
 
-                <!-- Efekt nadpłaty -->
-                <div class="form-group">
-                    <label class="form-label">Efekt nadpłaty</label>
-                    <div>
-                        <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
-                        <label for="skrocenie">Skrócenie kredytu</label>
-                        <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie" class="ms-2">
-                        <label for="obnizenie">Obniżenie raty</label>
+                <div class="form-row">
+                    <!-- Nadpłata -->
+                    <div class="form-group">
+                        <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                            <span class="input-group-text">zł</span>
+                        </div>
+                        <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
+                    </div>
+
+                    <!-- Efekt nadpłaty -->
+                    <div class="form-group">
+                        <label class="form-label">Efekt nadpłaty</label>
+                        <div>
+                            <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
+                            <label for="skrocenie">Skrócenie kredytu</label>
+                            <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie" class="ms-2">
+                            <label for="obnizenie">Obniżenie raty</label>
+                        </div>
                     </div>
                 </div>
 
@@ -198,23 +247,40 @@
             <a href="https://twoja-strona.pl" target="_blank">
                 <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
             </a>
-            <h4 class="text-center mb-3">Kredyt wyjściowy</h4>
+            <div class="result-header">
+                <h4>Kredyt wyjściowy</h4>
+                <div>
+                    <span class="highlight yellow">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
+                    <span class="highlight red">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
+                </div>
+            </div>
             <button class="btn btn-secondary w-100 mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="chart-container">
                 <div class="chart-legend">
-                    <div><span class="color-box" style="background-color: #28a745;"></span>Kapitał: <span id="kapital">-</span> zł</div>
-                    <div><span class="color-box" style="background-color: #dc3545;"></span>Nadpłaty: <span id="nadplataWynik">-</span> zł</div>
-                    <div><span class="color-box" style="background-color: #6f42c1;"></span>Prowizja od nadpłat: <span id="prowizjaOdNadplat">-</span> zł</div>
-                    <div><span class="color-box" style="background-color: #007bff;"></span>Odsetki: <span id="odsetki">-</span> zł</div>
-                    <div><span class="color-box" style="background-color: #17a2b8;"></span>Prowizja za udzielenie: <span id="prowizjaWynik">-</span> zł</div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #28a745;">Kapitał</div>
+                        <span id="kapital">-</span> zł
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #dc3545;">Nadpłaty</div>
+                        <span id="nadplataWynik">-</span> zł
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #6f42c1;">Prowizja od nadpłat</div>
+                        <span id="prowizjaOdNadplat">-</span> zł
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #007bff;">Odsetki</div>
+                        <span id="odsetki">-</span> zł
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #17a2b8;">Prowizja za udzielenie</div>
+                        <span id="prowizjaWynik">-</span> zł
+                    </div>
                 </div>
                 <div class="chart">
                     <canvas id="creditChart"></canvas>
                 </div>
-            </div>
-            <div class="text-center mb-3">
-                <p><strong>Okres kredytowania:</strong> <span id="okresPoNadplacie">-</span> mc-y</p>
-                <p><strong>Całkowita kwota spłaty:</strong> <span id="koszt">-</span> zł</p>
             </div>
             <div class="harmonogram">
                 <h5 class="btn-toggle" onclick="toggleHarmonogram()">Harmonogram spłat ▼</h5>
@@ -401,29 +467,13 @@
             calkowityKoszt += prowizjaPLN;
 
             // Wyświetl wyniki
-            document.getElementById("kapital").textContent = kwota.toFixed(2);
-            document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toFixed(2);
+            document.getElementById("kapital").textContent = kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("prowizjaOdNadplat").textContent = "0.00"; // Brak prowizji od nadpłat
-            document.getElementById("odsetki").textContent = odsetki.toFixed(2);
-            document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toFixed(2);
+            document.getElementById("odsetki").textContent = odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
-            document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
-
-            // Wypełnij harmonogram
-            let tabela = document.getElementById("harmonogramTabela");
-            tabela.innerHTML = "";
-            harmonogram.forEach(wiersz => {
-                tabela.innerHTML += `
-                    <tr>
-                        <td>${wiersz.miesiac}</td>
-                        <td>${wiersz.rata}</td>
-                        <td>${wiersz.nadplata}</td>
-                        <td>${wiersz.kapital}</td>
-                        <td>${wiersz.odsetki}</td>
-                        <td>${wiersz.pozostaly}</td>
-                    </tr>
-                `;
-            });
+            document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
             // Tworzenie wykresu
             if (chart) chart.destroy();
@@ -443,6 +493,22 @@
                         legend: { display: false }
                     }
                 }
+            });
+
+            // Wypełnij harmonogram
+            let tabela = document.getElementById("harmonogramTabela");
+            tabela.innerHTML = "";
+            harmonogram.forEach(wiersz => {
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${wiersz.miesiac}</td>
+                        <td>${parseFloat(wiersz.rata).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
+                        <td>${parseFloat(wiersz.nadplata).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
+                        <td>${parseFloat(wiersz.kapital).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
+                        <td>${parseFloat(wiersz.odsetki).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
+                        <td>${parseFloat(wiersz.pozostaly).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                `;
             });
 
             // Zwinięcie formularza i pokazanie wyników
