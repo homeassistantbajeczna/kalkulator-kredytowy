@@ -184,7 +184,7 @@
             display: block;
         }
         .chart-legend .color-box:hover::after {
-            content: attr(data-tooltip); /* Wyświetlanie tooltipa */
+            content: attr(data-tooltip);
             position: absolute;
             top: 0;
             left: 0;
@@ -202,6 +202,14 @@
         }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
+        }
+        .chart-legend .legend-item:hover .legend-text {
+            opacity: 0; /* Ukrywanie tekstu obok paska na hover */
+            transition: opacity 0.3s ease;
+        }
+        .chart-legend .legend-text {
+            opacity: 1; /* Domyślna widoczność tekstu */
+            transition: opacity 0.3s ease;
         }
         .summary-footer {
             display: flex;
@@ -387,27 +395,32 @@
                     <div class="legend-item" data-index="0">
                         <div class="color-box" style="background-color: #28a745;" data-tooltip="Kapitał: -">
                             <span class="value" id="valueKapital">-</span>
-                        </div>Kapitał
+                        </div>
+                        <span class="legend-text">Kapitał</span>
                     </div>
                     <div class="legend-item" data-index="1">
                         <div class="color-box" style="background-color: #007bff;" data-tooltip="Odsetki: -">
                             <span class="value" id="valueOdsetki">-</span>
-                        </div>Odsetki
+                        </div>
+                        <span class="legend-text">Odsetki</span>
                     </div>
                     <div class="legend-item" data-index="2">
                         <div class="color-box" style="background-color: #dc3545;" data-tooltip="Nadpłaty: -">
                             <span class="value" id="valueNadplata">-</span>
-                        </div>Nadpłaty
+                        </div>
+                        <span class="legend-text">Nadpłaty</span>
                     </div>
                     <div class="legend-item" data-index="3">
                         <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja za udzielenie: -">
                             <span class="value" id="valueProwizja">-</span>
-                        </div>Prowizja za udzielenie
+                        </div>
+                        <span class="legend-text">Prowizja za udzielenie</span>
                     </div>
                     <div class="legend-item" data-index="4">
                         <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja od nadpłat: -">
                             <span class="value" id="valueProwizjaNadplata">-</span>
-                        </div>Prowizja od nadpłat
+                        </div>
+                        <span class="legend-text">Prowizja od nadpłat</span>
                     </div>
                 </div>
             </div>
@@ -609,7 +622,6 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            // Aktualizacja wartości i tooltipów
             document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.querySelector('.legend-item[data-index="0"] .color-box').setAttribute('data-tooltip', `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
@@ -631,7 +643,6 @@
             document.querySelector('.highlight.yellow').setAttribute('data-hover', `${miesiace} miesięcy`);
             document.querySelector('.highlight.red').setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
-            // Aktualizacja wykresu
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
@@ -650,7 +661,6 @@
                 }
             });
 
-            // Aktualizacja harmonogramu
             let tabela = document.getElementById("harmonogramTabela");
             tabela.innerHTML = "";
             harmonogram.forEach(wiersz => {
