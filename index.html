@@ -36,7 +36,7 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 1.2em;
-            color: #333333; /* Zadanie 1: Powrót do czarnego */
+            color: #333333;
             font-weight: 700;
         }
         .form-row {
@@ -63,7 +63,7 @@
             font-size: 0.8em;
             text-transform: uppercase;
             margin-bottom: 2px;
-            color: #333333; /* Zadanie 1: Powrót do czarnego */
+            color: #333333;
         }
         .form-control, .form-select, .form-range {
             height: 25px;
@@ -138,7 +138,7 @@
         }
         .result-header h4 {
             font-size: 1.2em;
-            color: #333333; /* Zadanie 1: Powrót do czarnego */
+            color: #333333;
             font-weight: 700;
         }
         .chart-container {
@@ -172,7 +172,7 @@
             color: #333333;
             cursor: pointer;
             transition: transform 0.3s ease;
-            padding-left: 5px; /* Zadanie 3: Odsunięcie tekstu o 0,5 cm */
+            padding-left: 5px !important; /* Zadanie 3: Odsunięcie tekstu o 0,5 cm */
         }
         .chart-legend .color-box {
             width: 30%;
@@ -181,7 +181,7 @@
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
-            line-height: 24px; /* Zadanie 4: Dopasowanie do wysokości */
+            line-height: 24px; /* Dopasowanie do wysokości */
             font-size: 0.6em;
             transition: width 0.3s ease, height 0.3s ease;
             white-space: nowrap;
@@ -209,7 +209,7 @@
             display: none;
         }
         .chart-legend .legend-item:hover .color-box .tooltip {
-            display: block; /* Zadanie 2: Upewnienie się, że tooltip się pojawia */
+            display: block !important; /* Zadanie 2: Upewnienie się, że tooltip się pojawia */
         }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
@@ -650,21 +650,27 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            // Aktualizacja wartości na paskach i tooltipów
+            // Aktualizacja wartości na paskach i tooltipów z debugowaniem
+            console.log("Debug: Aktualizacja wartości i tooltipów");
             document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipKapital").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            console.log("Tooltip Kapitał:", document.getElementById("tooltipKapital").textContent);
 
             document.getElementById("valueOdsetki").textContent = `${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipOdsetki").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            console.log("Tooltip Odsetki:", document.getElementById("tooltipOdsetki").textContent);
 
             document.getElementById("valueNadplata").textContent = `${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipNadplata").textContent = `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            console.log("Tooltip Nadpłaty:", document.getElementById("tooltipNadplata").textContent);
 
             document.getElementById("valueProwizja").textContent = `${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             document.getElementById("tooltipProwizja").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            console.log("Tooltip Prowizja:", document.getElementById("tooltipProwizja").textContent);
 
             document.getElementById("valueProwizjaNadplata").textContent = `0.00 zł`;
             document.getElementById("tooltipProwizjaNadplata").textContent = `Prowizja od nadpłat: 0.00 zł`;
+            console.log("Tooltip Prowizja od nadpłat:", document.getElementById("tooltipProwizjaNadplata").textContent);
 
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length || miesiace;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
