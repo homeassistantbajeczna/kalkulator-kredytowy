@@ -138,6 +138,17 @@
                     <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
                 </div>
 
+                <!-- Efekt nadpłaty -->
+                <div class="mb-2">
+                    <label class="form-label">Efekt nadpłaty:</label>
+                    <div>
+                        <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
+                        <label for="skrocenie">Skrócenie kredytu</label>
+                        <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie" class="ms-2">
+                        <label for="obnizenie">Obniżenie raty</label>
+                    </div>
+                </div>
+
                 <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz</button>
             </form>
             <div class="footer">
@@ -150,9 +161,11 @@
             <div class="result">
                 <h5>Wyniki:</h5>
                 <p><strong>Miesięczna rata:</strong> <span id="rata">-</span> PLN</p>
+                <p><strong>Nadpłata miesięczna:</strong> <span id="nadplataWynik">-</span> PLN</p>
                 <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt">-</span> PLN</p>
                 <p><strong>Odsetki:</strong> <span id="odsetki">-</span> PLN</p>
                 <p><strong>Prowizja:</strong> <span id="prowizjaWynik">-</span> PLN</p>
+                <p><strong>Okres spłaty po nadpłacie:</strong> <span id="okresPoNadplacie">-</span> miesięcy</p>
             </div>
             <div class="harmonogram">
                 <h5>Harmonogram spłat:</h5>
@@ -161,6 +174,7 @@
                         <tr>
                             <th>Miesiąc</th>
                             <th>Rata</th>
+                            <th>Nadpłata</th>
                             <th>Kapitał</th>
                             <th>Odsetki</th>
                             <th>Pozostały kapitał</th>
@@ -244,6 +258,7 @@
             let miesiace = parseInt(document.getElementById("okres").value);
             let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
             let rodzajRat = document.querySelector('input[name="rodzajRat"]:checked').value;
+            let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
             let prowizjaPLN = updateProwizja();
 
             let rata, calkowityKoszt = 0, odsetki = 0, harmonogram = [];
@@ -252,46 +267,56 @@
             if (rodzajRat === "rowne") {
                 // Raty równe
                 rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                if (nadplata > 0 && efektNadplaty === "obnizenie") {
+                    // Obniżenie raty
+                    rata = ((kwota - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
                     let kapital = rata - odsetkiMiesiac;
-                    if (nadplata > 0) {
+                    if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
-                        rata = pozostalyKapital > 0 ? (pozostalyKapital * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -(miesiace - i))) : 0;
                     }
                     pozostalyKapital -= kapital;
                     if (pozostalyKapital < 0) pozostalyKapital = 0;
-                    calkowityKoszt += rata + (nadplata > 0 ? nadplata : 0);
+                    calkowityKoszt += rata + (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0);
                     odsetki += odsetkiMiesiac;
                     harmonogram.push({
                         miesiac: i,
-                        rata: (rata + (nadplata > 0 ? nadplata : 0)).toFixed(2),
+                        rata: rata.toFixed(2),
+                        nadplata: (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0).toFixed(2),
                         kapital: kapital.toFixed(2),
                         odsetki: odsetkiMiesiac.toFixed(2),
                         pozostaly: pozostalyKapital.toFixed(2)
                     });
+                    if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
             } else {
                 // Raty malejące
                 let kapitalStaly = kwota / miesiace;
+                if (nadplata > 0 && efektNadplaty === "obnizenie") {
+                    kapitalStaly = (kwota - nadplata * miesiace) / miesiace;
+                }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
                     let kapital = kapitalStaly;
                     rata = kapital + odsetkiMiesiac;
-                    if (nadplata > 0) {
+                    if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
                     }
                     pozostalyKapital -= kapital;
                     if (pozostalyKapital < 0) pozostalyKapital = 0;
-                    calkowityKoszt += rata + (nadplata > 0 ? nadplata : 0);
+                    calkowityKoszt += rata + (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0);
                     odsetki += odsetkiMiesiac;
                     harmonogram.push({
                         miesiac: i,
-                        rata: (rata + (nadplata > 0 ? nadplata : 0)).toFixed(2),
+                        rata: rata.toFixed(2),
+                        nadplata: (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0).toFixed(2),
                         kapital: kapital.toFixed(2),
                         odsetki: odsetkiMiesiac.toFixed(2),
                         pozostaly: pozostalyKapital.toFixed(2)
                     });
+                    if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
             }
 
@@ -300,9 +325,11 @@
 
             // Wyświetl wyniki
             document.getElementById("rata").textContent = harmonogram[0].rata;
+            document.getElementById("nadplataWynik").textContent = nadplata.toFixed(2);
             document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
             document.getElementById("odsetki").textContent = odsetki.toFixed(2);
             document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toFixed(2);
+            document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
 
             // Wypełnij harmonogram
             let tabela = document.getElementById("harmonogramTabela");
@@ -312,6 +339,7 @@
                     <tr>
                         <td>${wiersz.miesiac}</td>
                         <td>${wiersz.rata}</td>
+                        <td>${wiersz.nadplata}</td>
                         <td>${wiersz.kapital}</td>
                         <td>${wiersz.odsetki}</td>
                         <td>${wiersz.pozostaly}</td>
