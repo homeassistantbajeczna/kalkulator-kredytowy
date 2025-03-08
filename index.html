@@ -41,7 +41,7 @@
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: center; /* Wyrównanie suwaków w pionie */
+            align-items: flex-start; /* Przywrócenie domyślnego wyrównania */
         }
         .form-group {
             flex: 1;
@@ -79,6 +79,10 @@
             background: #d3d3d3;
             border-radius: 5px;
         }
+        /* Dodanie marginesu dolnego tylko dla suwaków "Kwota kredytu" i "Oprocentowanie" */
+        #kwotaRange, #oprocentowanieRange {
+            margin-bottom: 12px; /* Dopasowanie do wysokości .sub-info w "Ilość rat" */
+        }
         .form-range::-webkit-slider-thumb {
             background: #C2B280;
             border: none;
@@ -105,7 +109,6 @@
             color: #333333;
             margin-top: 2px;
             text-align: left;
-            min-height: 10px; /* Stała wysokość dla wyrównania */
         }
         .radio-option {
             display: flex;
