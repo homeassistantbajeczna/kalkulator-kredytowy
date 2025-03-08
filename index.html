@@ -43,12 +43,19 @@
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: center; /* Zadanie 1: Zmiana na center dla wyrównania */
+            align-items: flex-start;
         }
         .form-group {
             flex: 1;
             min-width: 0;
             max-width: 200px;
+        }
+        .form-group.no-sub-info {
+            position: relative;
+        }
+        .form-group.no-sub-info .sub-info {
+            visibility: hidden;
+            height: 0;
         }
         .form-label {
             font-weight: 500;
@@ -76,11 +83,11 @@
         .form-range {
             margin-top: 2px;
             height: 10px;
-            background: #d3d3d3; /* Zadanie 4: Ciemniejsze tło paska suwaka */
+            background: #d3d3d3;
             border-radius: 5px;
         }
         .form-range::-webkit-slider-thumb {
-            background: #C2B280; /* Zadanie 4: Kolor uchwytu jak przycisk */
+            background: #C2B280;
             border: none;
             border-radius: 50%;
             width: 16px;
@@ -89,7 +96,7 @@
             -webkit-appearance: none;
         }
         .form-range::-moz-range-thumb {
-            background: #C2B280; /* Zadanie 4: Kolor uchwytu jak przycisk */
+            background: #C2B280;
             border: none;
             border-radius: 50%;
             width: 16px;
@@ -101,17 +108,14 @@
             padding: 2px 5px;
         }
         .sub-info {
-            font-size: 0.6em;
+            font-size: 0.3em; /* Zadanie 1: Zmniejszenie o połowę */
             color: #333333;
             margin-top: 2px;
             text-align: left;
         }
-        .form-group.no-sub-info .input-group {
-            margin-bottom: 16px;
-        }
         .radio-option {
             display: flex;
-            align-items: center; /* Zadanie 3: Wyśrodkowanie etykiet */
+            align-items: center;
             gap: 3px;
         }
         .radio-label {
@@ -134,18 +138,22 @@
         }
         .chart-container {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             margin-bottom: 20px;
             position: relative;
         }
         .chart {
             flex: 1;
-            max-width: 200px; /* Zadanie 6: Zmniejszenie wykresu */
+            max-width: 150px;
+            position: relative;
+            z-index: 20; /* Zadanie 4: Zwiększenie z-index */
+            margin-right: 20px; /* Zadanie 4: Dodanie odstępu */
         }
         .chart-legend {
             flex: 1;
             padding-left: 20px;
+            max-width: 50%;
         }
         .chart-legend .legend-item {
             display: flex;
@@ -157,22 +165,41 @@
             transition: transform 0.3s ease;
         }
         .chart-legend .color-box {
-            width: 120%; /* Zadanie 5: Rozszerzenie pasków */
-            height: 3.75px; /* Zadanie 5: Skrócenie o połowę */
+            width: 30%;
+            height: 20px; /* Zadanie 5: Zwiększenie wysokości paska x2.67 */
             margin-bottom: 5px;
             border-radius: 5px;
             text-align: center;
-            color: #fff;
             font-weight: 500;
-            line-height: 3.75px;
-            font-size: 0.5em;
+            line-height: 20px;
+            font-size: 0.6em;
             transition: width 0.3s ease, height 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
+            position: relative;
+        }
+        .chart-legend .legend-item .color-box span.value {
+            color: #fff;
         }
         .chart-legend .legend-item:hover .color-box {
-            width: 130%;
-            height: 4.5px;
+            width: 40%;
+            height: 24px;
+        }
+        .chart-legend .legend-item:hover {
+            color: #fff;
+        }
+        .chart-legend .legend-item .color-box:hover::after {
+            content: attr(data-label); /* Zadanie 6: Wyświetlanie "Nazwa: wartość" na pasku */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            font-size: 0.6em;
+            line-height: 20px;
+            text-align: center;
+            z-index: 30;
         }
         .summary-footer {
             display: flex;
@@ -227,7 +254,7 @@
     <div class="container">
         <div class="form-section" id="formSection">
             <a href="https://twoja-strona.pl" target="_blank">
-                <h3 class="text-center">Logo</h3>
+                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
             </a>
             <h4>Kalkulator Kredytowy</h4>
 
@@ -240,6 +267,7 @@
                             <span class="input-group-text">zł</span>
                         </div>
                         <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="500000">
+                        <div class="sub-info"></div>
                     </div>
                     <div class="form-group">
                         <label for="okres" class="form-label">Ilość rat</label>
@@ -257,6 +285,7 @@
                             <span class="input-group-text">%</span>
                         </div>
                         <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="7">
+                        <div class="sub-info"></div>
                     </div>
                 </div>
 
@@ -267,9 +296,10 @@
                             <option value="rowne" selected>Rata równa</option>
                             <option value="malejace">Rata malejąca</option>
                         </select>
+                        <div class="sub-info"></div>
                     </div>
                     <div class="form-group">
-                        <label for="prowizja" class="form-label">Prowizja</label> <!-- Zadanie 2: Zmiana nazwy -->
+                        <label for="prowizja" class="form-label">Prowizja</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
                             <select class="form-select" id="prowizjaTyp">
@@ -296,10 +326,18 @@
                             </div>
                         </div>
                         <div class="input-group mt-2">
-                            <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                            <input type="number" class="form-control" id="nadplata" min="0" max="10000" step="10" value="0">
                             <span class="input-group-text">zł</span>
                         </div>
-                        <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
+                        <input type="range" class="form-range" id="nadplataRange" min="0" max="10000" step="10" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="nadplataJednorazowa" class="form-label">Nadpłata jednorazowa</label>
+                        <div class="input-group mt-2">
+                            <input type="number" class="form-control" id="nadplataJednorazowa" min="0" max="100000" step="100" value="0">
+                            <span class="input-group-text">zł</span>
+                        </div>
+                        <input type="range" class="form-range" id="nadplataJednorazowaRange" min="0" max="100000" step="100" value="0">
                     </div>
                 </div>
 
@@ -311,10 +349,10 @@
 
         <div class="result-section" id="resultSection">
             <a href="https://twoja-strona.pl" target="_blank">
-                <h3 class="text-center">Logo</h3>
+                <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
             </a>
             <div class="result-header">
-                <h4>Kredyt Posiadany</h4>
+                <h4>Wyliczenia kredytu podstawowego</h4>
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="chart-container">
@@ -323,19 +361,19 @@
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
-                        <div class="color-box" style="background-color: #28a745;">Kapitał: <span id="kapital">-</span></div>
+                        <div class="color-box" style="background-color: #28a745;" data-label="Kapitał: <span id='kapital'>-</span> zł"><span class="value" id="kapital">-</span></div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
-                        <div class="color-box" style="background-color: #dc3545;">Nadpłaty: <span id="nadplataWynik">-</span></div>
+                        <div class="color-box" style="background-color: #dc3545;" data-label="Nadpłaty: <span id='nadplataWynik'>-</span> zł"><span class="value" id="nadplataWynik">-</span></div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="2">
-                        <div class="color-box" style="background-color: #6f42c1;">Prowizja od nadpłat: <span id="prowizjaOdNadplat">-</span></div>
+                        <div class="color-box" style="background-color: #6f42c1;" data-label="Prowizja od nadpłat: <span id='prowizjaOdNadplat'>-</span> zł"><span class="value" id="prowizjaOdNadplat">-</span></div>Prowizja od nadpłat
                     </div>
                     <div class="legend-item" data-index="3">
-                        <div class="color-box" style="background-color: #007bff;">Odsetki: <span id="odsetki">-</span></div>
+                        <div class="color-box" style="background-color: #007bff;" data-label="Odsetki: <span id='odsetki'>-</span> zł"><span class="value" id="odsetki">-</span></div>Odsetki
                     </div>
                     <div class="legend-item" data-index="4">
-                        <div class="color-box" style="background-color: #17a2b8;">Prowizja za udzielenie: <span id="prowizjaWynik">-</span></div>
+                        <div class="color-box" style="background-color: #17a2b8;" data-label="Prowizja za udzielenie: <span id='prowizjaWynik'>-</span> zł"><span class="value" id="prowizjaWynik">-</span></div>Prowizja za udzielenie
                     </div>
                 </div>
             </div>
@@ -408,6 +446,13 @@
             document.getElementById("nadplataRange").value = this.value;
         });
 
+        document.getElementById("nadplataJednorazowaRange").addEventListener("input", function() {
+            document.getElementById("nadplataJednorazowa").value = this.value;
+        });
+        document.getElementById("nadplataJednorazowa").addEventListener("input", function() {
+            document.getElementById("nadplataJednorazowaRange").value = this.value;
+        });
+
         function updateLata() {
             let miesiace = parseInt(document.getElementById("okres").value);
             let lata = (miesiace / 12).toFixed(0);
@@ -448,6 +493,7 @@
             let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12;
             let miesiace = parseInt(document.getElementById("okres").value);
             let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
+            let nadplataJednorazowa = parseFloat(document.getElementById("nadplataJednorazowa").value) || 0;
             let rodzajRat = document.getElementById("rodzajRat").value;
             let efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
             let prowizjaPLN = updateProwizja();
@@ -456,16 +502,24 @@
             let pozostalyKapital = kwota;
             let calkowitaNadplata = 0;
 
+            // Uwzględnienie nadpłaty jednorazowej w pierwszym miesiącu
+            if (nadplataJednorazowa > 0) {
+                pozostalyKapital -= nadplataJednorazowa;
+                calkowitaNadplata += nadplataJednorazowa;
+            }
+
             if (rodzajRat === "rowne") {
-                rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                rata = (pozostalyKapital * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
-                    rata = ((kwota - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                    rata = ((pozostalyKapital - nadplata * miesiace) * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
                 }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
                     let kapital = rata - odsetkiMiesiac;
+                    let nadplataMiesiac = 0;
                     if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
+                        nadplataMiesiac = nadplata;
                         calkowitaNadplata += nadplata;
                     }
                     pozostalyKapital -= kapital;
@@ -475,7 +529,7 @@
                     harmonogram.push({
                         miesiac: i,
                         rata: rata.toFixed(2),
-                        nadplata: (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0).toFixed(2),
+                        nadplata: (nadplataMiesiac + (i === 1 ? nadplataJednorazowa : 0)).toFixed(2),
                         kapital: kapital.toFixed(2),
                         odsetki: odsetkiMiesiac.toFixed(2),
                         pozostaly: pozostalyKapital.toFixed(2)
@@ -483,16 +537,18 @@
                     if (nadplata > 0 && efektNadplaty === "skrocenie" && pozostalyKapital <= 0) break;
                 }
             } else {
-                let kapitalStaly = kwota / miesiace;
+                let kapitalStaly = pozostalyKapital / miesiace;
                 if (nadplata > 0 && efektNadplaty === "obnizenie") {
-                    kapitalStaly = (kwota - nadplata * miesiace) / miesiace;
+                    kapitalStaly = (pozostalyKapital - nadplata * miesiace) / miesiace;
                 }
                 for (let i = 1; i <= miesiace && pozostalyKapital > 0; i++) {
                     let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
                     let kapital = kapitalStaly;
                     rata = kapital + odsetkiMiesiac;
+                    let nadplataMiesiac = 0;
                     if (nadplata > 0 && efektNadplaty === "skrocenie") {
                         kapital += nadplata;
+                        nadplataMiesiac = nadplata;
                         calkowitaNadplata += nadplata;
                     }
                     pozostalyKapital -= kapital;
@@ -502,7 +558,7 @@
                     harmonogram.push({
                         miesiac: i,
                         rata: rata.toFixed(2),
-                        nadplata: (nadplata > 0 && efektNadplaty === "skrocenie" ? nadplata : 0).toFixed(2),
+                        nadplata: (nadplataMiesiac + (i === 1 ? nadplataJednorazowa : 0)).toFixed(2),
                         kapital: kapital.toFixed(2),
                         odsetki: odsetkiMiesiac.toFixed(2),
                         pozostaly: pozostalyKapital.toFixed(2)
@@ -521,6 +577,13 @@
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
 
+            // Aktualizacja data-label dla pasków kolorowych
+            document.querySelectorAll('.color-box').forEach(box => {
+                const label = box.parentElement.textContent.trim().split(' ')[0];
+                const value = box.querySelector('.value').textContent;
+                box.setAttribute('data-label', `${label}: ${value} zł`);
+            });
+
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
@@ -530,7 +593,7 @@
                         data: [kwota, calkowitaNadplata, 0, odsetki, prowizjaPLN],
                         backgroundColor: ['#28a745', '#dc3545', '#6f42c1', '#007bff', '#17a2b8'],
                         borderWidth: 1,
-                        hoverOffset: 20
+                        hoverOffset: 10 // Zadanie 4: Zmniejszenie efektu powiększenia
                     }]
                 },
                 options: {
