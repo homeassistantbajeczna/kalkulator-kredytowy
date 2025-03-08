@@ -239,7 +239,7 @@
             content: attr(data-hover);
             font-weight: bold;
             font-size: 1.2em;
-            color: #333333;
+            color: #dc3545; /* Zmiana na czerwony */
             position: absolute;
             left: 0;
             top: 0;
@@ -563,7 +563,7 @@
         }
 
         function showForm() {
-            document.getElementById("formSection").style.display = "block"; // Poprawiona literówka
+            document.getElementById("formSection").style.display = "block";
             document.getElementById("resultSection").style.display = "none";
         }
 
@@ -710,7 +710,6 @@
                 }
             });
 
-            // Interakcja między legendą a wykresem
             document.querySelectorAll('.legend-item').forEach(item => {
                 item.addEventListener('mouseenter', function() {
                     const index = parseInt(this.getAttribute('data-index'));
