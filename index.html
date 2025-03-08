@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         .logo {
-            max-width: 150px; /* Zadanie 6: Powiększenie logo */
+            max-width: 150px;
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -123,7 +123,7 @@
             margin-left: 0;
         }
         .spacer {
-            height: 16px; /* Zadanie 1: Zmniejszenie wysokości dla lepszego wyrównania */
+            height: 12px; /* Zadanie 1: Dalsze podniesienie pola */
         }
         .result-section {
             display: none;
@@ -149,19 +149,19 @@
         }
         .chart {
             flex: 1;
-            max-width: 200px; /* Zadanie 2: Zwiększenie rozmiaru wykresu */
+            max-width: 180px; /* Zadanie 2: Dostosowanie rozmiaru wykresu */
             position: relative;
             z-index: 20;
-            margin-right: 10px; /* Zadanie 5: Zmniejszenie odstępu od pasków */
+            margin-right: 0; /* Zadanie 2: Usunięcie odstępu */
         }
         .chart-legend {
             flex: 1;
-            padding-left: 20px;
+            padding-left: 0; /* Zadanie 2: Usunięcie odstępu od wykresu */
             max-width: 50%;
         }
         .chart-legend .legend-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* Zadanie 5: Nazwy wyżej */
             margin-bottom: 8px;
             font-size: 0.9em;
             color: #333333;
@@ -171,7 +171,7 @@
         .chart-legend .color-box {
             width: 30%;
             height: 20px;
-            margin-bottom: 5px;
+            margin-bottom: 3px; /* Zadanie 5: Lepsze oddzielenie od nazwy */
             border-radius: 5px;
             text-align: center;
             font-weight: 500;
@@ -182,15 +182,8 @@
             overflow: hidden;
             position: relative;
         }
-        .chart-legend .legend-item:hover .color-box {
-            width: 40%;
-            height: 24px;
-        }
-        .chart-legend .legend-item:hover {
-            color: #fff;
-        }
-        .chart-legend .legend-item .color-box:hover::after {
-            content: attr(data-label); /* Zadanie 3: Wyświetlanie tylko wartości z data-label */
+        .chart-legend .color-box .tooltip {
+            display: none; /* Zadanie 3: Początkowo ukryte */
             position: absolute;
             top: 0;
             left: 0;
@@ -201,6 +194,17 @@
             line-height: 24px;
             text-align: center;
             z-index: 30;
+            transition: display 0.2s ease;
+        }
+        .chart-legend .color-box:hover .tooltip {
+            display: block; /* Zadanie 3: Wyświetlanie przy hover */
+        }
+        .chart-legend .legend-item:hover .color-box {
+            width: 40%;
+            height: 24px;
+        }
+        .chart-legend .legend-item:hover {
+            color: #fff;
         }
         .summary-footer {
             display: flex;
@@ -212,6 +216,7 @@
             font-size: 0.9em;
             padding: 4px 8px;
             border-radius: 5px;
+            position: relative;
         }
         .highlight.yellow {
             background-color: #ffeb3b;
@@ -222,15 +227,15 @@
         }
         .harmonogram {
             margin-top: 20px;
-            font-size: 0.7em; /* Zadanie 4: Zmniejszenie rozmiaru tabeli */
+            font-size: 0.7em;
         }
         .harmonogram table {
             margin-bottom: 0;
-            table-layout: fixed; /* Zadanie 4: Równomierne rozłożenie kolumn */
+            table-layout: fixed;
             width: 100%;
         }
         .harmonogram th, .harmonogram td {
-            padding: 2px 4px; /* Zadanie 4: Zmniejszenie paddingu */
+            padding: 2px 4px;
             text-align: center;
         }
         .btn-toggle {
@@ -369,19 +374,29 @@
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
-                        <div class="color-box" style="background-color: #28a745;" data-label="Kapitał: - zł" id="kapitalBox"></div>Kapitał
+                        <div class="color-box" style="background-color: #28a745;">
+                            <span class="tooltip" id="kapitalTooltip"></span>
+                        </div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
-                        <div class="color-box" style="background-color: #dc3545;" data-label="Nadpłaty: - zł" id="nadplataWynikBox"></div>Nadpłaty
+                        <div class="color-box" style="background-color: #007bff;">
+                            <span class="tooltip" id="odsetkiTooltip"></span>
+                        </div>Odsetki
                     </div>
                     <div class="legend-item" data-index="2">
-                        <div class="color-box" style="background-color: #6f42c1;" data-label="Prowizja od nadpłat: - zł" id="prowizjaOdNadplatBox"></div>Prowizja od nadpłat
+                        <div class="color-box" style="background-color: #dc3545;">
+                            <span class="tooltip" id="nadplataWynikTooltip"></span>
+                        </div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="3">
-                        <div class="color-box" style="background-color: #007bff;" data-label="Odsetki: - zł" id="odsetkiBox"></div>Odsetki
+                        <div class="color-box" style="background-color: #17a2b8;">
+                            <span class="tooltip" id="prowizjaWynikTooltip"></span>
+                        </div>Prowizja za udzielenie
                     </div>
                     <div class="legend-item" data-index="4">
-                        <div class="color-box" style="background-color: #17a2b8;" data-label="Prowizja za udzielenie: - zł" id="prowizjaWynikBox"></div>Prowizja za udzielenie
+                        <div class="color-box" style="background-color: #6f42c1;">
+                            <span class="tooltip" id="prowizjaOdNadplatTooltip"></span>
+                        </div>Prowizja od nadpłat
                     </div>
                 </div>
             </div>
@@ -577,26 +592,36 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            // Aktualizacja wartości w data-label
-            document.getElementById("kapitalBox").setAttribute('data-label', `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
-            document.getElementById("nadplataWynikBox").setAttribute('data-label', `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
-            document.getElementById("prowizjaOdNadplatBox").setAttribute('data-label', `Prowizja od nadpłat: 0.00 zł`);
-            document.getElementById("odsetkiBox").setAttribute('data-label', `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
-            document.getElementById("prowizjaWynikBox").setAttribute('data-label', `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            // Aktualizacja wartości w tooltipach
+            document.getElementById("kapitalTooltip").textContent = `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("odsetkiTooltip").textContent = `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("nadplataWynikTooltip").textContent = `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("prowizjaWynikTooltip").textContent = `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("prowizjaOdNadplatTooltip").textContent = `Prowizja od nadpłat: 0.00 zł`;
 
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+
+            // Zadanie 4: Zmiana tekstu przy najechaniu na okres
+            let okresElement = document.getElementById("okresPoNadplacie");
+            let originalOkres = okresElement.textContent;
+            okresElement.addEventListener('mouseover', function() {
+                this.textContent = "360 miesięcy";
+            });
+            okresElement.addEventListener('mouseout', function() {
+                this.textContent = originalOkres;
+            });
 
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
                 type: 'doughnut',
                 data: {
-                    labels: ['Kapitał', 'Nadpłaty', 'Prowizja od nadpłat', 'Odsetki', 'Prowizja za udzielenie'],
+                    labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja za udzielenie', 'Prowizja od nadpłat'], // Zadanie 6: Nowa kolejność
                     datasets: [{
-                        data: [kwota, calkowitaNadplata, 0, odsetki, prowizjaPLN],
-                        backgroundColor: ['#28a745', '#dc3545', '#6f42c1', '#007bff', '#17a2b8'],
+                        data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
+                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'], // Zadanie 6: Nowa kolejność kolorów
                         borderWidth: 1,
-                        hoverOffset: 3 // Zadanie 2: Zmniejszenie efektu powiększenia
+                        hoverOffset: 3
                     }]
                 },
                 options: {
