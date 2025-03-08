@@ -10,14 +10,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #F5F5DC; /* Jasny beżowy */
+            background-color: #F5F5DC; /* Jasny beżowy - tło główne */
             font-family: 'Arial', sans-serif;
             padding: 10px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: #D2B48C; /* Ciemny beżowy */
+            background: #FFFFFF; /* Białe tło zamiast ciemnego beżowego */
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
@@ -65,7 +65,10 @@
         }
         .form-range {
             margin-top: 2px;
-            accent-color: #FFD700; /* Złoty */
+            accent-color: #F5F5DC; /* Jasny beżowy - kolor suwaka */
+            background-color: #000000; /* Czarny - tło suwaka */
+            border-radius: 5px;
+            height: 10px;
         }
         .input-group-text {
             font-size: 0.8em;
@@ -107,13 +110,14 @@
         }
         .chart-container {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* Wyrównanie do góry */
             justify-content: space-between;
             margin-bottom: 20px;
         }
         .chart-legend {
             flex: 1;
             padding-right: 20px;
+            max-width: 50%; /* Ograniczenie szerokości legendy */
         }
         .chart-legend .legend-item {
             display: flex;
@@ -152,8 +156,8 @@
             margin-bottom: 10px;
         }
         .btn-primary, .btn-secondary {
-            background-color: #FFD700; /* Złoty */
-            border-color: #FFD700;
+            background-color: #F5F5DC; /* Jasny beżowy */
+            border-color: #F5F5DC;
             color: #000000; /* Czarny tekst */
             font-size: 0.9em;
             padding: 5px 20px;
@@ -162,8 +166,8 @@
             display: block;
         }
         .btn-primary:hover, .btn-secondary:hover {
-            background-color: #e0c107;
-            border-color: #e0c107;
+            background-color: #E0E0C0; /* Lekki odcień beżowego przy hover */
+            border-color: #E0E0C0;
             color: #000000;
         }
     </style>
@@ -235,11 +239,15 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
-                        <div>
-                            <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
-                            <label for="skrocenie">Skrócenie kredytu</label>
-                            <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie" class="ms-2">
-                            <label for="obnizenie">Obniżenie raty</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
+                                <label for="skrocenie">Skrócenie kredytu</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie">
+                                <label for="obnizenie">Obniżenie raty</label>
+                            </div>
                         </div>
                         <div class="input-group mt-2">
                             <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
@@ -270,6 +278,9 @@
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="chart-container">
+                <div class="chart">
+                    <canvas id="creditChart"></canvas>
+                </div>
                 <div class="chart-legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #28a745;">Kapitał</div>
@@ -291,9 +302,6 @@
                         <div class="color-box" style="background-color: #17a2b8;">Prowizja za udzielenie</div>
                         <span id="prowizjaWynik">-</span> zł
                     </div>
-                </div>
-                <div class="chart">
-                    <canvas id="creditChart"></canvas>
                 </div>
             </div>
             <div class="harmonogram">
