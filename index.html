@@ -41,7 +41,7 @@
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: flex-start; /* Przywrócenie domyślnego wyrównania */
+            align-items: flex-start;
         }
         .form-group {
             flex: 1;
@@ -79,9 +79,8 @@
             background: #d3d3d3;
             border-radius: 5px;
         }
-        /* Dodanie marginesu dolnego tylko dla suwaków "Kwota kredytu" i "Oprocentowanie" */
         #kwotaRange, #oprocentowanieRange {
-            margin-bottom: 12px; /* Dopasowanie do wysokości .sub-info w "Ilość rat" */
+            margin-bottom: 12px;
         }
         .form-range::-webkit-slider-thumb {
             background: #C2B280;
@@ -105,7 +104,7 @@
             padding: 2px 5px;
         }
         .sub-info {
-            font-size: 0.3em;
+            font-size: 0.6em; /* Powiększenie tekstu "Ilość lat" i "Wartość prowizji" */
             color: #333333;
             margin-top: 2px;
             text-align: left;
@@ -114,6 +113,10 @@
             display: flex;
             align-items: center;
             gap: 3px;
+        }
+        /* Styl dla radio buttons - kolor taki sam jak przycisk "Oblicz" */
+        input[type="radio"] {
+            accent-color: #C2B280; /* Kolor kropek wyboru */
         }
         .radio-label {
             font-size: 0.55em;
@@ -287,6 +290,10 @@
             border-color: #b0a070;
             color: #000000;
         }
+        /* Domyślnie zwinięty harmonogram */
+        #harmonogramContent {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -344,8 +351,8 @@
                                 <option value="pln">zł</option>
                             </select>
                         </div>
-                        <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 10000.00 zł</div>
                         <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
+                        <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 10000.00 zł</div>
                     </div>
                 </div>
                 <div class="form-row">
@@ -433,7 +440,7 @@
                 <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
             </div>
             <div class="harmonogram">
-                <h5 class="btn-toggle" onclick="toggleHarmonogram()">Harmonogram spłat ▼</h5>
+                <h5 class="btn-toggle" onclick="toggleHarmonogram()">Harmonogram spłat ►</h5>
                 <div id="harmonogramContent">
                     <table class="table table-striped">
                         <thead>
@@ -660,7 +667,7 @@
                     }]
                 },
                 options: {
-                    responsive: true,
+                    responsive: true;
                     plugins: { legend: { display: false } }
                 }
             });
