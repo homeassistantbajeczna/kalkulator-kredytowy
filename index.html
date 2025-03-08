@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         .logo {
-            max-width: 120px;
+            max-width: 150px; /* Zadanie 6: Powiększenie logo */
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -123,7 +123,7 @@
             margin-left: 0;
         }
         .spacer {
-            height: 20px; /* Zadanie 1: Pusta przestrzeń dla wyrównania */
+            height: 16px; /* Zadanie 1: Zmniejszenie wysokości dla lepszego wyrównania */
         }
         .result-section {
             display: none;
@@ -145,14 +145,14 @@
             justify-content: space-between;
             margin-bottom: 20px;
             position: relative;
-            overflow: visible; /* Zadanie 3: Zapobiega obcinaniu wykresu */
+            overflow: visible;
         }
         .chart {
             flex: 1;
-            max-width: 180px; /* Zadanie 3: Zwiększenie rozmiaru wykresu */
+            max-width: 200px; /* Zadanie 2: Zwiększenie rozmiaru wykresu */
             position: relative;
             z-index: 20;
-            margin-right: 20px;
+            margin-right: 10px; /* Zadanie 5: Zmniejszenie odstępu od pasków */
         }
         .chart-legend {
             flex: 1;
@@ -182,12 +182,6 @@
             overflow: hidden;
             position: relative;
         }
-        .chart-legend .legend-item .color-box span.value {
-            color: #fff;
-        }
-        .chart-legend .legend-item .color-box:hover span.value {
-            visibility: hidden; /* Zadanie 2: Ukrycie oryginalnej wartości przy najechaniu */
-        }
         .chart-legend .legend-item:hover .color-box {
             width: 40%;
             height: 24px;
@@ -196,14 +190,14 @@
             color: #fff;
         }
         .chart-legend .legend-item .color-box:hover::after {
-            content: attr(data-label); /* Zadanie 2: Wyświetlanie "Nazwa: wartość" */
+            content: attr(data-label); /* Zadanie 3: Wyświetlanie tylko wartości z data-label */
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             color: #fff;
-            font-size: 0.8em; /* Zadanie 2: Powiększenie tekstu */
+            font-size: 0.8em;
             line-height: 24px;
             text-align: center;
             z-index: 30;
@@ -228,10 +222,16 @@
         }
         .harmonogram {
             margin-top: 20px;
-            font-size: 0.8em;
+            font-size: 0.7em; /* Zadanie 4: Zmniejszenie rozmiaru tabeli */
         }
         .harmonogram table {
             margin-bottom: 0;
+            table-layout: fixed; /* Zadanie 4: Równomierne rozłożenie kolumn */
+            width: 100%;
+        }
+        .harmonogram th, .harmonogram td {
+            padding: 2px 4px; /* Zadanie 4: Zmniejszenie paddingu */
+            text-align: center;
         }
         .btn-toggle {
             cursor: pointer;
@@ -340,7 +340,7 @@
                     </div>
                     <div class="form-group">
                         <label for="nadplataJednorazowa" class="form-label">Nadpłata jednorazowa</label>
-                        <div class="spacer"></div> <!-- Zadanie 1: Pusta przestrzeń dla wyrównania -->
+                        <div class="spacer"></div>
                         <div class="input-group mt-2">
                             <input type="number" class="form-control" id="nadplataJednorazowa" min="0" max="100000" step="100" value="0">
                             <span class="input-group-text">zł</span>
@@ -369,19 +369,19 @@
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item" data-index="0">
-                        <div class="color-box" style="background-color: #28a745;" data-label="Kapitał: <span id='kapital'>-</span> zł"><span class="value" id="kapital">-</span></div>Kapitał
+                        <div class="color-box" style="background-color: #28a745;" data-label="Kapitał: - zł" id="kapitalBox"></div>Kapitał
                     </div>
                     <div class="legend-item" data-index="1">
-                        <div class="color-box" style="background-color: #dc3545;" data-label="Nadpłaty: <span id='nadplataWynik'>-</span> zł"><span class="value" id="nadplataWynik">-</span></div>Nadpłaty
+                        <div class="color-box" style="background-color: #dc3545;" data-label="Nadpłaty: - zł" id="nadplataWynikBox"></div>Nadpłaty
                     </div>
                     <div class="legend-item" data-index="2">
-                        <div class="color-box" style="background-color: #6f42c1;" data-label="Prowizja od nadpłat: <span id='prowizjaOdNadplat'>-</span> zł"><span class="value" id="prowizjaOdNadplat">-</span></div>Prowizja od nadpłat
+                        <div class="color-box" style="background-color: #6f42c1;" data-label="Prowizja od nadpłat: - zł" id="prowizjaOdNadplatBox"></div>Prowizja od nadpłat
                     </div>
                     <div class="legend-item" data-index="3">
-                        <div class="color-box" style="background-color: #007bff;" data-label="Odsetki: <span id='odsetki'>-</span> zł"><span class="value" id="odsetki">-</span></div>Odsetki
+                        <div class="color-box" style="background-color: #007bff;" data-label="Odsetki: - zł" id="odsetkiBox"></div>Odsetki
                     </div>
                     <div class="legend-item" data-index="4">
-                        <div class="color-box" style="background-color: #17a2b8;" data-label="Prowizja za udzielenie: <span id='prowizjaWynik'>-</span> zł"><span class="value" id="prowizjaWynik">-</span></div>Prowizja za udzielenie
+                        <div class="color-box" style="background-color: #17a2b8;" data-label="Prowizja za udzielenie: - zł" id="prowizjaWynikBox"></div>Prowizja za udzielenie
                     </div>
                 </div>
             </div>
@@ -577,20 +577,15 @@
 
             calkowityKoszt += prowizjaPLN;
 
-            document.getElementById("kapital").textContent = kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-            document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-            document.getElementById("prowizjaOdNadplat").textContent = "0.00";
-            document.getElementById("odsetki").textContent = odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-            document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            // Aktualizacja wartości w data-label
+            document.getElementById("kapitalBox").setAttribute('data-label', `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            document.getElementById("nadplataWynikBox").setAttribute('data-label', `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            document.getElementById("prowizjaOdNadplatBox").setAttribute('data-label', `Prowizja od nadpłat: 0.00 zł`);
+            document.getElementById("odsetkiBox").setAttribute('data-label', `Odsetki: ${odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            document.getElementById("prowizjaWynikBox").setAttribute('data-label', `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
             document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-
-            // Aktualizacja data-label dla pasków kolorowych
-            document.querySelectorAll('.color-box').forEach(box => {
-                const label = box.parentElement.textContent.trim().split(' ')[0];
-                const value = box.querySelector('.value').textContent;
-                box.setAttribute('data-label', `${label}: ${value} zł`);
-            });
 
             if (chart) chart.destroy();
             chart = new Chart(document.getElementById("creditChart"), {
@@ -601,7 +596,7 @@
                         data: [kwota, calkowitaNadplata, 0, odsetki, prowizjaPLN],
                         backgroundColor: ['#28a745', '#dc3545', '#6f42c1', '#007bff', '#17a2b8'],
                         borderWidth: 1,
-                        hoverOffset: 5 // Zadanie 3: Zmniejszenie efektu powiększenia
+                        hoverOffset: 3 // Zadanie 2: Zmniejszenie efektu powiększenia
                     }]
                 },
                 options: {
