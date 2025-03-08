@@ -43,7 +43,7 @@
             justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
-            align-items: flex-end; /* Wyrównanie do dołu */
+            align-items: center; /* Zmiana na center dla lepszego wyrównania */
         }
         .form-group {
             flex: 1;
@@ -76,25 +76,49 @@
         }
         .form-range {
             margin-top: 2px;
-            accent-color: #C2B280; /* Jasny beżowy - kolor suwaka jak przyciski */
             height: 10px;
+            background: #d3d3d3; /* Ciemniejsze tło paska suwaka */
+            border-radius: 5px;
+        }
+        /* Styl dla uchwytu suwaka (thumb) */
+        .form-range::-webkit-slider-thumb {
+            background: #C2B280; /* Kolor uchwytu taki sam jak przycisk */
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+        .form-range::-moz-range-thumb {
+            background: #C2B280; /* Kolor uchwytu taki sam jak przycisk */
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
         }
         .input-group-text {
             font-size: 0.8em;
             padding: 2px 5px;
         }
         .sub-info {
-            font-size: 0.6em; /* Zmniejszenie "Ilość lat" i "Wartość prowizji" o 2px */
+            font-size: 0.6em; /* Zmniejszenie "Ilość lat" i "Wartość prowizji" */
             color: #333333; /* Ciemnoszary */
             margin-top: 2px;
             text-align: left; /* Przesunięcie do lewej */
         }
         .form-group.no-sub-info .input-group {
-            margin-bottom: 16px; /* Dodatkowy odstęp dla pól bez sub-info, aby wyrównać */
+            margin-bottom: 16px; /* Dodatkowy odstęp dla pól bez sub-info */
+        }
+        .radio-option {
+            display: flex;
+            align-items: center; /* Wyśrodkowanie etykiety względem radio button */
+            gap: 3px;
         }
         .radio-label {
-            font-size: 0.55em; /* Jeszcze mniejszy tekst opcji */
-            margin-left: 3px; /* Mniejszy odstęp */
+            font-size: 0.55em; /* Mniejszy tekst opcji */
+            margin-left: 0; /* Usunięcie dodatkowego marginesu */
         }
         .result-section {
             display: none;
@@ -115,11 +139,11 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
-            position: relative; /* Dla większego wykresu */
+            position: relative;
         }
         .chart {
             flex: 1;
-            max-width: 300px; /* Zwiększenie wielkości wykresu */
+            max-width: 200px; /* Zmniejszenie wykresu kołowego */
         }
         .chart-legend {
             flex: 1;
@@ -135,22 +159,22 @@
             transition: transform 0.3s ease; /* Animacja powiększenia */
         }
         .chart-legend .color-box {
-            width: 100%;
-            height: 7.5px; /* Zmniejszenie pasków o połowę (z 15px do 7.5px) */
+            width: 120%; /* Rozszerzenie pasków */
+            height: 3.75px; /* Skrócenie o połowę (z 7.5px do 3.75px) */
             margin-bottom: 5px;
             border-radius: 5px;
             text-align: center;
             color: #fff;
             font-weight: 500;
-            line-height: 7.5px; /* Dopasowanie linii do wysokości paska */
-            font-size: 0.6em; /* Mniejszy tekst na paskach */
+            line-height: 3.75px; /* Dopasowanie linii do wysokości paska */
+            font-size: 0.5em; /* Jeszcze mniejszy tekst na paskach */
             transition: width 0.3s ease, height 0.3s ease; /* Animacja powiększenia */
             white-space: nowrap; /* Zapobiega zawijaniu tekstu */
             overflow: hidden; /* Ukrywa nadmiar tekstu */
         }
         .chart-legend .legend-item:hover .color-box {
-            width: 110%; /* Powiększenie paska */
-            height: 9px; /* Powiększenie paska */
+            width: 130%; /* Powiększenie paska */
+            height: 4.5px; /* Powiększenie paska */
         }
         .summary-footer {
             display: flex;
@@ -251,7 +275,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="prowizja" class="form-label">Prowizja za udzielenie</label>
+                        <label for="prowizja" class="form-label">Prowizja</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
                             <select class="form-select" id="prowizjaTyp">
@@ -269,11 +293,11 @@
                     <div class="form-group">
                         <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
                         <div style="display: flex; gap: 5px; align-items: center;">
-                            <div>
+                            <div class="radio-option">
                                 <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
                                 <label for="skrocenie" class="radio-label">Skrócenie kredytu</label>
                             </div>
-                            <div>
+                            <div class="radio-option">
                                 <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie">
                                 <label for="obnizenie" class="radio-label">Obniżenie raty</label>
                             </div>
