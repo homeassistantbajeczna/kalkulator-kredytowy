@@ -34,39 +34,47 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 1.2em;
+            color: #000000;
         }
         .form-row {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             margin-bottom: 10px;
             gap: 10px;
         }
         .form-group {
             flex: 1;
             min-width: 0;
+            max-width: 200px;
         }
         .form-label {
             font-weight: bold;
             font-size: 0.8em;
             text-transform: uppercase;
             margin-bottom: 2px;
+            color: #000000;
         }
         .form-control, .form-select, .form-range {
-            height: 30px;
+            height: 25px;
             font-size: 0.8em;
-            padding: 4px;
+            padding: 2px;
+        }
+        .form-select {
+            max-width: 60px;
         }
         .form-range {
             margin-top: 2px;
+            accent-color: #FFC107; /* Żółty kolor suwaka */
         }
         .input-group-text {
             font-size: 0.8em;
-            padding: 4px 8px;
+            padding: 2px 5px;
         }
         .sub-info {
             font-size: 0.7em;
             color: #555;
             margin-top: 2px;
+            text-align: center;
         }
         .result-section {
             display: none;
@@ -80,6 +88,7 @@
         }
         .result-header h4 {
             font-size: 1.2em;
+            color: #000000;
         }
         .result-header .highlight {
             font-size: 1em;
@@ -137,11 +146,20 @@
             text-decoration: underline;
             margin-bottom: 10px;
         }
-        .footer {
-            text-align: center;
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 10px;
+        .btn-primary, .btn-secondary {
+            background-color: #FFC107; /* Żółty kolor z logo */
+            border-color: #FFC107;
+            color: #000000; /* Czarny tekst */
+            font-size: 0.9em;
+            padding: 5px 20px;
+            width: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+            color: #000000;
         }
     </style>
 </head>
@@ -149,97 +167,88 @@
     <div class="container">
         <!-- Sekcja formularza -->
         <div class="form-section" id="formSection">
+            <!-- Rząd 1: Logo i nazwa -->
             <a href="https://twoja-strona.pl" target="_blank">
                 <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
             </a>
             <h4>Kalkulator Kredytowy</h4>
+
             <form id="kredytForm">
+                <!-- Rząd 2: Kwota kredytu, ilość rat, oprocentowanie -->
                 <div class="form-row">
-                    <!-- Kwota kredytu -->
                     <div class="form-group">
                         <label for="kwota" class="form-label">Kwota kredytu</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="3000000" required>
+                            <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="500000" required>
                             <span class="input-group-text">zł</span>
                         </div>
-                        <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="3000000">
+                        <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="500000">
                     </div>
-
-                    <!-- Ilość rat -->
                     <div class="form-group">
                         <label for="okres" class="form-label">Ilość rat</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="420" required>
+                            <input type="number" class="form-control" id="okres" min="12" max="420" step="1" value="360" required>
                             <span class="input-group-text">mc-y</span>
                         </div>
-                        <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="420">
-                        <div class="sub-info" id="lata">Ilość lat: 35</div>
+                        <div class="sub-info" id="lata">Ilość lat: 30</div>
+                        <input type="range" class="form-range" id="okresRange" min="12" max="420" step="1" value="360">
                     </div>
-
-                    <!-- Oprocentowanie -->
                     <div class="form-group">
                         <label for="oprocentowanie" class="form-label">Oprocentowanie</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="25" required>
+                            <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="7" required>
                             <span class="input-group-text">%</span>
                         </div>
-                        <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="25">
+                        <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="7">
                     </div>
                 </div>
 
+                <!-- Rząd 3: Rodzaj rat i prowizja -->
                 <div class="form-row">
-                    <!-- Rodzaj rat -->
                     <div class="form-group">
                         <label class="form-label">Rodzaj rat</label>
                         <select class="form-control" id="rodzajRat">
-                            <option value="rowne">Rata równa</option>
+                            <option value="rowne" selected>Rata równa</option>
                             <option value="malejace">Rata malejąca</option>
                         </select>
                     </div>
-
-                    <!-- Prowizja -->
                     <div class="form-group">
                         <label for="prowizja" class="form-label">Prowizja za udzielenie</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
                             <select class="form-select" id="prowizjaTyp">
-                                <option value="procent">%</option>
+                                <option value="procent" selected>%</option>
                                 <option value="pln">zł</option>
                             </select>
                         </div>
+                        <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 10000.00 zł</div>
                         <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
-                        <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 60000.00 zł</div>
                     </div>
                 </div>
 
+                <!-- Rząd 4: Nadpłata miesięczna -->
                 <div class="form-row">
-                    <!-- Nadpłata -->
                     <div class="form-group">
                         <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
-                            <span class="input-group-text">zł</span>
-                        </div>
-                        <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
-                    </div>
-
-                    <!-- Efekt nadpłaty -->
-                    <div class="form-group">
-                        <label class="form-label">Efekt nadpłaty</label>
                         <div>
                             <input type="radio" id="skrocenie" name="efektNadplaty" value="skrocenie" checked>
                             <label for="skrocenie">Skrócenie kredytu</label>
                             <input type="radio" id="obnizenie" name="efektNadplaty" value="obnizenie" class="ms-2">
                             <label for="obnizenie">Obniżenie raty</label>
                         </div>
+                        <div class="input-group mt-2">
+                            <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                            <span class="input-group-text">zł</span>
+                        </div>
+                        <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz</button>
+                <!-- Rząd 5: Przycisk -->
+                <div class="form-row">
+                    <button type="button" class="btn btn-primary" onclick="obliczKredyt()">Oblicz</button>
+                </div>
             </form>
-            <div class="footer">
-                <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Moja strona</a></p>
-            </div>
         </div>
 
         <!-- Sekcja wyników -->
@@ -254,7 +263,7 @@
                     <span class="highlight red">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
                 </div>
             </div>
-            <button class="btn btn-secondary w-100 mb-3" onclick="showForm()">Powrót do edycji</button>
+            <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="chart-container">
                 <div class="chart-legend">
                     <div class="legend-item">
@@ -299,9 +308,6 @@
                         <tbody id="harmonogramTabela"></tbody>
                     </table>
                 </div>
-            </div>
-            <div class="footer">
-                <p>Stworzone przez Ciebie | <a href="https://twoja-strona.pl" target="_blank">Moja strona</a></p>
             </div>
         </div>
     </div>
@@ -365,7 +371,7 @@
             let prowizja = parseFloat(document.getElementById("prowizja").value);
             let typ = document.getElementById("prowizjaTyp").value;
             let prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
-            document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toFixed(2)} zł`;
+            document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
             return prowizjaPLN;
         }
 
@@ -469,7 +475,7 @@
             // Wyświetl wyniki
             document.getElementById("kapital").textContent = kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("nadplataWynik").textContent = calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-            document.getElementById("prowizjaOdNadplat").textContent = "0.00"; // Brak prowizji od nadpłat
+            document.getElementById("prowizjaOdNadplat").textContent = "0.00";
             document.getElementById("odsetki").textContent = odsetki.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.getElementById("okresPoNadplacie").textContent = harmonogram.length;
