@@ -13,7 +13,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             background: #fff;
             padding: 30px;
@@ -35,24 +35,83 @@
             font-size: 0.9em;
             color: #666;
         }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .form-range {
+            margin-top: 10px;
+        }
+        .sub-info {
+            font-size: 0.9em;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo z linkiem -->
+        <a href="https://twoja-strona.pl" target="_blank">
+            <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo">
+        </a>
+
         <h2 class="text-center mb-4">Kalkulator Kredytowy</h2>
         <form id="kredytForm">
+            <!-- Kwota kredytu -->
             <div class="mb-3">
                 <label for="kwota" class="form-label">Kwota kredytu (PLN):</label>
-                <input type="number" class="form-control" id="kwota" min="1000" step="1000" required>
+                <input type="number" class="form-control" id="kwota" min="1000" max="5000000" step="1000" value="100000" required>
+                <input type="range" class="form-range" id="kwotaRange" min="1000" max="5000000" step="1000" value="100000">
             </div>
+
+            <!-- Ilość rat -->
+            <div class="mb-3">
+                <label for="okres" class="form-label">Ilość rat (miesiące):</label>
+                <input type="number" class="form-control" id="okres" min="12" max="240" step="1" value="120" required>
+                <input type="range" class="form-range" id="okresRange" min="12" max="240" step="1" value="120">
+                <div class="sub-info" id="lata">Przeliczona ilość lat: 10</div>
+            </div>
+
+            <!-- Oprocentowanie -->
             <div class="mb-3">
                 <label for="oprocentowanie" class="form-label">Oprocentowanie roczne (%):</label>
-                <input type="number" class="form-control" id="oprocentowanie" min="0" step="0.1" required>
+                <input type="number" class="form-control" id="oprocentowanie" min="0.1" max="25" step="0.1" value="5" required>
+                <input type="range" class="form-range" id="oprocentowanieRange" min="0.1" max="25" step="0.1" value="5">
             </div>
+
+            <!-- Rodzaj rat -->
             <div class="mb-3">
-                <label for="okres" class="form-label">Okres spłaty (lata):</label>
-                <input type="number" class="form-control" id="okres" min="1" max="30" required>
+                <label class="form-label">Rodzaj rat:</label>
+                <div>
+                    <input type="radio" id="rowne" name="rodzajRat" value="rowne" checked>
+                    <label for="rowne">Równe</label>
+                    <input type="radio" id="malejace" name="rodzajRat" value="malejace" class="ms-3">
+                    <label for="malejace">Malejące</label>
+                </div>
             </div>
+
+            <!-- Prowizja -->
+            <div class="mb-3">
+                <label for="prowizja" class="form-label">Prowizja za udzielenie kredytu:</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="prowizja" min="0.1" max="25" step="0.1" value="2">
+                    <select class="form-select" id="prowizjaTyp">
+                        <option value="procent">%</option>
+                        <option value="pln">PLN</option>
+                    </select>
+                </div>
+                <input type="range" class="form-range" id="prowizjaRange" min="0.1" max="25" step="0.1" value="2">
+                <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 2000 PLN</div>
+            </div>
+
+            <!-- Nadpłata (opcjonalna) -->
+            <div class="mb-3">
+                <label for="nadplata" class="form-label">Nadpłata miesięczna (PLN, opcjonalna):</label>
+                <input type="number" class="form-control" id="nadplata" min="10" max="10000" step="10" value="0">
+                <input type="range" class="form-range" id="nadplataRange" min="10" max="10000" step="10" value="0">
+            </div>
+
             <button type="button" class="btn btn-primary w-100" onclick="obliczKredyt()">Oblicz ratę</button>
         </form>
 
@@ -61,6 +120,7 @@
             <p><strong>Miesięczna rata:</strong> <span id="rata"></span> PLN</p>
             <p><strong>Całkowity koszt kredytu:</strong> <span id="koszt"></span> PLN</p>
             <p><strong>Odsetki:</strong> <span id="odsetki"></span> PLN</p>
+            <p><strong>Prowizja:</strong> <span id="prowizjaWynik"></span> PLN</p>
         </div>
 
         <div class="footer">
@@ -71,22 +131,124 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Synchronizacja suwaków z polami tekstowymi
+        document.getElementById("kwotaRange").addEventListener("input", function() {
+            document.getElementById("kwota").value = this.value;
+        });
+        document.getElementById("kwota").addEventListener("input", function() {
+            document.getElementById("kwotaRange").value = this.value;
+        });
+
+        document.getElementById("okresRange").addEventListener("input", function() {
+            document.getElementById("okres").value = this.value;
+            updateLata();
+        });
+        document.getElementById("okres").addEventListener("input", function() {
+            document.getElementById("okresRange").value = this.value;
+            updateLata();
+        });
+
+        document.getElementById("oprocentowanieRange").addEventListener("input", function() {
+            document.getElementById("oprocentowanie").value = this.value;
+        });
+        document.getElementById("oprocentowanie").addEventListener("input", function() {
+            document.getElementById("oprocentowanieRange").value = this.value;
+        });
+
+        document.getElementById("prowizjaRange").addEventListener("input", function() {
+            document.getElementById("prowizja").value = this.value;
+            updateProwizja();
+        });
+        document.getElementById("prowizja").addEventListener("input", function() {
+            document.getElementById("prowizjaRange").value = this.value;
+            updateProwizja();
+        });
+        document.getElementById("prowizjaTyp").addEventListener("change", updateProwizja);
+
+        document.getElementById("nadplataRange").addEventListener("input", function() {
+            document.getElementById("nadplata").value = this.value;
+        });
+        document.getElementById("nadplata").addEventListener("input", function() {
+            document.getElementById("nadplataRange").value = this.value;
+        });
+
+        // Funkcja przeliczająca lata
+        function updateLata() {
+            let miesiace = parseInt(document.getElementById("okres").value);
+            let lata = (miesiace / 12).toFixed(1);
+            document.getElementById("lata").textContent = `Przeliczona ilość lat: ${lata}`;
+        }
+
+        // Funkcja obliczająca prowizję w PLN
+        function updateProwizja() {
+            let kwota = parseFloat(document.getElementById("kwota").value);
+            let prowizja = parseFloat(document.getElementById("prowizja").value);
+            let typ = document.getElementById("prowizjaTyp").value;
+            let prowizjaPLN = typ === "procent" ? (kwota * prowizja / 100) : prowizja;
+            document.getElementById("prowizjaWartosc").textContent = `Wartość prowizji: ${prowizjaPLN.toFixed(2)} PLN`;
+            return prowizjaPLN;
+        }
+
+        // Inicjalizacja
+        updateLata();
+        updateProwizja();
+
+        // Obliczanie kredytu
         function obliczKredyt() {
-            // Pobierz dane z formularza
             let kwota = parseFloat(document.getElementById("kwota").value);
             let oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) / 100 / 12; // miesięczne
-            let lata = parseInt(document.getElementById("okres").value);
-            let miesiace = lata * 12;
+            let miesiace = parseInt(document.getElementById("okres").value);
+            let nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
+            let rodzajRat = document.querySelector('input[name="rodzajRat"]:checked').value;
+            let prowizjaPLN = updateProwizja();
 
-            // Oblicz ratę (wzór na ratę annuitetową)
-            let rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
-            let calkowityKoszt = rata * miesiace;
-            let odsetki = calkowityKoszt - kwota;
+            let rata, calkowityKoszt, odsetki;
+
+            if (rodzajRat === "rowne") {
+                // Raty równe (annuitetowe)
+                rata = (kwota * oprocentowanie) / (1 - Math.pow(1 + oprocentowanie, -miesiace));
+                calkowityKoszt = rata * miesiace;
+                odsetki = calkowityKoszt - kwota;
+            } else {
+                // Raty malejące
+                let kapital = kwota / miesiace;
+                calkowityKoszt = 0;
+                let pozostalyKapital = kwota;
+                for (let i = 0; i < miesiace; i++) {
+                    let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
+                    rata = kapital + odsetkiMiesiac; // Pierwsza rata jako przykład
+                    calkowityKoszt += rata;
+                    pozostalyKapital -= kapital;
+                }
+                odsetki = calkowityKoszt - kwota;
+                rata = (kwota / miesiace) + (kwota * oprocentowanie); // Przybliżona pierwsza rata
+            }
+
+            // Uwzględnienie nadpłaty
+            if (nadplata > 0) {
+                let pozostalyKapital = kwota;
+                let noweMiesiace = 0;
+                calkowityKoszt = 0;
+                while (pozostalyKapital > 0 && noweMiesiace < miesiace) {
+                    let odsetkiMiesiac = pozostalyKapital * oprocentowanie;
+                    let rataMiesiac = rodzajRat === "rowne" ? rata : (kwota / miesiace) + odsetkiMiesiac;
+                    rataMiesiac += nadplata;
+                    pozostalyKapital -= (rataMiesiac - odsetkiMiesiac);
+                    calkowityKoszt += rataMiesiac;
+                    noweMiesiace++;
+                }
+                odsetki = calkowityKoszt - kwota;
+                rata = rata; // Pierwsza rata pozostaje taka sama, ale okres się skraca
+            }
+
+            // Dodanie prowizji do kosztu
+            calkowityKoszt += prowizjaPLN;
 
             // Wyświetl wyniki
             document.getElementById("rata").textContent = rata.toFixed(2);
             document.getElementById("koszt").textContent = calkowityKoszt.toFixed(2);
             document.getElementById("odsetki").textContent = odsetki.toFixed(2);
+            document.getElementById("prowizjaWynik").textContent = prowizjaPLN.toFixed(2);
             document.getElementById("wynik").style.display = "block";
         }
     </script>
