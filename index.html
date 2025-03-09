@@ -385,6 +385,7 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 20px;
+            position: relative;
         }
         .result-wrapper {
             flex: 1;
@@ -402,7 +403,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            height: 140px;
+            height: 120px; /* Skrócona do wysokości wykresów */
             background-color: #C2B280;
             display: none;
         }
@@ -412,7 +413,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            height: 100%;
+            height: 0; /* Brak kreski przy harmonogramach */
             background-color: #C2B280;
             display: none;
         }
@@ -433,18 +434,18 @@
             padding: 5px 10px;
             margin-bottom: 3px;
             border-radius: 5px;
-            color: #fff;
+            color: #000000; /* Czarny tekst dla kontrastu */
             text-align: center;
             font-weight: 500;
         }
         .benefit-item.positive {
-            background: linear-gradient(90deg, #28a745, #218838);
+            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
         }
         .benefit-item.negative {
-            background: linear-gradient(90deg, #dc3545, #c82333);
+            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
         }
         .benefit-item.neutral {
-            background: linear-gradient(90deg, #007bff, #0069d9);
+            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
         }
     </style>
 </head>
@@ -752,7 +753,7 @@
                 </div>
             </div>
             <div class="benefit-summary" id="benefitSummary">
-                <h6>Korzyści z nowego kredytu:</h6>
+                <h6>Korzyści nowego kredytu:</h6>
                 <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
                 <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
                 <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
@@ -818,7 +819,7 @@
                 formSection2.style.display = "block";
                 formDivider.style.display = "block";
                 resultDivider.style.display = "block";
-                harmonogramDivider.style.display = "block";
+                harmonogramDivider.style.display = "none"; // Ukryta dla harmonogramów
             } else {
                 formSection2.style.display = "none";
                 formDivider.style.display = "none";
@@ -1258,7 +1259,7 @@
             const resultSection2 = document.getElementById("resultSection2");
             const harmonogramSection2 = document.getElementById("harmonogramSection2");
             const benefitSummary = document.getElementById("benefitSummary");
-            const harmonogramDivider = document.getElementById("harmonogramDivider");
+            const resultDivider = document.getElementById("resultDivider");
 
             const dane1 = obliczKredytDlaFormularza("");
             if (!dane1) return;
@@ -1272,7 +1273,7 @@
                 resultSection2.style.display = "block";
                 harmonogramSection2.style.display = "block";
                 benefitSummary.style.display = "block";
-                harmonogramDivider.style.display = "block";
+                resultDivider.style.display = "block";
 
                 aktualizujWyniki(dane2, "2");
 
@@ -1297,7 +1298,7 @@
                 resultSection2.style.display = "none";
                 harmonogramSection2.style.display = "none";
                 benefitSummary.style.display = "none";
-                harmonogramDivider.style.display = "none";
+                resultDivider.style.display = "none";
             }
 
             document.getElementById("formSection").style.display = "none";
