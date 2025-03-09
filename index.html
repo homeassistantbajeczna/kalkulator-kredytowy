@@ -22,6 +22,9 @@
                 <input type="checkbox" id="porownajKredyt" name="porownajKredyt">
                 <label for="porownajKredyt" class="checkbox-label">Porównaj kredyt</label>
             </div>
+            <div class="pdf-button">
+                <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
+            </div>
             <div class="form-container">
                 <div class="form-wrapper">
                     <h5>Twój Kredyt</h5>
@@ -406,7 +409,7 @@
         height: 0;
     }
     .form-label {
-        font-size: 0.7em; /* Usunięto font-weight: 700 */
+        font-size: 0.7em;
         text-transform: uppercase;
         margin-bottom: 2px;
         color: #333333;
@@ -610,9 +613,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        display: flex; /* Zmiana na flex dla wyśrodkowania */
-        justify-content: center; /* Wyśrodkowanie poziome */
-        align-items: center; /* Wyśrodkowanie pionowe */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .highlight.red {
         background-color: #f8d7da;
@@ -631,9 +634,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        display: flex; /* Zmiana na flex dla wyśrodkowania */
-        justify-content: center; /* Wyśrodkowanie poziome */
-        align-items: center; /* Wyśrodkowanie pionowe */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .harmonogram {
         margin-top: 20px;
@@ -651,9 +654,10 @@
     }
     .harmonogram th {
         background: linear-gradient(90deg, #C2B280, #b0a070);
-        color: #ffffff;
+        color: #000000; /* Czarna czcionka zamiast białej */
         padding: 8px;
-        text-align: center;
+        text-align: center; /* Wyśrodkowanie w poziomie */
+        vertical-align: middle; /* Wyśrodkowanie w pionie */
         font-weight: 500;
         border-bottom: 2px solid #ddd;
     }
@@ -663,7 +667,7 @@
         font-weight: 400;
         border-bottom: 1px solid #eee;
         background-color: #f9f9f9;
-        color: #000000; /* Czarna czcionka */
+        color: #000000;
     }
     .harmonogram tr:last-child td {
         border-bottom: none;
@@ -694,6 +698,10 @@
         border-color: #b0a070;
         color: #000000;
     }
+    .btn-sm {
+        font-size: 0.7em;
+        padding: 3px 10px;
+    }
     #harmonogramContent, #harmonogramContent2 {
         display: block;
     }
@@ -716,6 +724,14 @@
     .compare-checkbox label {
         font-size: 0.8em;
         color: #333333;
+    }
+    .pdf-button {
+        position: absolute;
+        top: 10px;
+        right: 120px; /* Odstęp od prawej krawędzi, aby nie nachodził na "Porównaj kredyt" */
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
     .form-container {
         display: flex;
@@ -811,8 +827,10 @@
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     let chart1, chart2;
+    const { jsPDF } = window.jspdf;
 
     function toggleCompareSection() {
         const compareCheckbox = document.getElementById("porownajKredyt");
@@ -1309,4 +1327,116 @@
     }
 
     document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
+
+    function generatePDF() {
+        const doc = new jsPDF();
+        const compareCheckbox = document.getElementById("porownajKredyt");
+        let yOffset = 10;
+
+        doc.setFontSize(16);
+        doc.text("Kalkulator Kredytowy - Wyniki", 10, yOffset);
+        yOffset += 10;
+
+        doc.setFontSize(12);
+        doc.text("Twój Kredyt", 10, yOffset);
+        yOffset += 10;
+
+        const kapital = document.getElementById("valueKapital").textContent;
+        const odsetki = document.getElementById("valueOdsetki").textContent;
+        const nadplata = document.getElementById("valueNadplata").textContent;
+        const prowizja = document.getElementById("valueProwizja").textContent;
+        const okres = document.getElementById("okresPoNadplacie").textContent;
+        const koszt = document.getElementById("koszt").textContent;
+
+        doc.text(`Kapitał: ${kapital}`, 10, yOffset);
+        yOffset += 5;
+        doc.text(`Odsetki: ${odsetki}`, 10, yOffset);
+        yOffset += 5;
+        doc.text(`Nadpłaty: ${nadplata}`, 10, yOffset);
+        yOffset += 5;
+        doc.text(`Prowizja: ${prowizja}`, 10, yOffset);
+        yOffset += 5;
+        doc.text(`Okres kredytowania: ${okres} mc-y`, 10, yOffset);
+        yOffset += 5;
+        doc.text(`Całkowita kwota spłaty: ${koszt} zł`, 10, yOffset);
+        yOffset += 10;
+
+        doc.text("Harmonogram spłat - Twój Kredyt", 10, yOffset);
+        yOffset += 5;
+        const harmonogram1 = document.getElementById("harmonogramTabela").getElementsByTagName("tr");
+        doc.autoTable({
+            startY: yOffset,
+            head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+            body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent)),
+            theme: 'striped',
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [194, 178, 128] }
+        });
+        yOffset = doc.lastAutoTable.finalY + 10;
+
+        if (compareCheckbox.checked) {
+            doc.addPage();
+            yOffset = 10;
+
+            doc.setFontSize(12);
+            doc.text("Nowy Kredyt", 10, yOffset);
+            yOffset += 10;
+
+            const kapital2 = document.getElementById("valueKapital2").textContent;
+            const odsetki2 = document.getElementById("valueOdsetki2").textContent;
+            const nadplata2 = document.getElementById("valueNadplata2").textContent;
+            const prowizja2 = document.getElementById("valueProwizja2").textContent;
+            const okres2 = document.getElementById("okresPoNadplacie2").textContent;
+            const koszt2 = document.getElementById("koszt2").textContent;
+
+            doc.text(`Kapitał: ${kapital2}`, 10, yOffset);
+            yOffset += 5;
+            doc.text(`Odsetki: ${odsetki2}`, 10, yOffset);
+            yOffset += 5;
+            doc.text(`Nadpłaty: ${nadplata2}`, 10, yOffset);
+            yOffset += 5;
+            doc.text(`Prowizja: ${prowizja2}`, 10, yOffset);
+            yOffset += 5;
+            doc.text(`Okres kredytowania: ${okres2} mc-y`, 10, yOffset);
+            yOffset += 5;
+            doc.text(`Całkowita kwota spłaty: ${koszt2} zł`, 10, yOffset);
+            yOffset += 10;
+
+            doc.text("Harmonogram spłat - Nowy Kredyt", 10, yOffset);
+            yOffset += 5;
+            const harmonogram2 = document.getElementById("harmonogramTabela2").getElementsByTagName("tr");
+            doc.autoTable({
+                startY: yOffset,
+                head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+                body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent)),
+                theme: 'striped',
+                styles: { fontSize: 8, cellPadding: 2 },
+                headStyles: { fillColor: [194, 178, 128] }
+            });
+            yOffset = doc.lastAutoTable.finalY + 10;
+
+            doc.setFontSize(12);
+            doc.text("Korzyści nowego kredytu", 10, yOffset);
+            yOffset += 5;
+            const benefitCost = document.getElementById("benefitCost").textContent;
+            const benefitPeriod = document.getElementById("benefitPeriod").textContent;
+            const benefitPercentage = document.getElementById("benefitPercentage").textContent;
+
+            doc.text(benefitCost, 10, yOffset);
+            yOffset += 5;
+            doc.text(benefitPeriod, 10, yOffset);
+            yOffset += 5;
+            doc.text(benefitPercentage, 10, yOffset);
+        }
+
+        doc.save("Kalkulator_Kredytowy_Wyniki.pdf");
+    }
+
+    document.getElementById("generatePdfBtn").addEventListener("click", function() {
+        if (document.getElementById("resultSection").style.display === "none") {
+            alert("Najpierw oblicz kredyt, aby wygenerować PDF!");
+        } else {
+            generatePDF();
+        }
+    });
 </script>
