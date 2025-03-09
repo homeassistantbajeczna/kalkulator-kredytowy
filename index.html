@@ -814,15 +814,15 @@
 
         // Funkcja aktualizacji lat
         function updateLata(idOkres, idLata) {
-            const okres = parseInt(document.getElementById(idOkres).value);
+            const okres = parseInt(document.getElementById(idOkres).value) || 0;
             const lata = Math.ceil(okres / 12);
             document.getElementById(idLata).textContent = `Ilość lat: ${lata}`;
         }
 
         // Funkcja aktualizacji prowizji
         function updateProwizja(idKwota, idProwizja, idProwizjaTyp, idProwizjaWartosc) {
-            const kwota = parseFloat(document.getElementById(idKwota).value);
-            const prowizja = parseFloat(document.getElementById(idProwizja).value);
+            const kwota = parseFloat(document.getElementById(idKwota).value) || 0;
+            const prowizja = parseFloat(document.getElementById(idProwizja).value) || 0;
             const prowizjaTyp = document.getElementById(idProwizjaTyp).value;
             let prowizjaWartosc = prowizjaTyp === "procent" ? (kwota * prowizja / 100) : prowizja;
             document.getElementById(idProwizjaWartosc).textContent = `Wartość prowizji: ${prowizjaWartosc.toFixed(2)} zł`;
@@ -1008,7 +1008,7 @@
             const rodzajRat = document.getElementById("rodzajRat").value;
             const nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
             const nadplataJednorazowa = parseFloat(document.getElementById("nadplataJednorazowa").value) || 0;
-            const efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
+            const efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked')?.value || "skrocenie";
             const prowizja = updateProwizja("kwota", "prowizja", "prowizjaTyp", "prowizjaWartosc");
 
             const result1 = calculateLoan(kwota, oprocentowanie, okres, rodzajRat, nadplata, nadplataJednorazowa, efektNadplaty, prowizja);
@@ -1022,7 +1022,7 @@
                 const rodzajRat2 = document.getElementById("rodzajRat2").value;
                 const nadplata2 = parseFloat(document.getElementById("nadplata2").value) || 0;
                 const nadplataJednorazowa2 = parseFloat(document.getElementById("nadplataJednorazowa2").value) || 0;
-                const efektNadplaty2 = document.querySelector('input[name="efektNadplaty2"]:checked').value;
+                const efektNadplaty2 = document.querySelector('input[name="efektNadplaty2"]:checked')?.value || "skrocenie";
                 const prowizja2 = updateProwizja("kwota2", "prowizja2", "prowizjaTyp2", "prowizjaWartosc2");
 
                 const result2 = calculateLoan(kwota2, oprocentowanie2, okres2, rodzajRat2, nadplata2, nadplataJednorazowa2, efektNadplaty2, prowizja2);
@@ -1038,6 +1038,7 @@
                 document.getElementById("benefitPercentage").innerHTML = `Zmniejszysz koszty o: <span class="value">${percentageDifference}</span> %`;
             }
 
+            // Przełączenie widoku
             document.getElementById("formSection").style.display = "none";
             document.getElementById("resultSection").style.display = "block";
         });
