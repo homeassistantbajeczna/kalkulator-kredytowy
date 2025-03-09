@@ -867,12 +867,12 @@
         function toggleHarmonogram(id) {
             const content = document.getElementById(id);
             const toggle = content.previousElementSibling;
-            if (content.style.display === "none") {
+            if (content.style.display === "none" || content.style.display === "") {
                 content.style.display = "block";
-                toggle.textContent = "Harmonogram spłat ▼";
+                toggle.textContent = "Harmonogram spłat ▲";
             } else {
                 content.style.display = "none";
-                toggle.textContent = "Harmonogram spłat ▲";
+                toggle.textContent = "Harmonogram spłat ▼";
             }
         }
 
@@ -882,11 +882,11 @@
             let pozostalyKapital = kwota;
             let harmonogram = [];
             let totalOdsetki = 0;
-            let totalNadplata = nadplataJednorazowa;
+            let totalNadplata = nadplataJednorazowa || 0;
             let kapitalSplacony = 0;
             let okresPoNadplacie = okres;
 
-            // Obliczanie raty równej
+            // Obliczanie raty równej lub malejącej
             let rataStala = rodzajRat === "rowne" ?
                 (kwota * monthlyRate * Math.pow(1 + monthlyRate, okres)) / (Math.pow(1 + monthlyRate, okres) - 1) :
                 kwota / okres + kwota * monthlyRate;
@@ -902,22 +902,25 @@
                     rataStala = kapital + odsetki;
                 }
 
-                let nadplataMiesieczna = i === 1 ? nadplataJednorazowa + nadplata : nadplata;
+                let nadplataMiesieczna = i === 1 ? (nadplataJednorazowa || 0) + (nadplata || 0) : (nadplata || 0);
                 totalNadplata += nadplataMiesieczna;
 
-                let rataCalkowita = rataStala + nadplataMiesieczna;
+                let rataCalkowita = rataStala;
                 if (efektNadplaty === "skrocenie" && nadplataMiesieczna > 0) {
                     kapital += nadplataMiesieczna;
+                    rataCalkowita = kapital + odsetki;
+                } else if (efektNadplaty === "obnizenie" && nadplataMiesieczna > 0) {
+                    pozostalyKapital -= nadplataMiesieczna;
+                    rataCalkowita += nadplataMiesieczna;
                 }
 
-                if (pozostalyKapital - kapital < 0) {
+                if (kapital > pozostalyKapital) {
                     kapital = pozostalyKapital;
                     rataCalkowita = kapital + odsetki;
-                    pozostalyKapital = 0;
-                    okresPoNadplacie = i;
-                } else {
-                    pozostalyKapital -= kapital;
                 }
+
+                pozostalyKapital -= kapital;
+                if (pozostalyKapital < 0) pozostalyKapital = 0;
 
                 totalOdsetki += odsetki;
                 kapitalSplacony += kapital;
@@ -931,7 +934,10 @@
                     pozostalyKapital: pozostalyKapital.toFixed(2)
                 });
 
-                if (pozostalyKapital <= 0) break;
+                if (pozostalyKapital <= 0) {
+                    okresPoNadplacie = i;
+                    break;
+                }
             }
 
             const totalCost = kapitalSplacony + totalOdsetki + prowizja;
@@ -961,15 +967,16 @@
 
         // Funkcja aktualizacji wyników
         function updateResults(prefix, harmonogram, totalOdsetki, totalNadplata, totalCost, okresPoNadplacie, kwota) {
-            document.getElementById(`valueKapital${prefix}`).textContent = kwota.toFixed(2) + " zł";
-            document.getElementById(`valueOdsetki${prefix}`).textContent = totalOdsetki.toFixed(2) + " zł";
-            document.getElementById(`valueNadplata${prefix}`).textContent = totalNadplata.toFixed(2) + " zł";
-            document.getElementById(`valueProwizja${prefix}`).textContent = prowizja.toFixed(2) + " zł";
-            document.getElementById(`okresPoNadplacie${prefix}`).textContent = okresPoNadplacie;
-            document.getElementById(`koszt${prefix}`).textContent = totalCost.toFixed(2);
-            document.querySelector(`#okresPoNadplacie${prefix}`).parentElement.dataset.hover = `${okresPoNadplacie} miesięcy`;
+            const suffix = prefix || "";
+            document.getElementById(`valueKapital${suffix}`).textContent = kwota.toFixed(2) + " zł";
+            document.getElementById(`valueOdsetki${suffix}`).textContent = totalOdsetki.toFixed(2) + " zł";
+            document.getElementById(`valueNadplata${suffix}`).textContent = totalNadplata.toFixed(2) + " zł";
+            document.getElementById(`valueProwizja${suffix}`).textContent = prowizja.toFixed(2) + " zł";
+            document.getElementById(`okresPoNadplacie${suffix}`).textContent = okresPoNadplacie;
+            document.getElementById(`koszt${suffix}`).textContent = totalCost.toFixed(2);
+            document.querySelector(`#okresPoNadplacie${suffix}`).parentElement.dataset.hover = `${okresPoNadplacie} miesięcy`;
 
-            const tabela = document.getElementById(`harmonogramTabela${prefix}`);
+            const tabela = document.getElementById(`harmonogramTabela${suffix}`);
             tabela.innerHTML = "";
             harmonogram.forEach(row => {
                 tabela.innerHTML += `
@@ -983,7 +990,7 @@
                     </tr>`;
             });
 
-            updateChart(`creditChart${prefix}`, kwota, totalOdsetki, totalNadplata, prowizja);
+            updateChart(`creditChart${suffix}`, kwota, totalOdsetki, totalNadplata, prowizja);
         }
 
         // Funkcja wyświetlania formularza
@@ -994,25 +1001,27 @@
 
         // Główna funkcja obliczeń
         document.getElementById("obliczBtn").addEventListener("click", () => {
-            const kwota = parseFloat(document.getElementById("kwota").value);
-            const oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value);
-            const okres = parseInt(document.getElementById("okres").value);
+            // Dane dla pierwszego kredytu
+            const kwota = parseFloat(document.getElementById("kwota").value) || 0;
+            const oprocentowanie = parseFloat(document.getElementById("oprocentowanie").value) || 0;
+            const okres = parseInt(document.getElementById("okres").value) || 0;
             const rodzajRat = document.getElementById("rodzajRat").value;
-            const nadplata = parseFloat(document.getElementById("nadplata").value);
-            const nadplataJednorazowa = parseFloat(document.getElementById("nadplataJednorazowa").value);
+            const nadplata = parseFloat(document.getElementById("nadplata").value) || 0;
+            const nadplataJednorazowa = parseFloat(document.getElementById("nadplataJednorazowa").value) || 0;
             const efektNadplaty = document.querySelector('input[name="efektNadplaty"]:checked').value;
             const prowizja = updateProwizja("kwota", "prowizja", "prowizjaTyp", "prowizjaWartosc");
 
             const result1 = calculateLoan(kwota, oprocentowanie, okres, rodzajRat, nadplata, nadplataJednorazowa, efektNadplaty, prowizja);
             updateResults("", result1.harmonogram, result1.totalOdsetki, result1.totalNadplata, result1.totalCost, result1.okresPoNadplacie, kwota);
 
+            // Dane dla drugiego kredytu (jeśli porównanie włączone)
             if (document.getElementById("porownajKredyt").checked) {
-                const kwota2 = parseFloat(document.getElementById("kwota2").value);
-                const oprocentowanie2 = parseFloat(document.getElementById("oprocentowanie2").value);
-                const okres2 = parseInt(document.getElementById("okres2").value);
+                const kwota2 = parseFloat(document.getElementById("kwota2").value) || 0;
+                const oprocentowanie2 = parseFloat(document.getElementById("oprocentowanie2").value) || 0;
+                const okres2 = parseInt(document.getElementById("okres2").value) || 0;
                 const rodzajRat2 = document.getElementById("rodzajRat2").value;
-                const nadplata2 = parseFloat(document.getElementById("nadplata2").value);
-                const nadplataJednorazowa2 = parseFloat(document.getElementById("nadplataJednorazowa2").value);
+                const nadplata2 = parseFloat(document.getElementById("nadplata2").value) || 0;
+                const nadplataJednorazowa2 = parseFloat(document.getElementById("nadplataJednorazowa2").value) || 0;
                 const efektNadplaty2 = document.querySelector('input[name="efektNadplaty2"]:checked').value;
                 const prowizja2 = updateProwizja("kwota2", "prowizja2", "prowizjaTyp2", "prowizjaWartosc2");
 
@@ -1022,7 +1031,7 @@
                 // Obliczanie korzyści
                 const costDifference = result1.totalCost - result2.totalCost;
                 const periodDifference = result1.okresPoNadplacie - result2.okresPoNadplacie;
-                const percentageDifference = (costDifference / result1.totalCost * 100).toFixed(2);
+                const percentageDifference = result1.totalCost > 0 ? ((costDifference / result1.totalCost) * 100).toFixed(2) : 0;
 
                 document.getElementById("benefitCost").innerHTML = `Zmniejszenie kosztu kredytu: <span class="value">${costDifference.toFixed(2)}</span> zł`;
                 document.getElementById("benefitPeriod").innerHTML = `Skrócenie okresu kredytowania: <span class="value">${periodDifference}</span> miesięcy`;
