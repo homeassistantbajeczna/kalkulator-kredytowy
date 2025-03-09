@@ -249,8 +249,8 @@
             cursor: pointer;
         }
         .highlight.yellow {
-            background-color: #17a2b8; /* Cyjan z Prowizji od nadpłat */
-            color: #ffffff; /* Biała czcionka */
+            background-color: #808000; /* Oliwkowy */
+            color: #000000; /* Czarna czcionka */
         }
         .highlight.yellow:hover, .highlight.red:hover {
             color: transparent;
@@ -259,7 +259,7 @@
             content: attr(data-hover);
             font-weight: bold;
             font-size: 1.1em;
-            color: #ffffff; /* Biała czcionka po najechaniu */
+            color: #000000; /* Czarna czcionka po najechaniu */
             position: absolute;
             left: 0;
             top: 0;
@@ -691,6 +691,12 @@
                                 </div>
                                 <span class="legend-text">Prowizja</span>
                             </div>
+                            <div class="legend-item" data-index="4">
+                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja od nadpłat: -">
+                                    <span class="value" id="valueProwizjaNadplata">-</span>
+                                </div>
+                                <span class="legend-text">Prowizja od nadpłat</span>
+                            </div>
                         </div>
                     </div>
                     <div class="summary-footer">
@@ -729,6 +735,12 @@
                                     <span class="value" id="valueProwizja2">-</span>
                                 </div>
                                 <span class="legend-text">Prowizja</span>
+                            </div>
+                            <div class="legend-item" data-index="4">
+                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja od nadpłat: -">
+                                    <span class="value" id="valueProwizjaNadplata2">-</span>
+                                </div>
+                                <span class="legend-text">Prowizja od nadpłat</span>
                             </div>
                         </div>
                     </div>
@@ -1181,10 +1193,10 @@
                     labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja', 'Prowizja od nadpłat'],
                     datasets: [{
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
-                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1'],
+                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1', '#17a2b8'],
                         borderWidth: 1,
                         hoverOffset: 8,
-                        hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1']
+                        hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1', '#17a2b8']
                     }]
                 },
                 options: {
