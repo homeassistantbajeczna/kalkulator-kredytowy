@@ -135,7 +135,7 @@
         .checkbox-container {
             display: flex;
             justify-content: center;
-            margin-left: -20px; /* Przesunięcie w lewo */
+            margin-left: -20px;
         }
         .spacer {
             height: 10px;
@@ -379,6 +379,13 @@
             flex-wrap: wrap;
             position: relative;
         }
+        .harmonogram-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
         .result-wrapper {
             flex: 1;
             max-width: 500px;
@@ -391,17 +398,27 @@
         }
         .divider {
             position: absolute;
-            top: 40px; /* Przesunięcie do góry do wykresów */
+            top: 40px;
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            height: 140px; /* Ograniczona wysokość do wykresów */
+            height: 140px;
+            background-color: #C2B280;
+            display: none;
+        }
+        #harmonogramDivider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 100%;
             background-color: #C2B280;
             display: none;
         }
         .benefit-summary {
             display: none;
-            margin: 20px auto; /* Centralka i odstęp */
+            margin: 20px auto;
             max-width: 600px;
             text-align: center;
             font-size: 0.7em;
@@ -687,24 +704,6 @@
                         <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
                         <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
                     </div>
-                    <div class="harmonogram">
-                        <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent')">Harmonogram spłat ▼</h5>
-                        <div id="harmonogramContent">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Miesiąc</th>
-                                        <th>Rata</th>
-                                        <th>Nadpłata</th>
-                                        <th>Kapitał</th>
-                                        <th>Odsetki</th>
-                                        <th>Pozostały kapitał</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="harmonogramTabela"></tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
                 <div class="divider" id="resultDivider"></div>
                 <div class="result-wrapper" id="resultSection2" style="display: none;">
@@ -750,6 +749,37 @@
                         <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie2">-</span> mc-y</span>
                         <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt2">-</span> zł</span>
                     </div>
+                </div>
+            </div>
+            <div class="benefit-summary" id="benefitSummary">
+                <h6>Korzyści z nowego kredytu:</h6>
+                <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
+                <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
+                <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
+            </div>
+            <div class="harmonogram-container">
+                <div class="result-wrapper">
+                    <div class="harmonogram">
+                        <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent')">Harmonogram spłat ▼</h5>
+                        <div id="harmonogramContent">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Miesiąc</th>
+                                        <th>Rata</th>
+                                        <th>Nadpłata</th>
+                                        <th>Kapitał</th>
+                                        <th>Odsetki</th>
+                                        <th>Pozostały kapitał</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="harmonogramTabela"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider" id="harmonogramDivider"></div>
+                <div class="result-wrapper" id="harmonogramSection2" style="display: none;">
                     <div class="harmonogram">
                         <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent2')">Harmonogram spłat ▼</h5>
                         <div id="harmonogramContent2">
@@ -770,12 +800,6 @@
                     </div>
                 </div>
             </div>
-            <div class="benefit-summary" id="benefitSummary">
-                <h6>Korzyści z nowego kredytu:</h6>
-                <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
-                <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
-                <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
-            </div>
         </div>
     </div>
 
@@ -788,18 +812,18 @@
             const formSection2 = document.getElementById("formSection2");
             const formDivider = document.getElementById("formDivider");
             const resultDivider = document.getElementById("resultDivider");
-            const benefitSummary = document.getElementById("benefitSummary");
+            const harmonogramDivider = document.getElementById("harmonogramDivider");
 
             if (compareCheckbox.checked) {
                 formSection2.style.display = "block";
                 formDivider.style.display = "block";
                 resultDivider.style.display = "block";
-                benefitSummary.style.display = "block";
+                harmonogramDivider.style.display = "block";
             } else {
                 formSection2.style.display = "none";
                 formDivider.style.display = "none";
                 resultDivider.style.display = "none";
-                benefitSummary.style.display = "none";
+                harmonogramDivider.style.display = "none";
             }
         }
 
@@ -1232,7 +1256,9 @@
         function obliczKredyt() {
             const compareCheckbox = document.getElementById("porownajKredyt");
             const resultSection2 = document.getElementById("resultSection2");
+            const harmonogramSection2 = document.getElementById("harmonogramSection2");
             const benefitSummary = document.getElementById("benefitSummary");
+            const harmonogramDivider = document.getElementById("harmonogramDivider");
 
             const dane1 = obliczKredytDlaFormularza("");
             if (!dane1) return;
@@ -1244,16 +1270,18 @@
                 if (!dane2) return;
 
                 resultSection2.style.display = "block";
+                harmonogramSection2.style.display = "block";
                 benefitSummary.style.display = "block";
+                harmonogramDivider.style.display = "block";
+
                 aktualizujWyniki(dane2, "2");
 
-                // Obliczanie korzyści
                 const koszt1 = dane1.calkowityKoszt;
                 const koszt2 = dane2.calkowityKoszt;
                 const okres1 = dane1.okresPoNadplacie;
                 const okres2 = dane2.okresPoNadplacie;
 
-                const kosztRodzaj = koszt1 - koszt2; // Różnica: stary - nowy
+                const kosztRodzaj = koszt1 - koszt2;
                 const okresRodzaj = okres1 - okres2;
                 const procentRodzaj = ((koszt1 - koszt2) / koszt1 * 100).toFixed(2);
 
@@ -1267,7 +1295,9 @@
                 document.getElementById("benefitPercentage").className = `benefit-item ${procentRodzaj >= 0 ? 'positive' : 'negative'}`;
             } else {
                 resultSection2.style.display = "none";
+                harmonogramSection2.style.display = "none";
                 benefitSummary.style.display = "none";
+                harmonogramDivider.style.display = "none";
             }
 
             document.getElementById("formSection").style.display = "none";
