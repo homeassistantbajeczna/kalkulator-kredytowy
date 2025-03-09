@@ -129,8 +129,13 @@
             margin-left: 0;
         }
         .checkbox-label.nadplata-label {
-            font-size: 0.6em; /* Powiększenie napisu "Włącz nadpłaty" */
-            font-weight: bold; /* Pogrubienie napisu */
+            font-size: 0.6em;
+            font-weight: bold;
+        }
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            margin-left: -20px; /* Przesunięcie w lewo */
         }
         .spacer {
             height: 10px;
@@ -326,7 +331,7 @@
             color: #000000;
         }
         #harmonogramContent, #harmonogramContent2 {
-            display: block; /* Domyślnie rozwinięty */
+            display: block;
         }
         #nadplataSection, #nadplataSection2 {
             display: none;
@@ -334,7 +339,7 @@
         .checkbox-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-left: -20px;
         }
         .compare-checkbox {
             position: absolute;
@@ -352,7 +357,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
-            position: relative; /* Dla kreski oddzielającej */
+            position: relative;
         }
         .form-wrapper {
             flex: 1;
@@ -372,7 +377,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            position: relative; /* Dla kreski oddzielającej */
+            position: relative;
         }
         .result-wrapper {
             flex: 1;
@@ -386,13 +391,41 @@
         }
         .divider {
             position: absolute;
-            top: 0;
+            top: 10%; /* Margines od góry */
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background-color: #C2B280; /* Kolor kreski taki jak przycisk "Oblicz" */
-            display: none; /* Domyślnie ukryta */
+            width: 1px; /* Subtelna kreska */
+            height: 80%; /* Skrócona wysokość */
+            background-color: #C2B280;
+            display: none;
+        }
+        .benefit-summary {
+            display: none;
+            margin-top: 10px;
+            font-size: 0.7em;
+        }
+        .benefit-summary h6 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #333333;
+            font-weight: 700;
+        }
+        .benefit-item {
+            padding: 5px 10px;
+            margin-bottom: 3px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: center;
+            font-weight: 500;
+        }
+        .benefit-item.positive {
+            background: linear-gradient(90deg, #28a745, #218838);
+        }
+        .benefit-item.negative {
+            background: linear-gradient(90deg, #dc3545, #c82333);
+        }
+        .benefit-item.neutral {
+            background: linear-gradient(90deg, #007bff, #0069d9);
         }
     </style>
 </head>
@@ -443,7 +476,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class "form-group no-sub-info">
+                            <div class="form-group no-sub-info">
                                 <label class="form-label">Rodzaj rat</label>
                                 <select class="form-control" id="rodzajRat">
                                     <option value="rowne" selected>Rata równa</option>
@@ -711,6 +744,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="benefit-summary" id="benefitSummary">
+                        <h6>Korzyści z nowego kredytu:</h6>
+                        <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
+                        <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
+                        <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
+                    </div>
                     <div class="summary-footer">
                         <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie2">-</span> mc-y</span>
                         <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt2">-</span> zł</span>
@@ -747,15 +786,18 @@
             const formSection2 = document.getElementById("formSection2");
             const formDivider = document.getElementById("formDivider");
             const resultDivider = document.getElementById("resultDivider");
+            const benefitSummary = document.getElementById("benefitSummary");
 
             if (compareCheckbox.checked) {
                 formSection2.style.display = "block";
                 formDivider.style.display = "block";
                 resultDivider.style.display = "block";
+                benefitSummary.style.display = "block";
             } else {
                 formSection2.style.display = "none";
                 formDivider.style.display = "none";
                 resultDivider.style.display = "none";
+                benefitSummary.style.display = "none";
             }
         }
 
@@ -1188,6 +1230,7 @@
         function obliczKredyt() {
             const compareCheckbox = document.getElementById("porownajKredyt");
             const resultSection2 = document.getElementById("resultSection2");
+            const benefitSummary = document.getElementById("benefitSummary");
 
             const dane1 = obliczKredytDlaFormularza("");
             if (!dane1) return;
@@ -1199,9 +1242,30 @@
                 if (!dane2) return;
 
                 resultSection2.style.display = "block";
+                benefitSummary.style.display = "block";
                 aktualizujWyniki(dane2, "2");
+
+                // Obliczanie korzyści
+                const koszt1 = dane1.calkowityKoszt;
+                const koszt2 = dane2.calkowityKoszt;
+                const okres1 = dane1.okresPoNadplacie;
+                const okres2 = dane2.okresPoNadplacie;
+
+                const kosztRodzaj = koszt2 - koszt1;
+                const okresRodzaj = okres1 - okres2;
+                const procentRodzaj = ((koszt1 - koszt2) / koszt1 * 100).toFixed(2);
+
+                document.getElementById("benefitCost").textContent = `Zmniejszenie kosztu kredytu: ${kosztRodzaj >= 0 ? kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 }) : (-kosztRodzaj).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+                document.getElementById("benefitCost").className = `benefit-item ${kosztRodzaj >= 0 ? 'positive' : 'negative'}`;
+
+                document.getElementById("benefitPeriod").textContent = `Skrócenie okresu kredytowania: ${okresRodzaj >= 0 ? okresRodzaj : (-okresRodzaj)} miesięcy`;
+                document.getElementById("benefitPeriod").className = `benefit-item ${okresRodzaj >= 0 ? 'positive' : 'negative'}`;
+
+                document.getElementById("benefitPercentage").textContent = `Zmniejszysz koszty o: ${procentRodzaj >= 0 ? procentRodzaj : (-procentRodzaj)} %`;
+                document.getElementById("benefitPercentage").className = `benefit-item ${procentRodzaj >= 0 ? 'positive' : 'negative'}`;
             } else {
                 resultSection2.style.display = "none";
+                benefitSummary.style.display = "none";
             }
 
             document.getElementById("formSection").style.display = "none";
