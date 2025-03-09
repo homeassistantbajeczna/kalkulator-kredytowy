@@ -34,7 +34,7 @@
         }
         .form-section {
             padding: 10px;
-            position: relative; /* Dla pozycjonowania przycisku porównania */
+            position: relative;
         }
         .form-section h4 {
             margin-bottom: 15px;
@@ -53,7 +53,7 @@
         .form-group {
             flex: 1;
             min-width: 0;
-            max-width: 150px; /* Zmniejszenie szerokości pól w formularzu */
+            max-width: 150px;
         }
         .form-group.no-sub-info .sub-info {
             visibility: hidden;
@@ -61,13 +61,13 @@
         }
         .form-label {
             font-weight: 700;
-            font-size: 0.7em; /* Mniejsza czcionka w formularzu */
+            font-size: 0.7em;
             text-transform: uppercase;
             margin-bottom: 2px;
             color: #333333;
         }
         .form-control, .form-select, .form-range {
-            height: 22px; /* Mniejsze pola */
+            height: 22px;
             font-size: 0.7em;
             padding: 2px;
             text-align: center;
@@ -128,13 +128,17 @@
             font-size: 0.45em;
             margin-left: 0;
         }
+        .checkbox-label.nadplata-label {
+            font-size: 0.6em; /* Powiększenie napisu "Włącz nadpłaty" */
+            font-weight: bold; /* Pogrubienie napisu */
+        }
         .spacer {
             height: 10px;
         }
         .result-section {
             display: none;
             padding: 10px;
-            max-width: 1200px; /* Zwiększenie szerokości sekcji wyników */
+            max-width: 1200px;
             margin: 0 auto;
         }
         .result-header {
@@ -157,7 +161,7 @@
         }
         .chart {
             flex: 0 0 auto;
-            width: 120px; /* Zmniejszenie wykresów */
+            width: 120px;
             height: 120px;
             position: relative;
             z-index: 25;
@@ -265,7 +269,7 @@
         }
         .harmonogram {
             margin-top: 20px;
-            font-size: 0.65em; /* Zmniejszenie czcionki w harmonogramie */
+            font-size: 0.65em;
         }
         .harmonogram table {
             margin-bottom: 0;
@@ -322,7 +326,7 @@
             color: #000000;
         }
         #harmonogramContent, #harmonogramContent2 {
-            display: block;
+            display: block; /* Domyślnie rozwinięty */
         }
         #nadplataSection, #nadplataSection2 {
             display: none;
@@ -348,10 +352,11 @@
             display: flex;
             gap: 20px;
             justify-content: center;
+            position: relative; /* Dla kreski oddzielającej */
         }
         .form-wrapper {
             flex: 1;
-            max-width: 400px; /* Ograniczenie szerokości formularzy */
+            max-width: 400px;
         }
         .form-wrapper h5 {
             font-size: 1em;
@@ -367,16 +372,27 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            position: relative; /* Dla kreski oddzielającej */
         }
         .result-wrapper {
             flex: 1;
-            max-width: 500px; /* Ograniczenie szerokości wyników */
+            max-width: 500px;
         }
         .result-wrapper h5 {
             font-size: 1em;
             text-align: center;
             margin-bottom: 10px;
             color: #333333;
+        }
+        .divider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #C2B280; /* Kolor kreski taki jak przycisk "Oblicz" */
+            display: none; /* Domyślnie ukryta */
         }
     </style>
 </head>
@@ -389,15 +405,13 @@
     <div class="container">
         <div class="form-section" id="formSection">
             <h4>Kalkulator Kredytowy</h4>
-            <!-- Przycisk porównania -->
             <div class="compare-checkbox">
                 <input type="checkbox" id="porownajKredyt" name="porownajKredyt">
                 <label for="porownajKredyt" class="checkbox-label">Porównaj kredyt</label>
             </div>
             <div class="form-container">
-                <!-- Formularz 1 -->
                 <div class="form-wrapper">
-                    <h5>Kredyt 1</h5>
+                    <h5>Twój Kredyt</h5>
                     <form id="kredytForm">
                         <div class="form-row">
                             <div class="form-group">
@@ -429,7 +443,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group no-sub-info">
+                            <div class "form-group no-sub-info">
                                 <label class="form-label">Rodzaj rat</label>
                                 <select class="form-control" id="rodzajRat">
                                     <option value="rowne" selected>Rata równa</option>
@@ -454,7 +468,7 @@
                             <div class="form-group">
                                 <div style="display: flex; align-items: center; gap: 5px;">
                                     <input type="checkbox" id="wlaczNadplate" name="wlaczNadplate">
-                                    <label for="wlaczNadplate" class="checkbox-label">Włącz nadpłaty</label>
+                                    <label for="wlaczNadplate" class="checkbox-label nadplata-label">Włącz nadpłaty</label>
                                 </div>
                             </div>
                         </div>
@@ -489,9 +503,9 @@
                         </div>
                     </form>
                 </div>
-                <!-- Formularz 2 (ukryty domyślnie) -->
+                <div class="divider" id="formDivider"></div>
                 <div class="form-wrapper" id="formSection2">
-                    <h5>Kredyt 2</h5>
+                    <h5>Nowy Kredyt</h5>
                     <form id="kredytForm2">
                         <div class="form-row">
                             <div class="form-group">
@@ -548,7 +562,7 @@
                             <div class="form-group">
                                 <div style="display: flex; align-items: center; gap: 5px;">
                                     <input type="checkbox" id="wlaczNadplate2" name="wlaczNadplate2">
-                                    <label for="wlaczNadplate2" class="checkbox-label">Włącz nadpłaty</label>
+                                    <label for="wlaczNadplate2" class="checkbox-label nadplata-label">Włącz nadpłaty</label>
                                 </div>
                             </div>
                         </div>
@@ -595,9 +609,8 @@
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="result-container">
-                <!-- Wyniki Kredyt 1 -->
                 <div class="result-wrapper">
-                    <h5>Kredyt 1</h5>
+                    <h5>Twój Kredyt</h5>
                     <div class="chart-container">
                         <div class="chart">
                             <canvas id="creditChart"></canvas>
@@ -658,9 +671,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- Wyniki Kredyt 2 (ukryte domyślnie) -->
+                <div class="divider" id="resultDivider"></div>
                 <div class="result-wrapper" id="resultSection2" style="display: none;">
-                    <h5>Kredyt 2</h5>
+                    <h5>Nowy Kredyt</h5>
                     <div class="chart-container">
                         <div class="chart">
                             <canvas id="creditChart2"></canvas>
@@ -729,20 +742,25 @@
     <script>
         let chart1, chart2;
 
-        // Funkcja do pokazywania/ukrywania drugiego formularza
         function toggleCompareSection() {
             const compareCheckbox = document.getElementById("porownajKredyt");
             const formSection2 = document.getElementById("formSection2");
+            const formDivider = document.getElementById("formDivider");
+            const resultDivider = document.getElementById("resultDivider");
+
             if (compareCheckbox.checked) {
                 formSection2.style.display = "block";
+                formDivider.style.display = "block";
+                resultDivider.style.display = "block";
             } else {
                 formSection2.style.display = "none";
+                formDivider.style.display = "none";
+                resultDivider.style.display = "none";
             }
         }
 
         document.getElementById("porownajKredyt").addEventListener("change", toggleCompareSection);
 
-        // Funkcje dla formularza 1
         function toggleNadplataSection() {
             const nadplataSection = document.getElementById("nadplataSection");
             const nadplataCheckbox = document.getElementById("wlaczNadplate");
@@ -832,7 +850,6 @@
             nadplataJednorazowaRange.value = this.value;
         });
 
-        // Funkcje dla formularza 2
         function toggleNadplataSection2() {
             const nadplataSection = document.getElementById("nadplataSection2");
             const nadplataCheckbox = document.getElementById("wlaczNadplate2");
@@ -985,7 +1002,7 @@
             let prowizjaPLN = formPrefix === "" ? updateProwizja() : updateProwizja2();
 
             if (kwota <= 0 || miesiace <= 0 || oprocentowanie <= 0) {
-                alert("Proszę wypełnić wszystkie wymagane pola poprawnymi wartościami dla Kredytu " + (formPrefix === "" ? "1" : "2") + ".");
+                alert("Proszę wypełnić wszystkie wymagane pola poprawnymi wartościami dla " + (formPrefix === "" ? "Twojego Kredytu" : "Nowego Kredytu") + ".");
                 return null;
             }
 
@@ -1172,13 +1189,11 @@
             const compareCheckbox = document.getElementById("porownajKredyt");
             const resultSection2 = document.getElementById("resultSection2");
 
-            // Oblicz Kredyt 1
             const dane1 = obliczKredytDlaFormularza("");
             if (!dane1) return;
 
             aktualizujWyniki(dane1);
 
-            // Jeśli porównywarka jest włączona, oblicz Kredyt 2
             if (compareCheckbox.checked) {
                 const dane2 = obliczKredytDlaFormularza("2");
                 if (!dane2) return;
