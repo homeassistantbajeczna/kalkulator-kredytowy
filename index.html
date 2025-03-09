@@ -22,9 +22,6 @@
                 <input type="checkbox" id="porownajKredyt" name="porownajKredyt">
                 <label for="porownajKredyt" class="checkbox-label">Porównaj kredyt</label>
             </div>
-            <div class="pdf-button">
-                <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
-            </div>
             <div class="form-container">
                 <div class="form-wrapper">
                     <h5>Twój Kredyt</h5>
@@ -223,6 +220,7 @@
                 <h4>Podsumowanie wyników</h4>
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
+            <button id="generatePdfBtn" class="btn btn-primary btn-sm mb-3">Generuj PDF</button>
             <div class="result-container">
                 <div class="result-wrapper">
                     <h5>Twój Kredyt</h5>
@@ -654,10 +652,10 @@
     }
     .harmonogram th {
         background: linear-gradient(90deg, #C2B280, #b0a070);
-        color: #000000; /* Czarna czcionka zamiast białej */
+        color: #000000;
         padding: 8px;
-        text-align: center; /* Wyśrodkowanie w poziomie */
-        vertical-align: middle; /* Wyśrodkowanie w pionie */
+        text-align: center;
+        vertical-align: middle;
         font-weight: 500;
         border-bottom: 2px solid #ddd;
     }
@@ -702,6 +700,10 @@
         font-size: 0.7em;
         padding: 3px 10px;
     }
+    #generatePdfBtn {
+        display: block;
+        margin: 0 auto 10px;
+    }
     #harmonogramContent, #harmonogramContent2 {
         display: block;
     }
@@ -724,14 +726,6 @@
     .compare-checkbox label {
         font-size: 0.8em;
         color: #333333;
-    }
-    .pdf-button {
-        position: absolute;
-        top: 10px;
-        right: 120px; /* Odstęp od prawej krawędzi, aby nie nachodził na "Porównaj kredyt" */
-        display: flex;
-        align-items: center;
-        gap: 5px;
     }
     .form-container {
         display: flex;
@@ -1328,6 +1322,8 @@
 
     document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
 
+    document.getElementById("generatePdfBtn").addEventListener("click", generatePDF);
+
     function generatePDF() {
         const doc = new jsPDF();
         const compareCheckbox = document.getElementById("porownajKredyt");
@@ -1431,12 +1427,4 @@
 
         doc.save("Kalkulator_Kredytowy_Wyniki.pdf");
     }
-
-    document.getElementById("generatePdfBtn").addEventListener("click", function() {
-        if (document.getElementById("resultSection").style.display === "none") {
-            alert("Najpierw oblicz kredyt, aby wygenerować PDF!");
-        } else {
-            generatePDF();
-        }
-    });
 </script>
