@@ -391,17 +391,19 @@
         }
         .divider {
             position: absolute;
-            top: 10%; /* Margines od góry */
+            top: 40px; /* Przesunięcie do góry do wykresów */
             left: 50%;
             transform: translateX(-50%);
-            width: 1px; /* Subtelna kreska */
-            height: 80%; /* Skrócona wysokość */
+            width: 1px;
+            height: 140px; /* Ograniczona wysokość do wykresów */
             background-color: #C2B280;
             display: none;
         }
         .benefit-summary {
             display: none;
-            margin-top: 10px;
+            margin: 20px auto; /* Centralka i odstęp */
+            max-width: 600px;
+            text-align: center;
             font-size: 0.7em;
         }
         .benefit-summary h6 {
@@ -638,7 +640,7 @@
 
         <div class="result-section" id="resultSection">
             <div class="result-header">
-                <h4>Wyniki porównania kredytów</h4>
+                <h4>Podsumowanie wyników</h4>
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
             <div class="result-container">
@@ -744,12 +746,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="benefit-summary" id="benefitSummary">
-                        <h6>Korzyści z nowego kredytu:</h6>
-                        <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
-                        <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
-                        <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
-                    </div>
                     <div class="summary-footer">
                         <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie2">-</span> mc-y</span>
                         <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt2">-</span> zł</span>
@@ -773,6 +769,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="benefit-summary" id="benefitSummary">
+                <h6>Korzyści z nowego kredytu:</h6>
+                <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
+                <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
+                <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
             </div>
         </div>
     </div>
@@ -1251,11 +1253,11 @@
                 const okres1 = dane1.okresPoNadplacie;
                 const okres2 = dane2.okresPoNadplacie;
 
-                const kosztRodzaj = koszt2 - koszt1;
+                const kosztRodzaj = koszt1 - koszt2; // Różnica: stary - nowy
                 const okresRodzaj = okres1 - okres2;
                 const procentRodzaj = ((koszt1 - koszt2) / koszt1 * 100).toFixed(2);
 
-                document.getElementById("benefitCost").textContent = `Zmniejszenie kosztu kredytu: ${kosztRodzaj >= 0 ? kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 }) : (-kosztRodzaj).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+                document.getElementById("benefitCost").textContent = `Zmniejszenie kosztu kredytu: ${kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
                 document.getElementById("benefitCost").className = `benefit-item ${kosztRodzaj >= 0 ? 'positive' : 'negative'}`;
 
                 document.getElementById("benefitPeriod").textContent = `Skrócenie okresu kredytowania: ${okresRodzaj >= 0 ? okresRodzaj : (-okresRodzaj)} miesięcy`;
