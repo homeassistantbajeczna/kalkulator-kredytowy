@@ -827,8 +827,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     let chart1, chart2;
-    const { jsPDF } = window.jspdf || {};
 
+    // Sprawdzenie, czy jsPDF jest załadowany
+    const { jsPDF } = window.jspdf || {};
     if (!jsPDF) {
         console.error("Biblioteka jsPDF nie została załadowana. Sprawdź połączenie z internetem lub ścieżkę do skryptu.");
     }
@@ -1331,18 +1332,17 @@
 
     document.getElementById("generatePdfBtn").addEventListener("click", function() {
         try {
+            if (!jsPDF) {
+                throw new Error("Biblioteka jsPDF nie jest dostępna.");
+            }
             generatePDF();
         } catch (error) {
-            console.error("Błąd podczas generowania PDF:", error);
             alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
+            console.error("Błąd podczas generowania PDF:", error);
         }
     });
 
     function generatePDF() {
-        if (!jsPDF) {
-            throw new Error("Biblioteka jsPDF nie jest dostępna.");
-        }
-
         const doc = new jsPDF();
         const compareCheckbox = document.getElementById("porownajKredyt");
         let yOffset = 10;
@@ -1355,12 +1355,12 @@
         doc.text("Twój Kredyt", 10, yOffset);
         yOffset += 10;
 
-        const kapital = document.getElementById("valueKapital").textContent;
-        const odsetki = document.getElementById("valueOdsetki").textContent;
-        const nadplata = document.getElementById("valueNadplata").textContent;
-        const prowizja = document.getElementById("valueProwizja").textContent;
-        const okres = document.getElementById("okresPoNadplacie").textContent;
-        const koszt = document.getElementById("koszt").textContent;
+        const kapital = document.getElementById("valueKapital").textContent || "-";
+        const odsetki = document.getElementById("valueOdsetki").textContent || "-";
+        const nadplata = document.getElementById("valueNadplata").textContent || "-";
+        const prowizja = document.getElementById("valueProwizja").textContent || "-";
+        const okres = document.getElementById("okresPoNadplacie").textContent || "-";
+        const koszt = document.getElementById("koszt").textContent || "-";
 
         doc.text(`Kapitał: ${kapital}`, 10, yOffset);
         yOffset += 5;
@@ -1381,7 +1381,7 @@
         doc.autoTable({
             startY: yOffset,
             head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-            body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent)),
+            body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
             theme: 'striped',
             styles: { fontSize: 8, cellPadding: 2 },
             headStyles: { fillColor: [194, 178, 128] }
@@ -1396,12 +1396,12 @@
             doc.text("Nowy Kredyt", 10, yOffset);
             yOffset += 10;
 
-            const kapital2 = document.getElementById("valueKapital2").textContent;
-            const odsetki2 = document.getElementById("valueOdsetki2").textContent;
-            const nadplata2 = document.getElementById("valueNadplata2").textContent;
-            const prowizja2 = document.getElementById("valueProwizja2").textContent;
-            const okres2 = document.getElementById("okresPoNadplacie2").textContent;
-            const koszt2 = document.getElementById("koszt2").textContent;
+            const kapital2 = document.getElementById("valueKapital2").textContent || "-";
+            const odsetki2 = document.getElementById("valueOdsetki2").textContent || "-";
+            const nadplata2 = document.getElementById("valueNadplata2").textContent || "-";
+            const prowizja2 = document.getElementById("valueProwizja2").textContent || "-";
+            const okres2 = document.getElementById("okresPoNadplacie2").textContent || "-";
+            const koszt2 = document.getElementById("koszt2").textContent || "-";
 
             doc.text(`Kapitał: ${kapital2}`, 10, yOffset);
             yOffset += 5;
@@ -1422,7 +1422,7 @@
             doc.autoTable({
                 startY: yOffset,
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-                body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent)),
+                body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
                 theme: 'striped',
                 styles: { fontSize: 8, cellPadding: 2 },
                 headStyles: { fillColor: [194, 178, 128] }
@@ -1432,9 +1432,9 @@
             doc.setFontSize(12);
             doc.text("Korzyści nowego kredytu", 10, yOffset);
             yOffset += 5;
-            const benefitCost = document.getElementById("benefitCost").textContent;
-            const benefitPeriod = document.getElementById("benefitPeriod").textContent;
-            const benefitPercentage = document.getElementById("benefitPercentage").textContent;
+            const benefitCost = document.getElementById("benefitCost").textContent || "-";
+            const benefitPeriod = document.getElementById("benefitPeriod").textContent || "-";
+            const benefitPercentage = document.getElementById("benefitPercentage").textContent || "-";
 
             doc.text(benefitCost, 10, yOffset);
             yOffset += 5;
