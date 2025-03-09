@@ -825,13 +825,17 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
     let chart1, chart2;
 
-    // Sprawdzenie, czy jsPDF jest załadowany
+    // Sprawdzenie, czy jsPDF i autoTable są załadowane
     const { jsPDF } = window.jspdf || {};
     if (!jsPDF) {
         console.error("Biblioteka jsPDF nie została załadowana. Sprawdź połączenie z internetem lub ścieżkę do skryptu.");
+    }
+    if (typeof jsPDF !== 'function' || !jsPDF.prototype.autoTable) {
+        console.error("Plugin autoTable nie został załadowany lub jest niezgodny z wersją jsPDF.");
     }
 
     function toggleCompareSection() {
@@ -1335,6 +1339,9 @@
             if (!jsPDF) {
                 throw new Error("Biblioteka jsPDF nie jest dostępna.");
             }
+            if (!jsPDF.prototype.autoTable) {
+                throw new Error("Plugin autoTable nie jest dostępny.");
+            }
             generatePDF();
         } catch (error) {
             alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
@@ -1347,10 +1354,12 @@
         const compareCheckbox = document.getElementById("porownajKredyt");
         let yOffset = 10;
 
+        // Nagłówek
         doc.setFontSize(16);
         doc.text("Kalkulator Kredytowy - Wyniki", 10, yOffset);
         yOffset += 10;
 
+        // Twój Kredyt
         doc.setFontSize(12);
         doc.text("Twój Kredyt", 10, yOffset);
         yOffset += 10;
@@ -1375,19 +1384,26 @@
         doc.text(`Całkowita kwota spłaty: ${koszt} zł`, 10, yOffset);
         yOffset += 10;
 
+        // Harmonogram Twój Kredyt
         doc.text("Harmonogram spłat - Twój Kredyt", 10, yOffset);
         yOffset += 5;
         const harmonogram1 = document.getElementById("harmonogramTabela").getElementsByTagName("tr");
-        doc.autoTable({
-            startY: yOffset,
-            head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-            body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
-            theme: 'striped',
-            styles: { fontSize: 8, cellPadding: 2 },
-            headStyles: { fillColor: [194, 178, 128] }
-        });
-        yOffset = doc.lastAutoTable.finalY + 10;
+        if (harmonogram1.length > 0) {
+            doc.autoTable({
+                startY: yOffset,
+                head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+                body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
+                theme: 'striped',
+                styles: { fontSize: 8, cellPadding: 2 },
+                headStyles: { fillColor: [194, 178, 128] }
+            });
+            yOffset = doc.lastAutoTable.finalY + 10;
+        } else {
+            doc.text("Brak danych harmonogramu.", 10, yOffset);
+            yOffset += 10;
+        }
 
+        // Nowy Kredyt (jeśli włączone porównanie)
         if (compareCheckbox.checked) {
             doc.addPage();
             yOffset = 10;
@@ -1416,19 +1432,26 @@
             doc.text(`Całkowita kwota spłaty: ${koszt2} zł`, 10, yOffset);
             yOffset += 10;
 
+            // Harmonogram Nowy Kredyt
             doc.text("Harmonogram spłat - Nowy Kredyt", 10, yOffset);
             yOffset += 5;
             const harmonogram2 = document.getElementById("harmonogramTabela2").getElementsByTagName("tr");
-            doc.autoTable({
-                startY: yOffset,
-                head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-                body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
-                theme: 'striped',
-                styles: { fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [194, 178, 128] }
-            });
-            yOffset = doc.lastAutoTable.finalY + 10;
+            if (harmonogram2.length > 0) {
+                doc.autoTable({
+                    startY: yOffset,
+                    head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+                    body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
+                    theme: 'striped',
+                    styles: { fontSize: 8, cellPadding: 2 },
+                    headStyles: { fillColor: [194, 178, 128] }
+                });
+                yOffset = doc.lastAutoTable.finalY + 10;
+            } else {
+                doc.text("Brak danych harmonogramu.", 10, yOffset);
+                yOffset += 10;
+            }
 
+            // Korzyści nowego kredytu
             doc.setFontSize(12);
             doc.text("Korzyści nowego kredytu", 10, yOffset);
             yOffset += 5;
