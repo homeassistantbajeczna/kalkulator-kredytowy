@@ -120,10 +120,10 @@
             align-items: center;
             gap: 3px;
         }
-        input[type="radio"] {
+        input[type="radio"], input[type="checkbox"] {
             accent-color: #C2B280;
         }
-        .radio-label {
+        .radio-label, .checkbox-label {
             font-size: 0.55em;
             margin-left: 0;
         }
@@ -302,6 +302,15 @@
         #harmonogramContent {
             display: block;
         }
+        /* Domyślne ukrycie sekcji nadpłaty */
+        #nadplataSection {
+            display: none;
+        }
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -365,7 +374,17 @@
                         <div class="sub-info" id="prowizjaWartosc">Wartość prowizji: 10000.00 zł</div>
                     </div>
                 </div>
-                <div class="form-row">
+                <!-- Dodanie checkboxa do włączania nadpłaty -->
+                <div class="checkbox-container">
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="wlaczNadplate" name="wlaczNadplate">
+                            <label for="wlaczNadplate" class="checkbox-label">Włącz nadpłaty</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sekcja nadpłaty (domyślnie ukryta) -->
+                <div class="form-row" id="nadplataSection">
                     <div class="form-group">
                         <label for="nadplata" class="form-label">Nadpłata miesięczna</label>
                         <div style="display: flex; gap: 5px; align-items: center;">
@@ -470,6 +489,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let chart;
+
+        // Funkcja do pokazywania/ukrywania sekcji nadpłaty
+        function toggleNadplataSection() {
+            const nadplataSection = document.getElementById("nadplataSection");
+            const nadplataCheckbox = document.getElementById("wlaczNadplate");
+            const nadplataInput = document.getElementById("nadplata");
+            const nadplataJednorazowaInput = document.getElementById("nadplataJednorazowa");
+            const nadplataRange = document.getElementById("nadplataRange");
+            const nadplataJednorazowaRange = document.getElementById("nadplataJednorazowaRange");
+
+            if (nadplataCheckbox.checked) {
+                nadplataSection.style.display = "flex";
+            } else {
+                nadplataSection.style.display = "none";
+                // Resetowanie wartości nadpłaty przy wyłączaniu sekcji
+                nadplataInput.value = 0;
+                nadplataJednorazowaInput.value = 0;
+                nadplataRange.value = 0;
+                nadplataJednorazowaRange.value = 0;
+            }
+        }
+
+        document.getElementById("wlaczNadplate").addEventListener("change", toggleNadplataSection);
 
         document.getElementById("kwotaRange").addEventListener("input", function() {
             const kwotaInput = document.getElementById("kwota");
@@ -676,7 +718,6 @@
             document.getElementById("valueProwizjaNadplata").textContent = `0.00 zł`;
             document.querySelector('.legend-item[data-index="4"] .color-box').setAttribute('data-tooltip', `Prowizja od nadpłat: 0.00 zł`);
 
-            // Poprawa: Ustawiamy okres kredytowania na podstawie harmonogram.length
             const okresPoNadplacie = harmonogram.length || miesiace;
             document.getElementById("okresPoNadplacie").textContent = okresPoNadplacie;
             document.querySelector('.highlight.yellow').setAttribute('data-hover', `${okresPoNadplacie} miesięcy`);
