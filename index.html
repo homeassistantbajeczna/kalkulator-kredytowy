@@ -218,9 +218,9 @@
         <div class="result-section" id="resultSection">
             <div class="result-header">
                 <h4>Podsumowanie wyników</h4>
+                <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
             </div>
             <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
-            <button id="generatePdfBtn" class="btn btn-primary btn-sm mb-3">Generuj PDF</button>
             <div class="result-container">
                 <div class="result-wrapper">
                     <h5>Twój Kredyt</h5>
@@ -495,11 +495,13 @@
     .result-header {
         text-align: center;
         margin-bottom: 20px;
+        position: relative; /* Dodane dla pozycjonowania przycisku */
     }
     .result-header h4 {
         font-size: 1.2em;
         color: #333333;
         font-weight: 700;
+        display: inline-block; /* Aby nie kolidować z przyciskiem */
     }
     .chart-container {
         display: flex;
@@ -701,8 +703,9 @@
         padding: 3px 10px;
     }
     #generatePdfBtn {
-        display: block;
-        margin: 0 auto 10px;
+        position: absolute;
+        top: 0;
+        right: 10px;
     }
     #harmonogramContent, #harmonogramContent2 {
         display: block;
@@ -824,7 +827,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     let chart1, chart2;
-    const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf || {};
+
+    if (!jsPDF) {
+        console.error("Biblioteka jsPDF nie została załadowana. Sprawdź połączenie z internetem lub ścieżkę do skryptu.");
+    }
 
     function toggleCompareSection() {
         const compareCheckbox = document.getElementById("porownajKredyt");
@@ -1322,9 +1329,20 @@
 
     document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
 
-    document.getElementById("generatePdfBtn").addEventListener("click", generatePDF);
+    document.getElementById("generatePdfBtn").addEventListener("click", function() {
+        try {
+            generatePDF();
+        } catch (error) {
+            console.error("Błąd podczas generowania PDF:", error);
+            alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
+        }
+    });
 
     function generatePDF() {
+        if (!jsPDF) {
+            throw new Error("Biblioteka jsPDF nie jest dostępna.");
+        }
+
         const doc = new jsPDF();
         const compareCheckbox = document.getElementById("porownajKredyt");
         let yOffset = 10;
