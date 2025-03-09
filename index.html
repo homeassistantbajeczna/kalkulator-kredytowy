@@ -248,6 +248,10 @@
             position: relative;
             cursor: pointer;
         }
+        .highlight.yellow {
+            background-color: #808000; /* Oliwkowy */
+            color: #000000; /* Czarna czcionka */
+        }
         .highlight.yellow:hover, .highlight.red:hover {
             color: transparent;
         }
@@ -255,7 +259,7 @@
             content: attr(data-hover);
             font-weight: bold;
             font-size: 1.1em;
-            color: #dc3545;
+            color: #000000; /* Czarna czcionka po najechaniu */
             position: absolute;
             left: 0;
             top: 0;
@@ -264,9 +268,6 @@
             display: block;
             text-align: center;
             line-height: 1.5em;
-        }
-        .highlight.yellow {
-            background-color: #ffeb3b;
         }
         .highlight.red {
             background-color: #f8d7da;
@@ -403,7 +404,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            height: 120px; /* Skrócona do wysokości wykresów */
+            height: 120px;
             background-color: #C2B280;
             display: none;
         }
@@ -413,7 +414,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            height: 0; /* Brak kreski przy harmonogramach */
+            height: 0;
             background-color: #C2B280;
             display: none;
         }
@@ -434,18 +435,16 @@
             padding: 5px 10px;
             margin-bottom: 3px;
             border-radius: 5px;
-            color: #000000; /* Czarny tekst dla kontrastu */
+            color: #000000;
             text-align: center;
             font-weight: 500;
         }
-        .benefit-item.positive {
-            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
+        .benefit-item span.value {
+            font-size: 1.2em;
+            font-weight: 700;
         }
-        .benefit-item.negative {
-            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
-        }
-        .benefit-item.neutral {
-            background: linear-gradient(90deg, #C2B280, #b0a070); /* Kolor przycisku Oblicz */
+        .benefit-item.positive, .benefit-item.negative, .benefit-item.neutral {
+            background: linear-gradient(90deg, #C2B280, #b0a070);
         }
     </style>
 </head>
@@ -655,8 +654,7 @@
                 <button type="button" class="btn btn-primary" id="obliczBtn">Oblicz</button>
             </div>
         </div>
-
-        <div class="result-section" id="resultSection">
+                <div class="result-section" id="resultSection">
             <div class="result-header">
                 <h4>Podsumowanie wyników</h4>
             </div>
@@ -688,13 +686,13 @@
                                 <span class="legend-text">Nadpłaty</span>
                             </div>
                             <div class="legend-item" data-index="3">
-                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja za udzielenie: -">
+                                <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
                                     <span class="value" id="valueProwizja">-</span>
                                 </div>
-                                <span class="legend-text">Prowizja za udzielenie</span>
+                                <span class="legend-text">Prowizja</span>
                             </div>
                             <div class="legend-item" data-index="4">
-                                <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja od nadpłat: -">
+                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja od nadpłat: -">
                                     <span class="value" id="valueProwizjaNadplata">-</span>
                                 </div>
                                 <span class="legend-text">Prowizja od nadpłat</span>
@@ -733,13 +731,13 @@
                                 <span class="legend-text">Nadpłaty</span>
                             </div>
                             <div class="legend-item" data-index="3">
-                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja za udzielenie: -">
+                                <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
                                     <span class="value" id="valueProwizja2">-</span>
                                 </div>
-                                <span class="legend-text">Prowizja za udzielenie</span>
+                                <span class="legend-text">Prowizja</span>
                             </div>
                             <div class="legend-item" data-index="4">
-                                <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja od nadpłat: -">
+                                <div class="color-box" style="background-color: #17a2b8;" data-tooltip="Prowizja od nadpłat: -">
                                     <span class="value" id="valueProwizjaNadplata2">-</span>
                                 </div>
                                 <span class="legend-text">Prowizja od nadpłat</span>
@@ -754,9 +752,9 @@
             </div>
             <div class="benefit-summary" id="benefitSummary">
                 <h6>Korzyści nowego kredytu:</h6>
-                <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: - zł</div>
-                <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: - miesięcy</div>
-                <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: - %</div>
+                <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: <span class="value" id="benefitCostValue">-</span> zł</div>
+                <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: <span class="value" id="benefitPeriodValue">-</span> miesięcy</div>
+                <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: <span class="value" id="benefitPercentageValue">-</span> %</div>
             </div>
             <div class="harmonogram-container">
                 <div class="result-wrapper">
@@ -803,8 +801,7 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let chart1, chart2;
 
@@ -819,7 +816,7 @@
                 formSection2.style.display = "block";
                 formDivider.style.display = "block";
                 resultDivider.style.display = "block";
-                harmonogramDivider.style.display = "none"; // Ukryta dla harmonogramów
+                harmonogramDivider.style.display = "none";
             } else {
                 formSection2.style.display = "none";
                 formDivider.style.display = "none";
@@ -1173,7 +1170,7 @@
             document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .legend-item[data-index="2"] .color-box`).setAttribute('data-tooltip', `Nadpłaty: ${calkowitaNadplata.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
             document.getElementById(`valueProwizja${prefix}`).textContent = `${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .legend-item[data-index="3"] .color-box`).setAttribute('data-tooltip', `Prowizja za udzielenie: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .legend-item[data-index="3"] .color-box`).setAttribute('data-tooltip', `Prowizja: ${prowizjaPLN.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
             document.getElementById(`valueProwizjaNadplata${prefix}`).textContent = `0.00 zł`;
             document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .legend-item[data-index="4"] .color-box`).setAttribute('data-tooltip', `Prowizja od nadpłat: 0.00 zł`);
@@ -1193,13 +1190,13 @@
             chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja za udzielenie', 'Prowizja od nadpłat'],
+                    labels: ['Kapitał', 'Odsetki', 'Nadpłaty', 'Prowizja', 'Prowizja od nadpłat'],
                     datasets: [{
                         data: [kwota, odsetki, calkowitaNadplata, prowizjaPLN, 0],
-                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1'],
+                        backgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1', '#17a2b8'],
                         borderWidth: 1,
                         hoverOffset: 8,
-                        hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#17a2b8', '#6f42c1']
+                        hoverBackgroundColor: ['#28a745', '#007bff', '#dc3545', '#6f42c1', '#17a2b8']
                     }]
                 },
                 options: {
@@ -1286,13 +1283,13 @@
                 const okresRodzaj = okres1 - okres2;
                 const procentRodzaj = ((koszt1 - koszt2) / koszt1 * 100).toFixed(2);
 
-                document.getElementById("benefitCost").textContent = `Zmniejszenie kosztu kredytu: ${kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+                document.getElementById("benefitCostValue").textContent = `${kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 })}`;
                 document.getElementById("benefitCost").className = `benefit-item ${kosztRodzaj >= 0 ? 'positive' : 'negative'}`;
 
-                document.getElementById("benefitPeriod").textContent = `Skrócenie okresu kredytowania: ${okresRodzaj >= 0 ? okresRodzaj : (-okresRodzaj)} miesięcy`;
+                document.getElementById("benefitPeriodValue").textContent = `${okresRodzaj >= 0 ? okresRodzaj : (-okresRodzaj)}`;
                 document.getElementById("benefitPeriod").className = `benefit-item ${okresRodzaj >= 0 ? 'positive' : 'negative'}`;
 
-                document.getElementById("benefitPercentage").textContent = `Zmniejszysz koszty o: ${procentRodzaj >= 0 ? procentRodzaj : (-procentRodzaj)} %`;
+                document.getElementById("benefitPercentageValue").textContent = `${procentRodzaj >= 0 ? procentRodzaj : (-procentRodzaj)}`;
                 document.getElementById("benefitPercentage").className = `benefit-item ${procentRodzaj >= 0 ? 'positive' : 'negative'}`;
             } else {
                 resultSection2.style.display = "none";
