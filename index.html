@@ -264,7 +264,7 @@
         }
         .harmonogram {
             margin-top: 20px;
-            font-size: 0.6em; /* Zmniejszenie czcionki dla całego harmonogramu */
+            font-size: 0.6em;
         }
         .harmonogram table {
             margin-bottom: 0;
@@ -274,8 +274,8 @@
         .harmonogram th, .harmonogram td {
             padding: 2px 4px;
             text-align: center;
-            font-weight: 400; /* Lżejsza waga czcionki */
-            font-size: 0.6em; /* Zmniejszenie czcionki w komórkach */
+            font-weight: 400;
+            font-size: 0.6em;
         }
         .btn-toggle {
             cursor: pointer;
@@ -676,10 +676,12 @@
             document.getElementById("valueProwizjaNadplata").textContent = `0.00 zł`;
             document.querySelector('.legend-item[data-index="4"] .color-box').setAttribute('data-tooltip', `Prowizja od nadpłat: 0.00 zł`);
 
-            document.getElementById("okresPoNadplacie").textContent = harmonogram.length || miesiace;
-            document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            // Poprawa: Ustawiamy okres kredytowania na podstawie harmonogram.length
+            const okresPoNadplacie = harmonogram.length || miesiace;
+            document.getElementById("okresPoNadplacie").textContent = okresPoNadplacie;
+            document.querySelector('.highlight.yellow').setAttribute('data-hover', `${okresPoNadplacie} miesięcy`);
 
-            document.querySelector('.highlight.yellow').setAttribute('data-hover', `${miesiace} miesięcy`);
+            document.getElementById("koszt").textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
             document.querySelector('.highlight.red').setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
 
             if (chart) {
