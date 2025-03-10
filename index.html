@@ -824,8 +824,8 @@
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
     let chart1, chart2;
 
@@ -833,9 +833,8 @@
     const { jsPDF } = window.jspdf || {};
     if (!jsPDF) {
         console.error("Biblioteka jsPDF nie została załadowana. Sprawdź połączenie z internetem lub ścieżkę do skryptu.");
-    }
-    if (typeof jsPDF !== 'function' || !jsPDF.prototype.autoTable) {
-        console.error("Plugin autoTable nie został załadowany lub jest niezgodny z wersją jsPDF.");
+    } else if (!jsPDF.prototype.autoTable) {
+        console.warn("Plugin autoTable nie został załadowany. PDF zostanie wygenerowany bez tabel harmonogramu.");
     }
 
     function toggleCompareSection() {
@@ -1339,9 +1338,6 @@
             if (!jsPDF) {
                 throw new Error("Biblioteka jsPDF nie jest dostępna.");
             }
-            if (!jsPDF.prototype.autoTable) {
-                throw new Error("Plugin autoTable nie jest dostępny.");
-            }
             generatePDF();
         } catch (error) {
             alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
@@ -1388,7 +1384,7 @@
         doc.text("Harmonogram spłat - Twój Kredyt", 10, yOffset);
         yOffset += 5;
         const harmonogram1 = document.getElementById("harmonogramTabela").getElementsByTagName("tr");
-        if (harmonogram1.length > 0) {
+        if (harmonogram1.length > 0 && jsPDF.prototype.autoTable) {
             doc.autoTable({
                 startY: yOffset,
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
@@ -1399,7 +1395,7 @@
             });
             yOffset = doc.lastAutoTable.finalY + 10;
         } else {
-            doc.text("Brak danych harmonogramu.", 10, yOffset);
+            doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
             yOffset += 10;
         }
 
@@ -1436,7 +1432,7 @@
             doc.text("Harmonogram spłat - Nowy Kredyt", 10, yOffset);
             yOffset += 5;
             const harmonogram2 = document.getElementById("harmonogramTabela2").getElementsByTagName("tr");
-            if (harmonogram2.length > 0) {
+            if (harmonogram2.length > 0 && jsPDF.prototype.autoTable) {
                 doc.autoTable({
                     startY: yOffset,
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
@@ -1447,7 +1443,7 @@
                 });
                 yOffset = doc.lastAutoTable.finalY + 10;
             } else {
-                doc.text("Brak danych harmonogramu.", 10, yOffset);
+                doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
                 yOffset += 10;
             }
 
