@@ -1038,7 +1038,8 @@
         const nadplataJednorazowaRange = document.getElementById("nadplataJednorazowaRange2");
         nadplataJednorazowaRange.value = this.value;
     });
-        function updateLata() {
+
+    function updateLata() {
         const miesiace = parseInt(document.getElementById("okres").value) || 0;
         const lata = (miesiace / 12).toFixed(0);
         document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
@@ -1280,7 +1281,8 @@
             `;
         });
     }
-        function obliczKredyt() {
+
+    function obliczKredyt() {
         const compareCheckbox = document.getElementById("porownajKredyt");
         const resultSection2 = document.getElementById("resultSection2");
         const harmonogramSection2 = document.getElementById("harmonogramSection2");
@@ -1348,8 +1350,8 @@
     function generatePDF() {
         const doc = new jsPDF();
 
-        // Dodanie czcionki z polskimi znakami (np. Helvetica jako fallback, ale użyjemy UTF-8)
-        doc.setFont("helvetica", "normal"); // Helvetica jako domyślna z podstawowym wsparciem UTF-8
+        // Ustawienie czcionki z obsługą polskich znaków
+        doc.setFont("times", "normal"); // Używamy "times" jako domyślnej z lepszym wsparciem UTF-8
         doc.setFontSize(16);
 
         const compareCheckbox = document.getElementById("porownajKredyt");
@@ -1400,9 +1402,22 @@
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                 body: tableData,
                 theme: 'grid',
-                styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                styles: { 
+                    font: "times", // Używamy "times" dla polskich znaków
+                    fontSize: 8, 
+                    cellPadding: 2, 
+                    overflow: 'linebreak', 
+                    halign: 'right' // Wyrównanie liczb do prawej
+                },
                 headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
-                columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
+                columnStyles: { 
+                    0: { cellWidth: 20, halign: 'center' }, 
+                    1: { cellWidth: 30 }, 
+                    2: { cellWidth: 30 }, 
+                    3: { cellWidth: 30 }, 
+                    4: { cellWidth: 30 }, 
+                    5: { cellWidth: 40 } 
+                }
             });
             yOffset = doc.lastAutoTable.finalY + 10;
         } else {
@@ -1459,9 +1474,22 @@
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                     body: tableData2,
                     theme: 'grid',
-                    styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    styles: { 
+                        font: "times", // Używamy "times" dla polskich znaków
+                        fontSize: 8, 
+                        cellPadding: 2, 
+                        overflow: 'linebreak', 
+                        halign: 'right' // Wyrównanie liczb do prawej
+                    },
                     headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
-                    columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
+                    columnStyles: { 
+                        0: { cellWidth: 20, halign: 'center' }, 
+                        1: { cellWidth: 30 }, 
+                        2: { cellWidth: 30 }, 
+                        3: { cellWidth: 30 }, 
+                        4: { cellWidth: 30 }, 
+                        5: { cellWidth: 40 } 
+                    }
                 });
                 yOffset = doc.lastAutoTable.finalY + 10;
             } else {
