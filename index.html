@@ -1347,11 +1347,15 @@
 
     function generatePDF() {
         const doc = new jsPDF();
+
+        // Dodanie wsparcia dla polskich znaków (UTF-8)
+        doc.setFont("times"); // Ustawiamy Times, które wspiera polskie znaki w jsPDF
+        doc.setFontSize(16);
+
         const compareCheckbox = document.getElementById("porownajKredyt");
         let yOffset = 10;
 
         // Nagłówek dokumentu
-        doc.setFontSize(16);
         doc.text("Kalkulator Kredytowy - Podsumowanie", 10, yOffset);
         yOffset += 10;
 
@@ -1387,13 +1391,15 @@
         yOffset += 6;
 
         const harmonogram1 = document.getElementById("harmonogramTabela").getElementsByTagName("tr");
+        console.log("Harmonogram 1 rows:", harmonogram1.length); // Debug
         if (harmonogram1.length > 0 && jsPDF.prototype.autoTable) {
+            const tableData = Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-"));
             doc.autoTable({
                 startY: yOffset,
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-                body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
+                body: tableData,
                 theme: 'grid',
-                styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                styles: { font: "times", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                 headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                 columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
             });
@@ -1442,13 +1448,15 @@
             yOffset += 6;
 
             const harmonogram2 = document.getElementById("harmonogramTabela2").getElementsByTagName("tr");
+            console.log("Harmonogram 2 rows:", harmonogram2.length); // Debug
             if (harmonogram2.length > 0 && jsPDF.prototype.autoTable) {
+                const tableData2 = Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-"));
                 doc.autoTable({
                     startY: yOffset,
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
-                    body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
+                    body: tableData2,
                     theme: 'grid',
-                    styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    styles: { font: "times", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                     headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                     columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                 });
