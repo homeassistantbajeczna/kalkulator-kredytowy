@@ -1188,7 +1188,7 @@
             };
         }
     </script>
-           <script>
+    <script>
         function aktualizujWyniki(dane, prefix = "") {
             if (!dane) return;
 
@@ -1336,49 +1336,33 @@
 
         document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
 
-        // Funkcja do ładowania czcionki DejaVuSans.ttf
-        async function loadFont() {
-            try {
-                const response = await fetch('DejaVuSans.ttf');
-                if (!response.ok) throw new Error('Nie udało się załadować pliku DejaVuSans.ttf');
-                const arrayBuffer = await response.arrayBuffer();
-                const base64String = btoa(
-                    new Uint8Array(arrayBuffer)
-                        .reduce((data, byte) => data + String.fromCharCode(byte), '')
-                );
-                return `data:font/truetype;base64,${base64String}`;
-            } catch (error) {
-                console.error('Błąd ładowania czcionki:', error);
-                return null;
-            }
+        // Funkcja do zamiany polskich znaków na łacińskie
+        function removePolishChars(text) {
+            const polishToLatin = {
+                'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
+                'Ą': 'A', 'Ć': 'C', 'Ę': 'E', 'Ł': 'L', 'Ń': 'N', 'Ó': 'O', 'Ś': 'S', 'Ź': 'Z', 'Ż': 'Z'
+            };
+            return text.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, match => polishToLatin[match] || match);
         }
 
-        // Asynchroniczna funkcja generowania PDF z czcionką DejaVuSans
-        async function generatePDF() {
+        // Funkcja generowania PDF z zamianą polskich znaków
+        function generatePDF() {
             const doc = new jsPDF();
 
-            // Ładowanie i ustawienie czcionki
-            const fontBase64 = await loadFont();
-            if (fontBase64) {
-                doc.addFileToVFS("DejaVuSans.ttf", fontBase64);
-                doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
-                doc.setFont("DejaVuSans");
-            } else {
-                console.warn("Czcionka DejaVuSans nie została załadowana. Używam domyślnej Helvetica.");
-                doc.setFont("helvetica");
-            }
+            // Ustawienie domyślnej czcionki Helvetica (nie potrzebujemy DejaVuSans)
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(16);
 
             const compareCheckbox = document.getElementById("porownajKredyt");
             let yOffset = 10;
 
             // Nagłówek dokumentu
-            doc.setFontSize(16);
-            doc.text("Kalkulator Kredytowy - Podsumowanie", 10, yOffset);
+            doc.text(removePolishChars("Kalkulator Kredytowy - Podsumowanie"), 10, yOffset);
             yOffset += 10;
 
             // Sekcja: Twój Kredyt
             doc.setFontSize(14);
-            doc.text("Twój Kredyt", 10, yOffset);
+            doc.text(removePolishChars("Twoj Kredyt"), 10, yOffset);
             yOffset += 8;
 
             doc.setFontSize(10);
@@ -1389,23 +1373,23 @@
             const okres = document.getElementById("okresPoNadplacie").textContent || "-";
             const koszt = document.getElementById("koszt").textContent || "-";
 
-            doc.text(`Kapitał: ${kapital}`, 10, yOffset);
+            doc.text(removePolishChars(`Kapital: ${kapital}`), 10, yOffset);
             yOffset += 6;
-            doc.text(`Odsetki: ${odsetki}`, 10, yOffset);
+            doc.text(removePolishChars(`Odsetki: ${odsetki}`), 10, yOffset);
             yOffset += 6;
-            doc.text(`Nadpłaty: ${nadplata}`, 10, yOffset);
+            doc.text(removePolishChars(`Nadplaty: ${nadplata}`), 10, yOffset);
             yOffset += 6;
-            doc.text(`Prowizja: ${prowizja}`, 10, yOffset);
+            doc.text(removePolishChars(`Prowizja: ${prowizja}`), 10, yOffset);
             yOffset += 6;
-            doc.text(`Okres kredytowania: ${okres} miesięcy`, 10, yOffset);
+            doc.text(removePolishChars(`Okres kredytowania: ${okres} miesiecy`), 10, yOffset);
             yOffset += 6;
-            doc.text(`Całkowita kwota spłaty: ${koszt} zł`, 10, yOffset);
+            doc.text(removePolishChars(`Calkowita kwota splaty: ${koszt} zl`), 10, yOffset);
             yOffset += 10;
 
             // Harmonogram spłat - Twój Kredyt
             if (harmonogram1Data.length > 0 && jsPDF.prototype.autoTable) {
                 doc.setFontSize(12);
-                doc.text("Harmonogram spłat - Twój Kredyt", 10, yOffset);
+                doc.text(removePolishChars("Harmonogram splat - Twoj Kredyt"), 10, yOffset);
                 yOffset += 6;
 
                 const tableData = harmonogram1Data.map(row => [
@@ -1419,10 +1403,17 @@
 
                 doc.autoTable({
                     startY: yOffset,
-                    head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+                    head: [[
+                        removePolishChars('Miesiac'),
+                        removePolishChars('Rata'),
+                        removePolishChars('Nadplata'),
+                        removePolishChars('Kapital'),
+                        removePolishChars('Odsetki'),
+                        removePolishChars('Pozostaly kapital')
+                    ]],
                     body: tableData,
                     theme: 'grid',
-                    styles: { font: fontBase64 ? "DejaVuSans" : "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                     headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                     columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                 });
@@ -1437,7 +1428,7 @@
                 }
 
                 doc.setFontSize(14);
-                doc.text("Nowy Kredyt", 10, yOffset);
+                doc.text(removePolishChars("Nowy Kredyt"), 10, yOffset);
                 yOffset += 8;
 
                 doc.setFontSize(10);
@@ -1448,23 +1439,23 @@
                 const okres2 = document.getElementById("okresPoNadplacie2").textContent || "-";
                 const koszt2 = document.getElementById("koszt2").textContent || "-";
 
-                doc.text(`Kapitał: ${kapital2}`, 10, yOffset);
+                doc.text(removePolishChars(`Kapital: ${kapital2}`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Odsetki: ${odsetki2}`, 10, yOffset);
+                doc.text(removePolishChars(`Odsetki: ${odsetki2}`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Nadpłaty: ${nadplata2}`, 10, yOffset);
+                doc.text(removePolishChars(`Nadplaty: ${nadplata2}`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Prowizja: ${prowizja2}`, 10, yOffset);
+                doc.text(removePolishChars(`Prowizja: ${prowizja2}`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Okres kredytowania: ${okres2} miesięcy`, 10, yOffset);
+                doc.text(removePolishChars(`Okres kredytowania: ${okres2} miesiecy`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Całkowita kwota spłaty: ${koszt2} zł`, 10, yOffset);
+                doc.text(removePolishChars(`Calkowita kwota splaty: ${koszt2} zl`), 10, yOffset);
                 yOffset += 10;
 
                 // Harmonogram spłat - Nowy Kredyt
                 if (harmonogram2Data.length > 0 && jsPDF.prototype.autoTable) {
                     doc.setFontSize(12);
-                    doc.text("Harmonogram spłat - Nowy Kredyt", 10, yOffset);
+                    doc.text(removePolishChars("Harmonogram splat - Nowy Kredyt"), 10, yOffset);
                     yOffset += 6;
 
                     const tableData2 = harmonogram2Data.map(row => [
@@ -1478,10 +1469,17 @@
 
                     doc.autoTable({
                         startY: yOffset,
-                        head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
+                        head: [[
+                            removePolishChars('Miesiac'),
+                            removePolishChars('Rata'),
+                            removePolishChars('Nadplata'),
+                            removePolishChars('Kapital'),
+                            removePolishChars('Odsetki'),
+                            removePolishChars('Pozostaly kapital')
+                        ]],
                         body: tableData2,
                         theme: 'grid',
-                        styles: { font: fontBase64 ? "DejaVuSans" : "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                        styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                         headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                         columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                     });
@@ -1495,7 +1493,7 @@
                 }
 
                 doc.setFontSize(14);
-                doc.text("Korzyści nowego kredytu", 10, yOffset);
+                doc.text(removePolishChars("Korzyści nowego kredytu"), 10, yOffset);
                 yOffset += 8;
 
                 doc.setFontSize(10);
@@ -1506,24 +1504,23 @@
                 const benefitPercentageValue = document.getElementById("benefitPercentageValue").textContent || "-";
                 const benefitPercentageClass = document.getElementById("benefitPercentage").classList.contains("positive") ? "Korzyść" : "Strata";
 
-                doc.text(`Różnica w kosztach: ${benefitCostValue} zł (${benefitCostClass})`, 10, yOffset);
+                doc.text(removePolishChars(`Roznica w kosztach: ${benefitCostValue} zl (${benefitCostClass})`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Różnica w okresie: ${benefitPeriodValue} miesięcy (${benefitPeriodClass})`, 10, yOffset);
+                doc.text(removePolishChars(`Roznica w okresie: ${benefitPeriodValue} miesiecy (${benefitPeriodClass})`), 10, yOffset);
                 yOffset += 6;
-                doc.text(`Procentowa różnica: ${benefitPercentageValue}% (${benefitPercentageClass})`, 10, yOffset);
+                doc.text(removePolishChars(`Procentowa roznica: ${benefitPercentageValue}% (${benefitPercentageClass})`), 10, yOffset);
                 yOffset += 10;
             }
 
             doc.save("Kalkulator_Kredytowy_Podsumowanie.pdf");
         }
 
-        // Listener dla przycisku generowania PDF
-        document.getElementById("generatePdfBtn").addEventListener("click", async function() {
+        document.getElementById("generatePdfBtn").addEventListener("click", function() {
             try {
                 if (!jsPDF) {
                     throw new Error("Biblioteka jsPDF nie jest dostępna.");
                 }
-                await generatePDF();
+                generatePDF();
             } catch (error) {
                 alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
                 console.error("Błąd podczas generowania PDF:", error);
