@@ -837,6 +837,7 @@
         console.warn("Plugin autoTable nie został załadowany. PDF zostanie wygenerowany bez tabel harmonogramu.");
     }
 
+    // Funkcje toggle i event listeners (bez zmian)
     function toggleCompareSection() {
         const compareCheckbox = document.getElementById("porownajKredyt");
         const formSection2 = document.getElementById("formSection2");
@@ -880,6 +881,7 @@
 
     document.getElementById("wlaczNadplate").addEventListener("change", toggleNadplataSection);
 
+    // Event listeners dla pól formularza (bez zmian)
     document.getElementById("kwotaRange").addEventListener("input", function() {
         const kwotaInput = document.getElementById("kwota");
         kwotaInput.value = this.value;
@@ -1036,8 +1038,7 @@
         const nadplataJednorazowaRange = document.getElementById("nadplataJednorazowaRange2");
         nadplataJednorazowaRange.value = this.value;
     });
-
-    function updateLata() {
+        function updateLata() {
         const miesiace = parseInt(document.getElementById("okres").value) || 0;
         const lata = (miesiace / 12).toFixed(0);
         document.getElementById("lata").textContent = `Ilość lat: ${lata}`;
@@ -1279,8 +1280,7 @@
             `;
         });
     }
-
-    function obliczKredyt() {
+        function obliczKredyt() {
         const compareCheckbox = document.getElementById("porownajKredyt");
         const resultSection2 = document.getElementById("resultSection2");
         const harmonogramSection2 = document.getElementById("harmonogramSection2");
@@ -1348,8 +1348,8 @@
     function generatePDF() {
         const doc = new jsPDF();
 
-        // Dodanie wsparcia dla polskich znaków (UTF-8)
-        doc.setFont("times"); // Ustawiamy Times, które wspiera polskie znaki w jsPDF
+        // Dodanie czcionki z polskimi znakami (np. Helvetica jako fallback, ale użyjemy UTF-8)
+        doc.setFont("helvetica", "normal"); // Helvetica jako domyślna z podstawowym wsparciem UTF-8
         doc.setFontSize(16);
 
         const compareCheckbox = document.getElementById("porownajKredyt");
@@ -1394,12 +1394,13 @@
         console.log("Harmonogram 1 rows:", harmonogram1.length); // Debug
         if (harmonogram1.length > 0 && jsPDF.prototype.autoTable) {
             const tableData = Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-"));
+            console.log("Harmonogram 1 data:", tableData); // Debug
             doc.autoTable({
                 startY: yOffset,
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                 body: tableData,
                 theme: 'grid',
-                styles: { font: "times", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                 headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                 columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
             });
@@ -1408,6 +1409,7 @@
             doc.setFontSize(10);
             doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
             yOffset += 10;
+            console.log("Brak harmonogramu 1 - rows:", harmonogram1.length, "autoTable:", !!jsPDF.prototype.autoTable);
         }
 
         // Sekcja: Nowy Kredyt (jeśli porównanie włączone)
@@ -1451,12 +1453,13 @@
             console.log("Harmonogram 2 rows:", harmonogram2.length); // Debug
             if (harmonogram2.length > 0 && jsPDF.prototype.autoTable) {
                 const tableData2 = Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-"));
+                console.log("Harmonogram 2 data:", tableData2); // Debug
                 doc.autoTable({
                     startY: yOffset,
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                     body: tableData2,
                     theme: 'grid',
-                    styles: { font: "times", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                     headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                     columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                 });
@@ -1465,6 +1468,7 @@
                 doc.setFontSize(10);
                 doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
                 yOffset += 10;
+                console.log("Brak harmonogramu 2 - rows:", harmonogram2.length, "autoTable:", !!jsPDF.prototype.autoTable);
             }
 
             // Korzyści nowego kredytu
