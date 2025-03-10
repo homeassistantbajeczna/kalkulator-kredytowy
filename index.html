@@ -1188,7 +1188,7 @@
             };
         }
     </script>
-        <script>
+           <script>
         function aktualizujWyniki(dane, prefix = "") {
             if (!dane) return;
 
@@ -1336,29 +1336,43 @@
 
         document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
 
-        document.getElementById("generatePdfBtn").addEventListener("click", function() {
+        // Funkcja do ładowania czcionki DejaVuSans.ttf
+        async function loadFont() {
             try {
-                if (!jsPDF) {
-                    throw new Error("Biblioteka jsPDF nie jest dostępna.");
-                }
-                generatePDF();
+                const response = await fetch('DejaVuSans.ttf');
+                if (!response.ok) throw new Error('Nie udało się załadować pliku DejaVuSans.ttf');
+                const arrayBuffer = await response.arrayBuffer();
+                const base64String = btoa(
+                    new Uint8Array(arrayBuffer)
+                        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+                return `data:font/truetype;base64,${base64String}`;
             } catch (error) {
-                alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
-                console.error("Błąd podczas generowania PDF:", error);
+                console.error('Błąd ładowania czcionki:', error);
+                return null;
             }
-        });
+        }
 
-        function generatePDF() {
+        // Asynchroniczna funkcja generowania PDF z czcionką DejaVuSans
+        async function generatePDF() {
             const doc = new jsPDF();
 
-            // Ustawienie domyślnej czcionki Helvetica (brak DejaVu Sans w standardzie)
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(16);
+            // Ładowanie i ustawienie czcionki
+            const fontBase64 = await loadFont();
+            if (fontBase64) {
+                doc.addFileToVFS("DejaVuSans.ttf", fontBase64);
+                doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
+                doc.setFont("DejaVuSans");
+            } else {
+                console.warn("Czcionka DejaVuSans nie została załadowana. Używam domyślnej Helvetica.");
+                doc.setFont("helvetica");
+            }
 
             const compareCheckbox = document.getElementById("porownajKredyt");
             let yOffset = 10;
 
             // Nagłówek dokumentu
+            doc.setFontSize(16);
             doc.text("Kalkulator Kredytowy - Podsumowanie", 10, yOffset);
             yOffset += 10;
 
@@ -1408,7 +1422,7 @@
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                     body: tableData,
                     theme: 'grid',
-                    styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    styles: { font: fontBase64 ? "DejaVuSans" : "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                     headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                     columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                 });
@@ -1467,7 +1481,7 @@
                         head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                         body: tableData2,
                         theme: 'grid',
-                        styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                        styles: { font: fontBase64 ? "DejaVuSans" : "helvetica", fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
                         headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
                         columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                     });
@@ -1502,6 +1516,19 @@
 
             doc.save("Kalkulator_Kredytowy_Podsumowanie.pdf");
         }
+
+        // Listener dla przycisku generowania PDF
+        document.getElementById("generatePdfBtn").addEventListener("click", async function() {
+            try {
+                if (!jsPDF) {
+                    throw new Error("Biblioteka jsPDF nie jest dostępna.");
+                }
+                await generatePDF();
+            } catch (error) {
+                alert("Wystąpił problem z generowaniem PDF. Sprawdź konsolę przeglądarki.");
+                console.error("Błąd podczas generowania PDF:", error);
+            }
+        });
     </script>
 </body>
 </html>
