@@ -1206,8 +1206,8 @@
             document.getElementById(`okresPoNadplacie${prefix}`).textContent = okresPoNadplacie;
             document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .highlight.yellow`).setAttribute('data-hover', `${okresPoNadplacie} miesięcy`);
 
-            document.getElementById(`koszt${prefix}`).textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
-            document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .highlight.red`).setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
+            document.getElementById(`koszt${prefix}`).textContent = calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.querySelector(`.result-wrapper${prefix === "" ? ":nth-child(1)" : "#resultSection2"} .highlight.red`).setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`);
 
             let chart = prefix === "" ? chart1 : chart2;
             if (chart) {
