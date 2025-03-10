@@ -1350,16 +1350,17 @@
         const compareCheckbox = document.getElementById("porownajKredyt");
         let yOffset = 10;
 
-        // Nagłówek
+        // Nagłówek dokumentu
         doc.setFontSize(16);
-        doc.text("Kalkulator Kredytowy - Wyniki", 10, yOffset);
+        doc.text("Kalkulator Kredytowy - Podsumowanie", 10, yOffset);
         yOffset += 10;
 
-        // Twój Kredyt
-        doc.setFontSize(12);
+        // Sekcja: Twój Kredyt
+        doc.setFontSize(14);
         doc.text("Twój Kredyt", 10, yOffset);
-        yOffset += 10;
+        yOffset += 8;
 
+        doc.setFontSize(10);
         const kapital = document.getElementById("valueKapital").textContent || "-";
         const odsetki = document.getElementById("valueOdsetki").textContent || "-";
         const nadplata = document.getElementById("valueNadplata").textContent || "-";
@@ -1368,46 +1369,53 @@
         const koszt = document.getElementById("koszt").textContent || "-";
 
         doc.text(`Kapitał: ${kapital}`, 10, yOffset);
-        yOffset += 5;
+        yOffset += 6;
         doc.text(`Odsetki: ${odsetki}`, 10, yOffset);
-        yOffset += 5;
+        yOffset += 6;
         doc.text(`Nadpłaty: ${nadplata}`, 10, yOffset);
-        yOffset += 5;
+        yOffset += 6;
         doc.text(`Prowizja: ${prowizja}`, 10, yOffset);
-        yOffset += 5;
-        doc.text(`Okres kredytowania: ${okres} mc-y`, 10, yOffset);
-        yOffset += 5;
+        yOffset += 6;
+        doc.text(`Okres kredytowania: ${okres} miesięcy`, 10, yOffset);
+        yOffset += 6;
         doc.text(`Całkowita kwota spłaty: ${koszt} zł`, 10, yOffset);
         yOffset += 10;
 
-        // Harmonogram Twój Kredyt
+        // Harmonogram spłat - Twój Kredyt
+        doc.setFontSize(12);
         doc.text("Harmonogram spłat - Twój Kredyt", 10, yOffset);
-        yOffset += 5;
+        yOffset += 6;
+
         const harmonogram1 = document.getElementById("harmonogramTabela").getElementsByTagName("tr");
         if (harmonogram1.length > 0 && jsPDF.prototype.autoTable) {
             doc.autoTable({
                 startY: yOffset,
                 head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                 body: Array.from(harmonogram1).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
-                theme: 'striped',
-                styles: { fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [194, 178, 128] }
+                theme: 'grid',
+                styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
+                columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
             });
             yOffset = doc.lastAutoTable.finalY + 10;
         } else {
+            doc.setFontSize(10);
             doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
             yOffset += 10;
         }
 
-        // Nowy Kredyt (jeśli włączone porównanie)
+        // Sekcja: Nowy Kredyt (jeśli porównanie włączone)
         if (compareCheckbox.checked) {
-            doc.addPage();
-            yOffset = 10;
+            if (yOffset > 250) {
+                doc.addPage();
+                yOffset = 10;
+            }
 
-            doc.setFontSize(12);
+            doc.setFontSize(14);
             doc.text("Nowy Kredyt", 10, yOffset);
-            yOffset += 10;
+            yOffset += 8;
 
+            doc.setFontSize(10);
             const kapital2 = document.getElementById("valueKapital2").textContent || "-";
             const odsetki2 = document.getElementById("valueOdsetki2").textContent || "-";
             const nadplata2 = document.getElementById("valueNadplata2").textContent || "-";
@@ -1416,52 +1424,67 @@
             const koszt2 = document.getElementById("koszt2").textContent || "-";
 
             doc.text(`Kapitał: ${kapital2}`, 10, yOffset);
-            yOffset += 5;
+            yOffset += 6;
             doc.text(`Odsetki: ${odsetki2}`, 10, yOffset);
-            yOffset += 5;
+            yOffset += 6;
             doc.text(`Nadpłaty: ${nadplata2}`, 10, yOffset);
-            yOffset += 5;
+            yOffset += 6;
             doc.text(`Prowizja: ${prowizja2}`, 10, yOffset);
-            yOffset += 5;
-            doc.text(`Okres kredytowania: ${okres2} mc-y`, 10, yOffset);
-            yOffset += 5;
+            yOffset += 6;
+            doc.text(`Okres kredytowania: ${okres2} miesięcy`, 10, yOffset);
+            yOffset += 6;
             doc.text(`Całkowita kwota spłaty: ${koszt2} zł`, 10, yOffset);
             yOffset += 10;
 
-            // Harmonogram Nowy Kredyt
+            // Harmonogram spłat - Nowy Kredyt
+            doc.setFontSize(12);
             doc.text("Harmonogram spłat - Nowy Kredyt", 10, yOffset);
-            yOffset += 5;
+            yOffset += 6;
+
             const harmonogram2 = document.getElementById("harmonogramTabela2").getElementsByTagName("tr");
             if (harmonogram2.length > 0 && jsPDF.prototype.autoTable) {
                 doc.autoTable({
                     startY: yOffset,
                     head: [['Miesiąc', 'Rata', 'Nadpłata', 'Kapitał', 'Odsetki', 'Pozostały kapitał']],
                     body: Array.from(harmonogram2).map(row => Array.from(row.cells).map(cell => cell.textContent || "-")),
-                    theme: 'striped',
-                    styles: { fontSize: 8, cellPadding: 2 },
-                    headStyles: { fillColor: [194, 178, 128] }
+                    theme: 'grid',
+                    styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
+                    columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 30 }, 2: { cellWidth: 30 }, 3: { cellWidth: 30 }, 4: { cellWidth: 30 }, 5: { cellWidth: 40 } }
                 });
                 yOffset = doc.lastAutoTable.finalY + 10;
             } else {
+                doc.setFontSize(10);
                 doc.text("Harmonogram niedostępny (brak danych lub autoTable niezaładowane).", 10, yOffset);
                 yOffset += 10;
             }
 
             // Korzyści nowego kredytu
-            doc.setFontSize(12);
-            doc.text("Korzyści nowego kredytu", 10, yOffset);
-            yOffset += 5;
-            const benefitCost = document.getElementById("benefitCost").textContent || "-";
-            const benefitPeriod = document.getElementById("benefitPeriod").textContent || "-";
-            const benefitPercentage = document.getElementById("benefitPercentage").textContent || "-";
+            if (yOffset > 250) {
+                doc.addPage();
+                yOffset = 10;
+            }
 
-            doc.text(benefitCost, 10, yOffset);
-            yOffset += 5;
-            doc.text(benefitPeriod, 10, yOffset);
-            yOffset += 5;
-            doc.text(benefitPercentage, 10, yOffset);
+            doc.setFontSize(14);
+            doc.text("Korzyści nowego kredytu", 10, yOffset);
+            yOffset += 8;
+
+            doc.setFontSize(10);
+            const benefitCostValue = document.getElementById("benefitCostValue").textContent || "-";
+            const benefitCostClass = document.getElementById("benefitCost").classList.contains("positive") ? "Korzyść" : "Strata";
+            const benefitPeriodValue = document.getElementById("benefitPeriodValue").textContent || "-";
+            const benefitPeriodClass = document.getElementById("benefitPeriod").classList.contains("positive") ? "Korzyść" : "Strata";
+            const benefitPercentageValue = document.getElementById("benefitPercentageValue").textContent || "-";
+            const benefitPercentageClass = document.getElementById("benefitPercentage").classList.contains("positive") ? "Korzyść" : "Strata";
+
+            doc.text(`Różnica w kosztach: ${benefitCostValue} zł (${benefitCostClass})`, 10, yOffset);
+            yOffset += 6;
+            doc.text(`Różnica w okresie: ${benefitPeriodValue} miesięcy (${benefitPeriodClass})`, 10, yOffset);
+            yOffset += 6;
+            doc.text(`Procentowa różnica: ${benefitPercentageValue}% (${benefitPercentageClass})`, 10, yOffset);
+            yOffset += 10;
         }
 
-        doc.save("Kalkulator_Kredytowy_Wyniki.pdf");
+        doc.save("Kalkulator_Kredytowy_Podsumowanie.pdf");
     }
 </script>
