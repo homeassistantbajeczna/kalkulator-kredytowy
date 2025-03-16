@@ -115,249 +115,243 @@
                         </div>
                     </form>
                 </div>
-                <!-- Reszta kodu będzie w Części 2 -->
+                                <div class="divider" id="formDivider"></div>
+                <div class="form-wrapper" id="formSection2">
+                    <h5>Nowy Kredyt</h5>
+                    <form id="kredytForm2">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kwota2" class="form-label">Kwota kredytu</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="kwota2" min="1000" max="5000000" step="1000" value="500000">
+                                    <span class="input-group-text">zł</span>
+                                </div>
+                                <input type="range" class="form-range" id="kwotaRange2" min="1000" max="5000000" step="1000" value="500000">
+                                <div class="sub-info"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="okres2" class="form-label">Ilość rat</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="okres2" min="12" max="420" step="1" value="360">
+                                    <span class="input-group-text">mc-y</span>
+                                </div>
+                                <input type="range" class="form-range" id="okresRange2" min="12" max="420" step="1" value="360">
+                                <div class="sub-info" id="lata2">Ilość lat: 30</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="oprocentowanie2" class="form-label">Oprocentowanie</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="oprocentowanie2" min="0.1" max="25" step="0.1" value="7">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <input type="range" class="form-range" id="oprocentowanieRange2" min="0.1" max="25" step="0.1" value="7">
+                                <div class="sub-info"></div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group no-sub-info">
+                                <label class="form-label">Rodzaj rat</label>
+                                <select class="form-control" id="rodzajRat2">
+                                    <option value="rowne" selected>Rata równa</option>
+                                    <option value="malejace">Rata malejąca</option>
+                                </select>
+                                <div class="sub-info"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="prowizja2" class="form-label">Prowizja</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="prowizja2" min="0.1" max="25" step="0.1" value="2">
+                                    <select class="form-select" id="prowizjaTyp2">
+                                        <option value="procent" selected>%</option>
+                                        <option value="pln">zł</option>
+                                    </select>
+                                </div>
+                                <input type="range" class="form-range" id="prowizjaRange2" min="0.1" max="25" step="0.1" value="2">
+                                <div class="sub-info" id="prowizjaWartosc2">Wartość prowizji: 10000.00 zł</div>
+                            </div>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="form-group">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" id="wlaczNadplate2" name="wlaczNadplate2">
+                                    <label for="wlaczNadplate2" class="checkbox-label nadplata-label">Włącz nadpłaty</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row" id="nadplataSection2">
+                            <div class="form-group">
+                                <label for="nadplata2" class="form-label">Nadpłata miesięczna</label>
+                                <div style="display: flex; gap: 5px; align-items: center;">
+                                    <div class="radio-option">
+                                        <input type="radio" id="skrocenie2" name="efektNadplaty2" value="skrocenie" checked>
+                                        <label for="skrocenie2" class="radio-label">Skrócenie kredytu</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="obnizenie2" name="efektNadplaty2" value="obnizenie">
+                                        <label for="obnizenie2" class="radio-label">Obniżenie raty</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-2">
+                                    <input type="number" class="form-control" id="nadplata2" min="0" max="10000" step="10" value="0">
+                                    <span class="input-group-text">zł</span>
+                                </div>
+                                <input type="range" class="form-range" id="nadplataRange2" min="0" max="10000" step="10" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="nadplataJednorazowa2" class="form-label">Nadpłata jednorazowa</label>
+                                <div class="spacer"></div>
+                                <div class="input-group mt-2">
+                                    <input type="number" class="form-control" id="nadplataJednorazowa2" min="0" max="100000" step="100" value="0">
+                                    <span class="input-group-text">zł</span>
+                                </div>
+                                <input type="range" class="form-range" id="nadplataJednorazowaRange2" min="0" max="100000" step="100" value="0">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="button" class="btn btn-primary" id="obliczBtn" style="margin: 25px auto 0;">Oblicz</button>
             </div>
         </div>
     </div>
-</body>
-</html>
-<div class="divider" id="formDivider"></div>
-<div class="form-wrapper" id="formSection2">
-    <h5>Nowy Kredyt</h5>
-    <form id="kredytForm2">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="kwota2" class="form-label">Kwota kredytu</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="kwota2" min="1000" max="5000000" step="1000" value="500000">
-                    <span class="input-group-text">zł</span>
-                </div>
-                <input type="range" class="form-range" id="kwotaRange2" min="1000" max="5000000" step="1000" value="500000">
-                <div class="sub-info"></div>
-            </div>
-            <div class="form-group">
-                <label for="okres2" class="form-label">Ilość rat</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="okres2" min="12" max="420" step="1" value="360">
-                    <span class="input-group-text">mc-y</span>
-                </div>
-                <input type="range" class="form-range" id="okresRange2" min="12" max="420" step="1" value="360">
-                <div class="sub-info" id="lata2">Ilość lat: 30</div>
-            </div>
-            <div class="form-group">
-                <label for="oprocentowanie2" class="form-label">Oprocentowanie</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="oprocentowanie2" min="0.1" max="25" step="0.1" value="7">
-                    <span class="input-group-text">%</span>
-                </div>
-                <input type="range" class="form-range" id="oprocentowanieRange2" min="0.1" max="25" step="0.1" value="7">
-                <div class="sub-info"></div>
-            </div>
+    <div class="result-section" id="resultSection">
+        <div class="result-header">
+            <h4>Podsumowanie wyników</h4>
+            <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
         </div>
-        <div class="form-row">
-            <div class="form-group no-sub-info">
-                <label class="form-label">Rodzaj rat</label>
-                <select class="form-control" id="rodzajRat2">
-                    <option value="rowne" selected>Rata równa</option>
-                    <option value="malejace">Rata malejąca</option>
-                </select>
-                <div class="sub-info"></div>
-            </div>
-            <div class="form-group">
-                <label for="prowizja2" class="form-label">Prowizja</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="prowizja2" min="0.1" max="25" step="0.1" value="2">
-                    <select class="form-select" id="prowizjaTyp2">
-                        <option value="procent" selected>%</option>
-                        <option value="pln">zł</option>
-                    </select>
-                </div>
-                <input type="range" class="form-range" id="prowizjaRange2" min="0.1" max="25" step="0.1" value="2">
-                <div class="sub-info" id="prowizjaWartosc2">Wartość prowizji: 10000.00 zł</div>
-            </div>
-        </div>
-        <div class="checkbox-container">
-            <div class="form-group">
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <input type="checkbox" id="wlaczNadplate2" name="wlaczNadplate2">
-                    <label for="wlaczNadplate2" class="checkbox-label nadplata-label">Włącz nadpłaty</label>
-                </div>
-            </div>
-        </div>
-        <div class="form-row" id="nadplataSection2">
-            <div class="form-group">
-                <label for="nadplata2" class="form-label">Nadpłata miesięczna</label>
-                <div style="display: flex; gap: 5px; align-items: center;">
-                    <div class="radio-option">
-                        <input type="radio" id="skrocenie2" name="efektNadplaty2" value="skrocenie" checked>
-                        <label for="skrocenie2" class="radio-label">Skrócenie kredytu</label>
+        <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
+        <div class="result-container">
+            <div class="result-wrapper">
+                <h5>Twój Kredyt</h5>
+                <div class="chart-container">
+                    <div class="chart">
+                        <canvas id="creditChart"></canvas>
                     </div>
-                    <div class="radio-option">
-                        <input type="radio" id="obnizenie2" name="efektNadplaty2" value="obnizenie">
-                        <label for="obnizenie2" class="radio-label">Obniżenie raty</label>
-                    </div>
-                </div>
-                <div class="input-group mt-2">
-                    <input type="number" class="form-control" id="nadplata2" min="0" max="10000" step="10" value="0">
-                    <span class="input-group-text">zł</span>
-                </div>
-                <input type="range" class="form-range" id="nadplataRange2" min="0" max="10000" step="10" value="0">
-            </div>
-            <div class="form-group">
-                <label for="nadplataJednorazowa2" class="form-label">Nadpłata jednorazowa</label>
-                <div class="spacer"></div>
-                <div class="input-group mt-2">
-                    <input type="number" class="form-control" id="nadplataJednorazowa2" min="0" max="100000" step="100" value="0">
-                    <span class="input-group-text">zł</span>
-                </div>
-                <input type="range" class="form-range" id="nadplataJednorazowaRange2" min="0" max="100000" step="100" value="0">
-            </div>
-        </div>
-    </form>
-</div>
-</div>
-<div class="form-row">
-    <button type="button" class="btn btn-primary" id="obliczBtn">Oblicz</button>
-</div>
-</div>
-<div class="result-section" id="resultSection">
-    <div class="result-header">
-        <h4>Podsumowanie wyników</h4>
-        <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
-    </div>
-    <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
-    <div class="result-container">
-        <div class="result-wrapper">
-            <h5>Twój Kredyt</h5>
-            <div class="chart-container">
-                <div class="chart">
-                    <canvas id="creditChart"></canvas>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item" data-index="0">
-                        <div class="color-box" style="background-color: #28a745;" data-tooltip="Kapitał: -">
-                            <span class="value" id="valueKapital">-</span>
+                    <div class="chart-legend">
+                        <div class="legend-item" data-index="0">
+                            <div class="color-box" style="background-color: #28a745;" data-tooltip="Kapitał: -">
+                                <span class="value" id="valueKapital">-</span>
+                            </div>
+                            <span class="legend-text">Kapitał</span>
                         </div>
-                        <span class="legend-text">Kapitał</span>
-                    </div>
-                    <div class="legend-item" data-index="1">
-                        <div class="color-box" style="background-color: #007bff;" data-tooltip="Odsetki: -">
-                            <span class="value" id="valueOdsetki">-</span>
+                        <div class="legend-item" data-index="1">
+                            <div class="color-box" style="background-color: #007bff;" data-tooltip="Odsetki: -">
+                                <span class="value" id="valueOdsetki">-</span>
+                            </div>
+                            <span class="legend-text">Odsetki</span>
                         </div>
-                        <span class="legend-text">Odsetki</span>
-                    </div>
-                    <div class="legend-item" data-index="2">
-                        <div class="color-box" style="background-color: #dc3545;" data-tooltip="Nadpłaty: -">
-                            <span class="value" id="valueNadplata">-</span>
+                        <div class="legend-item" data-index="2">
+                            <div class="color-box" style="background-color: #dc3545;" data-tooltip="Nadpłaty: -">
+                                <span class="value" id="valueNadplata">-</span>
+                            </div>
+                            <span class="legend-text">Nadpłaty</span>
                         </div>
-                        <span class="legend-text">Nadpłaty</span>
-                    </div>
-                    <div class="legend-item" data-index="3">
-                        <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
-                            <span class="value" id="valueProwizja">-</span>
+                        <div class="legend-item" data-index="3">
+                            <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
+                                <span class="value" id="valueProwizja">-</span>
+                            </div>
+                            <span class="legend-text">Prowizja</span>
                         </div>
-                        <span class="legend-text">Prowizja</span>
                     </div>
                 </div>
-            </div>
-            <div class="summary-footer">
-                <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
-                <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
-            </div>
-        </div>
-        <div class="divider" id="resultDivider"></div>
-        <div class="result-wrapper" id="resultSection2" style="display: none;">
-            <h5>Nowy Kredyt</h5>
-            <div class="chart-container">
-                <div class="chart">
-                    <canvas id="creditChart2"></canvas>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item" data-index="0">
-                        <div class="color-box" style="background-color: #28a745;" data-tooltip="Kapitał: -">
-                            <span class="value" id="valueKapital2">-</span>
-                        </div>
-                        <span class="legend-text">Kapitał</span>
-                    </div>
-                    <div class="legend-item" data-index="1">
-                        <div class="color-box" style="background-color: #007bff;" data-tooltip="Odsetki: -">
-                            <span class="value" id="valueOdsetki2">-</span>
-                        </div>
-                        <span class="legend-text">Odsetki</span>
-                    </div>
-                    <div class="legend-item" data-index="2">
-                        <div class="color-box" style="background-color: #dc3545;" data-tooltip="Nadpłaty: -">
-                            <span class="value" id="valueNadplata2">-</span>
-                        </div>
-                        <span class="legend-text">Nadpłaty</span>
-                    </div>
-                    <div class="legend-item" data-index="3">
-                        <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
-                            <span class="value" id="valueProwizja2">-</span>
-                        </div>
-                        <span class="legend-text">Prowizja</span>
-                    </div>
+                <div class="summary-footer">
+                    <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie">-</span> mc-y</span>
+                    <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt">-</span> zł</span>
                 </div>
             </div>
-            <div class="summary-footer">
-                <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie2">-</span> mc-y</span>
-                <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt2">-</span> zł</span>
-            </div>
-        </div>
-    </div>
-    <div class="benefit-summary" id="benefitSummary">
-        <h6>Korzyści nowego kredytu:</h6>
-        <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: <span class="value" id="benefitCostValue">-</span> zł</div>
-        <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: <span class="value" id="benefitPeriodValue">-</span> miesięcy</div>
-        <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: <span class="value" id="benefitPercentageValue">-</span> %</div>
-    </div>
-    <div class="harmonogram-container">
-        <div class="result-wrapper">
-            <div class="harmonogram">
-                <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent')">Harmonogram spłat ▼</h5>
-                <div id="harmonogramContent">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Miesiąc</th>
-                                <th>Rata</th>
-                                <th>Nadpłata</th>
-                                <th>Kapitał</th>
-                                <th>Odsetki</th>
-                                <th>Pozostały kapitał</th>
-                            </tr>
-                        </thead>
-                        <tbody id="harmonogramTabela"></tbody>
-                    </table>
+            <div class="divider" id="resultDivider"></div>
+            <div class="result-wrapper" id="resultSection2" style="display: none;">
+                <h5>Nowy Kredyt</h5>
+                <div class="chart-container">
+                    <div class="chart">
+                        <canvas id="creditChart2"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item" data-index="0">
+                            <div class="color-box" style="background-color: #28a745;" data-tooltip="Kapitał: -">
+                                <span class="value" id="valueKapital2">-</span>
+                            </div>
+                            <span class="legend-text">Kapitał</span>
+                        </div>
+                        <div class="legend-item" data-index="1">
+                            <div class="color-box" style="background-color: #007bff;" data-tooltip="Odsetki: -">
+                                <span class="value" id="valueOdsetki2">-</span>
+                            </div>
+                            <span class="legend-text">Odsetki</span>
+                        </div>
+                        <div class="legend-item" data-index="2">
+                            <div class="color-box" style="background-color: #dc3545;" data-tooltip="Nadpłaty: -">
+                                <span class="value" id="valueNadplata2">-</span>
+                            </div>
+                            <span class="legend-text">Nadpłaty</span>
+                        </div>
+                        <div class="legend-item" data-index="3">
+                            <div class="color-box" style="background-color: #6f42c1;" data-tooltip="Prowizja: -">
+                                <span class="value" id="valueProwizja2">-</span>
+                            </div>
+                            <span class="legend-text">Prowizja</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary-footer">
+                    <span class="highlight yellow" data-hover="360 miesięcy">Okres kredytowania: <span id="okresPoNadplacie2">-</span> mc-y</span>
+                    <span class="highlight red" data-hover="">Całkowita kwota spłaty: <span id="koszt2">-</span> zł</span>
                 </div>
             </div>
         </div>
-        <div class="divider" id="harmonogramDivider"></div>
-        <div class="result-wrapper" id="harmonogramSection2" style="display: none;">
-            <div class="harmonogram">
-                <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent2')">Harmonogram spłat ▼</h5>
-                <div id="harmonogramContent2">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Miesiąc</th>
-                                <th>Rata</th>
-                                <th>Nadpłata</th>
-                                <th>Kapitał</th>
-                                <th>Odsetki</th>
-                                <th>Pozostały kapitał</th>
-                            </tr>
-                        </thead>
-                        <tbody id="harmonogramTabela2"></tbody>
-                    </table>
+        <div class="benefit-summary" id="benefitSummary">
+            <h6>Korzyści nowego kredytu:</h6>
+            <div class="benefit-item" id="benefitCost">Zmniejszenie kosztu kredytu: <span class="value" id="benefitCostValue">-</span> zł</div>
+            <div class="benefit-item" id="benefitPeriod">Skrócenie okresu kredytowania: <span class="value" id="benefitPeriodValue">-</span> miesięcy</div>
+            <div class="benefit-item" id="benefitPercentage">Zmniejszysz koszty o: <span class="value" id="benefitPercentageValue">-</span> %</div>
+        </div>
+        <div class="harmonogram-container">
+            <div class="result-wrapper">
+                <div class="harmonogram">
+                    <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent')">Harmonogram spłat ▼</h5>
+                    <div id="harmonogramContent">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Miesiąc</th>
+                                    <th>Rata</th>
+                                    <th>Nadpłata</th>
+                                    <th>Kapitał</th>
+                                    <th>Odsetki</th>
+                                    <th>Pozostały kapitał</th>
+                                </tr>
+                            </thead>
+                            <tbody id="harmonogramTabela"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="divider" id="harmonogramDivider"></div>
+            <div class="result-wrapper" id="harmonogramSection2" style="display: none;">
+                <div class="harmonogram">
+                    <h5 class="btn-toggle" onclick="toggleHarmonogram('harmonogramContent2')">Harmonogram spłat ▼</h5>
+                    <div id="harmonogramContent2">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Miesiąc</th>
+                                    <th>Rata</th>
+                                    <th>Nadpłata</th>
+                                    <th>Kapitał</th>
+                                    <th>Odsetki</th>
+                                    <th>Pozostały kapitał</th>
+                                </tr>
+                            </thead>
+                            <tbody id="harmonogramTabela2"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</body>
-<style>
+    <style>
     body {
         background-color: #f5f6f5;
         font-family: 'Montserrat', sans-serif;
@@ -694,7 +688,7 @@
         font-size: 0.9em;
         padding: 5px 20px;
         width: auto;
-        margin: 20px auto 0; /* Dodany większy odstęp od góry dla przycisku Oblicz */
+        margin: 25px auto 0; /* Zmodyfikowane z 20px na 25px */
         display: block;
     }
     .btn-primary:hover, .btn-secondary:hover {
@@ -828,7 +822,7 @@
         background: linear-gradient(90deg, #C2B280, #b0a070);
     }
 </style>
-<!-- Skrypty bibliotek -->
+    <!-- Skrypty bibliotek -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
@@ -1497,7 +1491,7 @@
             const benefitPeriodValue = document.getElementById("benefitPeriodValue").textContent || "-";
             const benefitPeriodClass = document.getElementById("benefitPeriod").classList.contains("positive") ? "Korzyść" : "Strata";
             const benefitPercentageValue = document.getElementById("benefitPercentageValue").textContent || "-";
-            const benefitPercentageClass = document.getElementById("benefitPercentage").classList.contains("positive") ? "Korzyść" : "Strata";
+            const benefitPercentageClass = document.getElementById("benefitPercentage").classList.contains("positive") ? "Korzyść
 
             doc.text(removePolishChars(`Zmniejszenie kosztu kredytu: ${benefitCostValue} zl (${benefitCostClass})`), 10, yOffset);
             yOffset += 6;
