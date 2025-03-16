@@ -1312,7 +1312,7 @@
                 const okresRodzaj = okres1 - okres2;
                 const procentRodzaj = ((koszt1 - koszt2) / koszt1 * 100).toFixed(2);
 
-                document.getElementById("benefitCostValue").textContent = `${kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2 })}`;
+                document.getElementById("benefitCostValue").textContent = `${kosztRodzaj.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 document.getElementById("benefitCost").className = `benefit-item ${kosztRodzaj >= 0 ? 'positive' : 'negative'}`;
 
                 document.getElementById("benefitPeriodValue").textContent = `${okresRodzaj >= 0 ? okresRodzaj : (-okresRodzaj)}`;
