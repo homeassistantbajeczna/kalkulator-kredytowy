@@ -5,17 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Kredytowy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="logo-container">
-        <a href="https://finance-brothers.pl">
-            <img src="cropped-logo-FB-1.png" alt="Twoje Logo" class="logo d-block mx-auto">
-        </a>
-    </div>
     <div class="container">
-        <div class="form-section" id="formSection">
+        <div class="form-section">
             <div class="header-row">
                 <h4>Kalkulator Kredytowy</h4>
                 <div class="compare-checkbox">
@@ -87,14 +82,13 @@
                 </div>
             </div>
             <div class="form-row">
-                <button type="button" class="btn btn-primary" id="obliczBtn" style="margin: 25px auto 0;">Oblicz</button>
+                <button type="button" class="btn btn-primary" id="obliczBtn">Oblicz</button>
             </div>
         </div>
     </div>
-    <div class="result-section" id="resultSection">
+    <div class="result-section" id="resultSection" style="display: none;">
         <div class="result-header">
             <h4 id="resultHeader">Podsumowanie wyników</h4>
-            <button id="generatePdfBtn" class="btn btn-primary btn-sm">Generuj PDF</button>
         </div>
         <button class="btn btn-secondary mb-3" onclick="showForm()">Powrót do edycji</button>
         <div class="result-container">
@@ -106,13 +100,13 @@
                     </div>
                     <div class="chart-legend">
                         <div class="legend-item" data-index="0">
-                            <div class="color-box" style="background-color: #28a745;" data-tooltip="">
+                            <div class="color-box" style="background-color: #28a745;">
                                 <span class="value" id="valueKapital">-</span>
                             </div>
                             <span class="legend-text" id="legendKapital">Kapitał</span>
                         </div>
                         <div class="legend-item" data-index="1">
-                            <div class="color-box" style="background-color: #007bff;" data-tooltip="">
+                            <div class="color-box" style="background-color: #007bff;">
                                 <span class="value" id="valueOdsetki">-</span>
                             </div>
                             <span class="legend-text" id="legendOdsetki">Odsetki</span>
@@ -120,8 +114,8 @@
                     </div>
                 </div>
                 <div class="summary-footer">
-                    <span class="highlight yellow" data-hover="">Okres kredytu: <span id="okresKredytuWynik">-</span> mc-y</span>
-                    <span class="highlight green" data-hover="">Całkowity koszt: <span id="calkowityKoszt">-</span> zł</span>
+                    <span class="highlight yellow">Okres kredytu: <span id="okresKredytuWynik">-</span> mc-y</span>
+                    <span class="highlight green">Całkowity koszt: <span id="calkowityKoszt">-</span> zł</span>
                 </div>
             </div>
             <div class="result-wrapper compare-section" style="display: none;">
@@ -132,13 +126,13 @@
                     </div>
                     <div class="chart-legend">
                         <div class="legend-item" data-index="0">
-                            <div class="color-box" style="background-color: #28a745;" data-tooltip="">
+                            <div class="color-box" style="background-color: #28a745;">
                                 <span class="value" id="valueKapital2">-</span>
                             </div>
                             <span class="legend-text" id="legendKapital2">Kapitał</span>
                         </div>
                         <div class="legend-item" data-index="1">
-                            <div class="color-box" style="background-color: #007bff;" data-tooltip="">
+                            <div class="color-box" style="background-color: #007bff;">
                                 <span class="value" id="valueOdsetki2">-</span>
                             </div>
                             <span class="legend-text" id="legendOdsetki2">Odsetki</span>
@@ -146,8 +140,8 @@
                     </div>
                 </div>
                 <div class="summary-footer">
-                    <span class="highlight yellow" data-hover="">Okres kredytu: <span id="okresKredytuWynik2">-</span> mc-y</span>
-                    <span class="highlight green" data-hover="">Całkowity koszt: <span id="calkowityKoszt2">-</span> zł</span>
+                    <span class="highlight yellow">Okres kredytu: <span id="okresKredytuWynik2">-</span> mc-y</span>
+                    <span class="highlight green">Całkowity koszt: <span id="calkowityKoszt2">-</span> zł</span>
                 </div>
             </div>
         </div>
@@ -206,24 +200,13 @@
     body {
         background-color: #f5f6f5;
         font-family: 'Montserrat', sans-serif;
-        padding: 10px;
-    }
-    .logo-container {
-        background-color: #e9ecef;
-        padding: 15px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .logo {
-        max-width: 200px;
-        margin-bottom: 0;
-        cursor: pointer;
+        padding: 20px;
     }
     .container {
         max-width: 1200px;
-        margin: 30px auto 0;
+        margin: 0 auto;
         background: #FFFFFF;
-        padding: 15px;
+        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
@@ -231,21 +214,23 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         position: relative;
     }
     .header-row h4 {
-        font-size: 1.2em;
+        font-size: 1.5em;
         color: #333333;
         font-weight: 700;
         margin: 0;
     }
     .compare-checkbox {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 0;
+        right: 0;
         display: flex;
         align-items: center;
+        font-size: 0.9em;
+        color: #333333;
     }
     .compare-checkbox .checkbox-label {
         display: flex;
@@ -279,35 +264,34 @@
         transform: translate(-50%, -50%);
     }
     .form-section {
-        padding: 10px;
-        position: relative;
+        padding: 20px;
     }
     .form-row {
         display: flex;
         justify-content: center;
-        margin-bottom: 10px;
-        gap: 10px;
+        margin-bottom: 20px;
+        gap: 20px;
         align-items: flex-start;
     }
     .form-group {
         flex: 1;
         min-width: 0;
-        max-width: 150px;
+        max-width: 200px;
     }
     .form-label {
-        font-size: 0.7em;
+        font-size: 0.8em;
         text-transform: uppercase;
-        margin-bottom: 2px;
+        margin-bottom: 5px;
         color: #333333;
     }
     .form-control, .form-range {
-        height: 22px;
-        font-size: 0.7em;
-        padding: 2px;
+        height: 30px;
+        font-size: 0.9em;
+        padding: 5px;
         text-align: center;
     }
     .form-range {
-        margin-top: 2px;
+        margin-top: 5px;
         height: 8px;
         background: #d3d3d3;
         border-radius: 5px;
@@ -330,18 +314,17 @@
         cursor: pointer;
     }
     .input-group-text {
-        font-size: 0.7em;
-        padding: 2px 5px;
+        font-size: 0.9em;
+        padding: 5px 10px;
     }
     .sub-info {
-        font-size: 0.4em;
+        font-size: 0.6em;
         color: #333333;
-        margin-top: 2px;
+        margin-top: 5px;
         text-align: left;
     }
     .result-section {
-        display: none;
-        padding: 10px;
+        padding: 20px;
         max-width: 1200px;
         margin: 0 auto;
         background: #FFFFFF;
@@ -349,13 +332,11 @@
     .result-header {
         text-align: center;
         margin-bottom: 20px;
-        position: relative;
     }
     .result-header h4 {
-        font-size: 1.2em;
+        font-size: 1.5em;
         color: #333333;
         font-weight: 700;
-        display: inline-block;
     }
     .chart-container {
         display: flex;
@@ -363,15 +344,11 @@
         align-items: center;
         gap: 20px;
         margin-bottom: 20px;
-        position: relative;
-        overflow: visible;
     }
     .chart {
         flex: 0 0 auto;
-        width: 120px;
-        height: 120px;
-        position: relative;
-        z-index: 25;
+        width: 150px;
+        height: 150px;
     }
     .chart-legend {
         flex: 0 0 auto;
@@ -384,152 +361,73 @@
     .chart-legend .legend-item {
         display: flex;
         align-items: center;
-        margin-bottom: 6px;
-        font-size: 0.7em;
+        margin-bottom: 10px;
+        font-size: 0.9em;
         color: #333333;
         cursor: pointer;
-        transition: transform 0.3s ease;
-        padding-left: 8px;
     }
     .chart-legend .color-box {
-        width: 90px;
-        height: 18px;
+        width: 100px;
+        height: 20px;
         border-radius: 5px;
         text-align: center;
         font-weight: 500;
-        line-height: 18px;
-        font-size: 0.8em;
+        line-height: 20px;
+        font-size: 0.9em;
         white-space: nowrap;
         overflow: hidden;
         position: relative;
         color: #fff;
-        margin-right: 6px;
+        margin-right: 10px;
     }
     .chart-legend .color-box .value {
         display: block;
     }
-    .chart-legend .color-box:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        color: #fff;
-        font-size: 0.8em;
-        line-height: 18px;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 30;
-    }
-    .chart-legend .color-box:hover .value {
-        display: none;
-    }
     .chart-legend .legend-text {
         opacity: 1;
         transition: opacity 0.3s ease;
-        font-size: 0.7em;
     }
     .summary-footer {
         display: flex;
         justify-content: center;
-        gap: 15px;
+        gap: 20px;
         margin-top: 10px;
     }
     .summary-footer .highlight {
-        font-size: 0.8em;
-        padding: 4px 6px;
+        font-size: 0.9em;
+        padding: 5px 10px;
         border-radius: 5px;
-        position: relative;
-        cursor: pointer;
     }
     .highlight.yellow {
         background-color: #17a2b8;
         color: #ffffff;
     }
-    .highlight.yellow:hover {
-        color: transparent;
-    }
-    .highlight.yellow:hover::after {
-        content: attr(data-hover);
-        font-weight: bold;
-        font-size: 1.1em;
-        color: #ffffff;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
     .highlight.green {
         background-color: #28a745;
         color: #ffffff;
     }
-    .highlight.green:hover {
-        color: transparent;
-    }
-    .highlight.green:hover::after {
-        content: attr(data-hover);
-        font-weight: bold;
-        font-size: 1.1em;
-        color: #ffffff;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
     .harmonogram {
         margin-top: 20px;
-        font-size: 0.8em;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        padding: 10px;
+        font-size: 0.9em;
     }
     .harmonogram table {
         margin: 0 auto;
         width: auto;
-        max-width: 1000px;
-        display: table;
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        background: #f9f9f9;
+        max-width: 100%;
     }
     .harmonogram th {
         background: linear-gradient(90deg, #C2B280, #b0a070);
         color: #000000;
-        padding: 12px;
+        padding: 10px;
         text-align: center;
-        vertical-align: middle;
-        font-weight: 500;
-        border-bottom: 2px solid #ddd;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .harmonogram td {
         padding: 10px;
         text-align: center;
-        font-weight: 400;
-        border-bottom: 1px solid #eee;
-        background-color: #f9f9f9;
-        color: #000000;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .btn-toggle {
         cursor: pointer;
-        font-size: 0.8em;
+        font-size: 0.9em;
         color: #007bff;
         text-decoration: underline;
         margin-bottom: 10px;
@@ -539,48 +437,27 @@
         border: none;
         color: #000000;
         font-size: 0.9em;
-        padding: 8px 20px;
-        width: auto;
-        margin: 25px auto 0;
-        display: block;
+        padding: 10px 20px;
         border-radius: 25px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
     .btn-primary:hover, .btn-secondary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         background: linear-gradient(135deg, #b0a070, #C2B280);
         color: #000000;
-    }
-    .btn-sm {
-        font-size: 0.7em;
-        padding: 3px 10px;
-    }
-    #generatePdfBtn {
-        position: absolute;
-        top: 0;
-        right: 10px;
-    }
-    #harmonogramContent, #harmonogramContent2 {
-        display: block;
     }
     .form-container {
         display: flex;
         gap: 20px;
         justify-content: center;
-        position: relative;
     }
     .form-wrapper {
         flex: 1;
-        max-width: 400px;
+        max-width: 600px;
     }
     .result-container {
         display: flex;
         gap: 20px;
         justify-content: center;
         flex-wrap: wrap;
-        position: relative;
     }
     .harmonogram-container {
         display: flex;
@@ -588,14 +465,10 @@
         justify-content: center;
         flex-wrap: wrap;
         margin-top: 20px;
-        position: relative;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        padding: 10px;
     }
     .result-wrapper {
         flex: 1;
-        max-width: 1000px;
+        max-width: 600px;
     }
     .result-wrapper h5 {
         font-size: 1em;
@@ -614,19 +487,8 @@
     }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
     <script>
         let chart, chart2, chartLine, chartLine2;
-        let harmonogramData = [];
-        let harmonogramData2 = [];
-
-        const { jsPDF } = window.jspdf || {};
-        if (!jsPDF) {
-            console.error("Biblioteka jsPDF nie została załadowana.");
-        } else if (!jsPDF.prototype.autoTable) {
-            console.warn("Plugin autoTable nie został załadowany. PDF bez tabel harmonogramu.");
-        }
 
         document.getElementById("kwotaKredytuRange").addEventListener("input", function() {
             const kwotaInput = document.getElementById("kwotaKredytu");
@@ -761,261 +623,6 @@
 
             document.getElementById("resultHeader").textContent = `Wynik kredytu${compareCheckbox.checked ? " - Porównanie" : ""}`;
 
-            const { rata, odsetkiCalkowite, harmonogram } = obliczHarmonogram(kwota, okres, oprocentowanie);
-            harmonogramData = harmonogram;
-
-            document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-            document.querySelector('.result-wrapper:first-child .legend-item[data-index="0"] .color-box').setAttribute('data-tooltip', `Kapitał: ${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
-            document.getElementById("valueOdsetki").textContent = `${odsetkiCalkowite.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
-            document.querySelector('.result-wrapper:first-child .legend-item[data-index="1"] .color-box').setAttribute('data-tooltip', `Odsetki: ${odsetkiCalkowite.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`);
-            document.getElementById("okresKredytuWynik").textContent = okres;
-            document.querySelector('.result-wrapper:first-child .highlight.yellow').setAttribute('data-hover', `${okres} miesięcy`);
-            const calkowityKoszt = kwota + odsetkiCalkowite;
-            document.getElementById("calkowityKoszt").textContent = `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.querySelector('.result-wrapper:first-child .highlight.green').setAttribute('data-hover', `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`);
-
-            if (chart) chart.destroy();
-            if (chartLine) chartLine.destroy();
-
-            const ctx = document.getElementById("kredytChart").getContext("2d");
-            chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Kapitał', 'Odsetki'],
-                    datasets: [{
-                        data: [kwota, odsetkiCalkowite],
-                        backgroundColor: ['#28a745', '#007bff'],
-                        borderWidth: 1,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            document.querySelectorAll('.result-wrapper:first-child .legend-item').forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    const index = parseInt(this.getAttribute('data-index'));
-                    chart.setActiveElements([{ datasetIndex: 0, index: index }]);
-                    chart.update();
-
-                    const currentLegend = document.querySelector(`#legend${['Kapital', 'Odsetki'][index]}`);
-                    if (currentLegend) currentLegend.style.opacity = 0;
-
-                    const valueElements = document.querySelectorAll('#valueKapital, #valueOdsetki');
-                    valueElements.forEach((value, idx) => {
-                        if (idx === index) value.textContent = `${['Kapitał', 'Odsetki'][idx]}: ${value.textContent}`;
-                    });
-                });
-
-                item.addEventListener('mouseleave', function() {
-                    const index = parseInt(this.getAttribute('data-index'));
-                    chart.setActiveElements([]);
-                    chart.update();
-
-                    const currentLegend = document.querySelector(`#legend${['Kapital', 'Odsetki'][index]}`);
-                    if (currentLegend) currentLegend.style.opacity = 1;
-
-                    document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-                    document.getElementById("valueOdsetki").textContent = `${odsetkiCalkowite.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
-                });
-            });
-
-            let tabela = document.getElementById("harmonogramTabela");
-            tabela.innerHTML = "";
-            harmonogram.forEach(wiersz => {
-                tabela.innerHTML += `
-                    <tr>
-                        <td>${wiersz.miesiac}</td>
-                        <td>${parseFloat(wiersz.rata).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                        <td>${parseFloat(wiersz.kapital).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                        <td>${parseFloat(wiersz.odsetki).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                        <td>${parseFloat(wiersz.pozostalyKapital).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                    </tr>
-                `;
-            });
-
-            const maxPozostalyKapital = Math.max(...harmonogram.map(wiersz => parseFloat(wiersz.pozostalyKapital)));
-            const minPozostalyKapital = 0;
-            const range = maxPozostalyKapital - minPozostalyKapital;
-            const padding = range * 0.1;
-            const yMin = minPozostalyKapital - padding;
-            const yMax = maxPozostalyKapital + padding;
-            const stepSize = range / 5;
-
-            const ctxLine = document.getElementById("kredytChartLine").getContext("2d");
-            chartLine = new Chart(ctxLine, {
-                type: 'line',
-                data: {
-                    labels: harmonogram.map(wiersz => `Miesiąc ${wiersz.miesiac}`),
-                    datasets: [
-                        {
-                            label: 'Pozostały kapitał',
-                            data: harmonogram.map(wiersz => parseFloat(wiersz.pozostalyKapital)),
-                            borderColor: '#D4C791',
-                            backgroundColor: 'rgba(212, 199, 145, 0.2)',
-                            fill: true,
-                            tension: 0.1,
-                            borderWidth: 2
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Okres (miesiące)', font: { size: 14 } },
-                            ticks: { font: { size: 12 } }
-                        },
-                        y: {
-                            title: { display: true, text: 'Pozostały kapitał (PLN)', font: { size: 14 } },
-                            min: yMin,
-                            max: yMax,
-                            ticks: { stepSize: stepSize, font: { size: 12 } }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: true, position: 'top', labels: { font: { size: 12 } } },
-                        tooltip: { enabled: true, backgroundColor: 'rgba(0, 0, 0, 0.8)', titleFont: { size: 12 }, bodyFont: { size: 10 } }
-                    }
-                }
-            });
-
-            if (compareCheckbox.checked) {
-                const { rata: rata2, odsetkiCalkowite: odsetkiCalkowite2, harmonogram: harmonogram2 } = obliczHarmonogram(kwota2, okres2, oprocentowanie2);
-                harmonogramData2 = harmonogram2;
-
-                document.getElementById("valueKapital2").textContent = `${kwota2.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-                document.querySelector('.result-wrapper:last-child .legend-item[data-index="0"] .color-box').setAttribute('data-tooltip', `Kapitał: ${kwota2.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`);
-                document.getElementById("valueOdsetki2").textContent = `${odsetkiCalkowite2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
-                document.querySelector('.result-wrapper:last-child .legend-item[data-index="1"] .color-box').setAttribute('data-tooltip', `Odsetki: ${odsetkiCalkowite2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`);
-                document.getElementById("okresKredytuWynik2").textContent = okres2;
-                document.querySelector('.result-wrapper:last-child .highlight.yellow').setAttribute('data-hover', `${okres2} miesięcy`);
-                const calkowityKoszt2 = kwota2 + odsetkiCalkowite2;
-                document.getElementById("calkowityKoszt2").textContent = `${calkowityKoszt2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                document.querySelector('.result-wrapper:last-child .highlight.green').setAttribute('data-hover', `${calkowityKoszt2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`);
-
-                if (chart2) chart2.destroy();
-                if (chartLine2) chartLine2.destroy();
-
-                const ctx2 = document.getElementById("kredytChart2").getContext("2d");
-                chart2 = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Kapitał', 'Odsetki'],
-                        datasets: [{
-                            data: [kwota2, odsetkiCalkowite2],
-                            backgroundColor: ['#28a745', '#007bff'],
-                            borderWidth: 1,
-                            hoverOffset: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } }
-                    }
-                });
-
-                document.querySelectorAll('.result-wrapper:last-child .legend-item').forEach(item => {
-                    item.addEventListener('mouseenter', function() {
-                        const index = parseInt(this.getAttribute('data-index'));
-                        chart2.setActiveElements([{ datasetIndex: 0, index: index }]);
-                        chart2.update();
-
-                        const currentLegend = document.querySelector(`#legend${['Kapital2', 'Odsetki2'][index]}`);
-                        if (currentLegend) currentLegend.style.opacity = 0;
-
-                        const valueElements = document.querySelectorAll('#valueKapital2, #valueOdsetki2');
-                        valueElements.forEach((value, idx) => {
-                            if (idx === index) value.textContent = `${['Kapitał', 'Odsetki'][idx]}: ${value.textContent}`;
-                        });
-                    });
-
-                    item.addEventListener('mouseleave', function() {
-                        const index = parseInt(this.getAttribute('data-index'));
-                        chart2.setActiveElements([]);
-                        chart2.update();
-
-                        const currentLegend = document.querySelector(`#legend${['Kapital2', 'Odsetki2'][index]}`);
-                        if (currentLegend) currentLegend.style.opacity = 1;
-
-                        document.getElementById("valueKapital2").textContent = `${kwota2.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
-                        document.getElementById("valueOdsetki2").textContent = `${odsetkiCalkowite2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
-                    });
-                });
-
-                let tabela2 = document.getElementById("harmonogramTabela2");
-                tabela2.innerHTML = "";
-                harmonogram2.forEach(wiersz => {
-                    tabela2.innerHTML += `
-                        <tr>
-                            <td>${wiersz.miesiac}</td>
-                            <td>${parseFloat(wiersz.rata).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                            <td>${parseFloat(wiersz.kapital).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                            <td>${parseFloat(wiersz.odsetki).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                            <td>${parseFloat(wiersz.pozostalyKapital).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł</td>
-                        </tr>
-                    `;
-                });
-
-                const maxPozostalyKapital2 = Math.max(...harmonogram2.map(wiersz => parseFloat(wiersz.pozostalyKapital)));
-                const minPozostalyKapital2 = 0;
-                const range2 = maxPozostalyKapital2 - minPozostalyKapital2;
-                const padding2 = range2 * 0.1;
-                const yMin2 = minPozostalyKapital2 - padding2;
-                const yMax2 = maxPozostalyKapital2 + padding2;
-                const stepSize2 = range2 / 5;
-
-                const ctxLine2 = document.getElementById("kredytChartLine2").getContext("2d");
-                chartLine2 = new Chart(ctxLine2, {
-                    type: 'line',
-                    data: {
-                        labels: harmonogram2.map(wiersz => `Miesiąc ${wiersz.miesiac}`),
-                        datasets: [
-                            {
-                                label: 'Pozostały kapitał',
-                                data: harmonogram2.map(wiersz => parseFloat(wiersz.pozostalyKapital)),
-                                borderColor: '#D4C791',
-                                backgroundColor: 'rgba(212, 199, 145, 0.2)',
-                                fill: true,
-                                tension: 0.1,
-                                borderWidth: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                title: { display: true, text: 'Okres (miesiące)', font: { size: 14 } },
-                                ticks: { font: { size: 12 } }
-                            },
-                            y: {
-                                title: { display: true, text: 'Pozostały kapitał (PLN)', font: { size: 14 } },
-                                min: yMin2,
-                                max: yMax2,
-                                ticks: { stepSize: stepSize2, font: { size: 12 } }
-                            }
-                        },
-                        plugins: {
-                            legend: { display: true, position: 'top', labels: { font: { size: 12 } } },
-                            tooltip: { enabled: true, backgroundColor: 'rgba(0, 0, 0, 0.8)', titleFont: { size: 12 }, bodyFont: { size: 10 } }
-                        }
-                    }
-                });
-            }
-
-            document.getElementById("formSection").style.display = "none";
-            document.getElementById("resultSection").style.display = "block";
-        }
-
-        function obliczHarmonogram(kwota, okres, oprocentowanie) {
             const oprocentowanieMiesieczne = oprocentowanie / 12;
             const rata = kwota * (oprocentowanieMiesieczne * Math.pow(1 + oprocentowanieMiesieczne, okres)) / (Math.pow(1 + oprocentowanieMiesieczne, okres) - 1);
             let pozostalyKapital = kwota;
@@ -1037,130 +644,166 @@
                 });
             }
 
-            return { rata, odsetkiCalkowite, harmonogram };
-        }
+            document.getElementById("valueKapital").textContent = `${kwota.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+            document.getElementById("valueOdsetki").textContent = `${odsetkiCalkowite.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
+            document.getElementById("okresKredytuWynik").textContent = okres;
+            const calkowityKoszt = kwota + odsetkiCalkowite;
+            document.getElementById("calkowityKoszt").textContent = `${calkowityKoszt.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const obliczBtn = document.getElementById("obliczBtn");
-            if (obliczBtn) obliczBtn.addEventListener("click", obliczKredyt);
-            else console.error("Przycisk 'Oblicz' nie został znaleziony w dokumencie.");
-        });
+            if (chart) chart.destroy();
+            if (chartLine) chartLine.destroy();
 
-        function removePolishChars(text) {
-            const polishToLatin = {
-                'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
-                'Ą': 'A', 'Ć': 'C', 'Ę': 'E', 'Ł': 'L', 'Ń': 'N', 'Ó': 'O', 'Ś': 'S', 'Ź': 'Z', 'Ż': 'Z'
-            };
-            return text.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, match => polishToLatin[match] || match);
-        }
+            const ctx = document.getElementById("kredytChart").getContext("2d");
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kapitał', 'Odsetki'],
+                    datasets: [{
+                        data: [kwota, odsetkiCalkowite],
+                        backgroundColor: ['#28a745', '#007bff'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
 
-        function generatePDF() {
-            const doc = new jsPDF();
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(16);
+            let tabela = document.getElementById("harmonogramTabela");
+            tabela.innerHTML = "";
+            harmonogram.forEach(wiersz => {
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${wiersz.miesiac}</td>
+                        <td>${wiersz.rata} zł</td>
+                        <td>${wiersz.kapital} zł</td>
+                        <td>${wiersz.odsetki} zł</td>
+                        <td>${wiersz.pozostalyKapital} zł</td>
+                    </tr>
+                `;
+            });
 
-            let yOffset = 10;
-            doc.text(removePolishChars("Kalkulator Kredytowy - Podsumowanie"), 10, yOffset);
-            yOffset += 10;
+            const ctxLine = document.getElementById("kredytChartLine").getContext("2d");
+            chartLine = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: harmonogram.map(wiersz => `Miesiąc ${wiersz.miesiac}`),
+                    datasets: [{
+                        label: 'Pozostały kapitał',
+                        data: harmonogram.map(wiersz => parseFloat(wiersz.pozostalyKapital)),
+                        borderColor: '#D4C791',
+                        backgroundColor: 'rgba(212, 199, 145, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
-            const compareCheckbox = document.getElementById("porownajKredyt");
-            doc.setFontSize(14);
-            doc.text(removePolishChars(`Wynik kredytu${compareCheckbox.checked ? " - Porównanie" : ""}`), 10, yOffset);
-            yOffset += 8;
+            if (compareCheckbox.checked) {
+                const oprocentowanieMiesieczne2 = oprocentowanie2 / 12;
+                const rata2 = kwota2 * (oprocentowanieMiesieczne2 * Math.pow(1 + oprocentowanieMiesieczne2, okres2)) / (Math.pow(1 + oprocentowanieMiesieczne2, okres2) - 1);
+                let pozostalyKapital2 = kwota2;
+                let odsetkiCalkowite2 = 0;
+                let harmonogram2 = [];
 
-            doc.setFontSize(10);
-            const kapital = document.getElementById("valueKapital").textContent || "-";
-            const odsetki = document.getElementById("valueOdsetki").textContent || "-";
-            const okres = document.getElementById("okresKredytuWynik").textContent || "-";
-            const calkowityKoszt = document.getElementById("calkowityKoszt").textContent || "-";
+                for (let i = 1; i <= okres2; i++) {
+                    const odsetki2 = pozostalyKapital2 * oprocentowanieMiesieczne2;
+                    const kapital2 = rata2 - odsetki2;
+                    pozostalyKapital2 -= kapital2;
+                    odsetkiCalkowite2 += odsetki2;
 
-            doc.text(removePolishChars(`${kapital}`), 10, yOffset);
-            yOffset += 6;
-            doc.text(removePolishChars(`${odsetki}`), 10, yOffset);
-            yOffset += 6;
-            doc.text(removePolishChars(`Okres kredytu: ${okres} miesięcy`), 10, yOffset);
-            yOffset += 6;
-            doc.text(removePolishChars(`Całkowity koszt: ${calkowityKoszt} zł`), 10, yOffset);
-            yOffset += 10;
+                    harmonogram2.push({
+                        miesiac: i,
+                        rata: rata2.toFixed(2),
+                        kapital: kapital2.toFixed(2),
+                        odsetki: odsetki2.toFixed(2),
+                        pozostalyKapital: Math.max(pozostalyKapital2, 0).toFixed(2)
+                    });
+                }
 
-            if (harmonogramData.length > 0 && jsPDF.prototype.autoTable) {
-                doc.setFontSize(12);
-                doc.text(removePolishChars("Harmonogram spłat"), 10, yOffset);
-                yOffset += 6;
+                document.getElementById("valueKapital2").textContent = `${kwota2.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł`;
+                document.getElementById("valueOdsetki2").textContent = `${odsetkiCalkowite2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`;
+                document.getElementById("okresKredytuWynik2").textContent = okres2;
+                const calkowityKoszt2 = kwota2 + odsetkiCalkowite2;
+                document.getElementById("calkowityKoszt2").textContent = `${calkowityKoszt2.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-                const tableData = harmonogramData.map(row => [
-                    row.miesiac,
-                    row.rata + ' zł',
-                    row.kapital + ' zł',
-                    row.odsetki + ' zł',
-                    row.pozostalyKapital + ' zł'
-                ]);
+                if (chart2) chart2.destroy();
+                if (chartLine2) chartLine2.destroy();
 
-                doc.autoTable({
-                    startY: yOffset,
-                    head: [[
-                        removePolishChars('Miesiąc'),
-                        removePolishChars('Rata'),
-                        removePolishChars('Kapitał'),
-                        removePolishChars('Odsetki'),
-                        removePolishChars('Pozostały kapitał')
-                    ]],
-                    body: tableData,
-                    theme: 'grid',
-                    styles: { font: "helvetica", fontSize: 8, cellPadding: 4, overflow: 'linebreak' },
-                    headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
-                    columnStyles: { 
-                        0: { cellWidth: 20 }, 
-                        1: { cellWidth: 30 }, 
-                        2: { cellWidth: 30 }, 
-                        3: { cellWidth: 30 }, 
-                        4: { cellWidth: 30 }
+                const ctx2 = document.getElementById("kredytChart2").getContext("2d");
+                chart2 = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Kapitał', 'Odsetki'],
+                        datasets: [{
+                            data: [kwota2, odsetkiCalkowite2],
+                            backgroundColor: ['#28a745', '#007bff'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
                     }
                 });
 
-                yOffset = doc.lastAutoTable.finalY + 10;
-            }
+                let tabela2 = document.getElementById("harmonogramTabela2");
+                tabela2.innerHTML = "";
+                harmonogram2.forEach(wiersz => {
+                    tabela2.innerHTML += `
+                        <tr>
+                            <td>${wiersz.miesiac}</td>
+                            <td>${wiersz.rata} zł</td>
+                            <td>${wiersz.kapital} zł</td>
+                            <td>${wiersz.odsetki} zł</td>
+                            <td>${wiersz.pozostalyKapital} zł</td>
+                        </tr>
+                    `;
+                });
 
-            if (compareCheckbox.checked && harmonogramData2.length > 0 && jsPDF.prototype.autoTable) {
-                doc.setFontSize(12);
-                doc.text(removePolishChars("Harmonogram spłat 2"), 10, yOffset);
-                yOffset += 6;
-
-                const tableData2 = harmonogramData2.map(row => [
-                    row.miesiac,
-                    row.rata + ' zł',
-                    row.kapital + ' zł',
-                    row.odsetki + ' zł',
-                    row.pozostalyKapital + ' zł'
-                ]);
-
-                doc.autoTable({
-                    startY: yOffset,
-                    head: [[
-                        removePolishChars('Miesiąc'),
-                        removePolishChars('Rata'),
-                        removePolishChars('Kapitał'),
-                        removePolishChars('Odsetki'),
-                        removePolishChars('Pozostały kapitał')
-                    ]],
-                    body: tableData2,
-                    theme: 'grid',
-                    styles: { font: "helvetica", fontSize: 8, cellPadding: 4, overflow: 'linebreak' },
-                    headStyles: { fillColor: [194, 178, 128], textColor: [0, 0, 0] },
-                    columnStyles: { 
-                        0: { cellWidth: 20 }, 
-                        1: { cellWidth: 30 }, 
-                        2: { cellWidth: 30 }, 
-                        3: { cellWidth: 30 }, 
-                        4: { cellWidth: 30 }
+                const ctxLine2 = document.getElementById("kredytChartLine2").getContext("2d");
+                chartLine2 = new Chart(ctxLine2, {
+                    type: 'line',
+                    data: {
+                        labels: harmonogram2.map(wiersz => `Miesiąc ${wiersz.miesiac}`),
+                        datasets: [{
+                            label: 'Pozostały kapitał',
+                            data: harmonogram2.map(wiersz => parseFloat(wiersz.pozostalyKapital)),
+                            borderColor: '#D4C791',
+                            backgroundColor: 'rgba(212, 199, 145, 0.2)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
                     }
                 });
             }
 
-            doc.save("Kalkulator_Kredytowy.pdf");
+            document.getElementById("formSection").style.display = "none";
+            document.getElementById("resultSection").style.display = "block";
         }
 
-        document.getElementById("generatePdfBtn").addEventListener("click", generatePDF);
+        document.getElementById("obliczBtn").addEventListener("click", obliczKredyt);
     </script>
 </body>
 </html>
